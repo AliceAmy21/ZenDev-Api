@@ -1,0 +1,8 @@
+.vs/**
+**/Debug/**
+**/obj/**
+
+**/.angular/**
+**.editorconfig
+**/.vscode/**
+**/node_modules/**
