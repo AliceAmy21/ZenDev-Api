@@ -6,3 +6,4 @@
 **.editorconfig
 **/.vscode/**
 **/node_modules/**
+**/ZenDev.UnitTests/bin**
