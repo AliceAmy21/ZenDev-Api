@@ -43,11 +43,9 @@ namespace ZenDev.BusinessLogic.Services
 
             try
             {
-                var matchingUserEntries = _dbContext.Users
-                                        .Where((record) => record.UserEmail == user.UserEmail)
-                                        .ToList();
+                var matchingUserEntries = _dbContext.Users.Any(record => record.UserEmail == user.UserEmail);
 
-                if(matchingUserEntries.Count != 0)
+                if(matchingUserEntries)
                 {
                     _logger.LogInformation("User already exists!");
                     result.Success = true;
