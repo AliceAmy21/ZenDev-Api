@@ -13,6 +13,8 @@ namespace ZenDev.Persistence
         public ZenDevDbContext()
             : base()
         {
+            _overrideConnectionString = true;
+            _connectionString = "Data Source=127.0.0.1\\ZenDev_DB,1433;database=ZenDev.Dev;User ID=SA;Password=ThreeAWithTAnd1J;TrustServerCertificate=true;";
         }
 
         public ZenDevDbContext(string connectionString)
@@ -29,6 +31,10 @@ namespace ZenDev.Persistence
         }
 
         public virtual DbSet<ExampleEntity> Examples { get; set; }
+        public virtual DbSet<UserEntity> Users { get; set; }
+        public virtual DbSet<ExerciseEntity> Exercises { get; set; }
+        public virtual DbSet<GroupEntity> Groups { get; set; }
+        public virtual DbSet<PersonalGoalEntity> PersonalGoals { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
