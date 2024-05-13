@@ -13,6 +13,8 @@ namespace ZenDev.Persistence.Entities
         [MaxLength(100)]
         public string UserName { get; set; } = string.Empty;
 
+        public string StravaRefreshToken { get; set; } = string.Empty;
+        
         public long Streak { get; set; }
 
         public string AvatarIconUrl { get; set; } = string.Empty;

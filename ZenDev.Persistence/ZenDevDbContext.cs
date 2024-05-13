@@ -32,6 +32,9 @@ namespace ZenDev.Persistence
 
         public virtual DbSet<ExampleEntity> Examples { get; set; }
         public virtual DbSet<UserEntity> Users { get; set; }
+        public virtual DbSet<ExerciseEntity> Exercises { get; set; }
+        public virtual DbSet<GroupEntity> Groups { get; set; }
+        public virtual DbSet<PersonalGoalEntity> PersonalGoals { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
