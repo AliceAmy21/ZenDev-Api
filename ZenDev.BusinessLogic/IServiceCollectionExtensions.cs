@@ -9,6 +9,7 @@ namespace ZenDev.BusinessLogic
         public static void RegisterBusinessLayerDependencies(this IServiceCollection services)
         {
             services.AddScoped<IExampleService, ExampleService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
