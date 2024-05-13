@@ -22,9 +22,7 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<UserEntity?> GetUserByEmailAsync(string email)
         {
-            var user = await _dbContext.Users
-                        .Where(user => user.UserEmail == email)
-                        .FirstOrDefaultAsync();
+            var user = await _dbContext.Users.FirstOrDefaultAsync(user=> user.UserEmail == email);
 
             return user;
         }
@@ -80,9 +78,7 @@ namespace ZenDev.BusinessLogic.Services
                 Success = false
             };
 
-            var user = await _dbContext.Users
-                        .Where(user => user.UserEmail == email)
-                        .FirstOrDefaultAsync();
+            var user = await _dbContext.Users.FirstOrDefaultAsync(user=> user.UserEmail == email);
 
             if(user != null)
             {
