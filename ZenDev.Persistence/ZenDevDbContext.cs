@@ -14,7 +14,7 @@ namespace ZenDev.Persistence
             : base()
         {
             _overrideConnectionString = true;
-            _connectionString = "Data Source=127.0.0.1\\ZenDev_DB,1433;database=ZenDev.Dev;User ID=SA;Password=ThreeAWithTAnd1J;TrustServerCertificate=true;";
+            _connectionString = Constants.ConnectionString.connectionString;
         }
 
         public ZenDevDbContext(string connectionString)
