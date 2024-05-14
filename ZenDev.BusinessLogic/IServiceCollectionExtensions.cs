@@ -10,6 +10,7 @@ namespace ZenDev.BusinessLogic
         {
             services.AddScoped<IExampleService, ExampleService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPersonalGoalService, PersonalGoalService>();
         }
     }
 }

@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240513081926_DatabaseInitialisation")]
+    [Migration("20240514132544_DatabaseInitialisation")]
     partial class DatabaseInitialisation
     {
         /// <inheritdoc />
@@ -101,6 +101,12 @@ namespace ZenDev.Persistence.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("GoalId"));
+
+                    b.Property<long>("AmountCompleted")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AmountToComplete")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ExerciseId")
                         .HasColumnType("bigint");

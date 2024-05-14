@@ -99,6 +99,12 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("GoalId"));
 
+                    b.Property<long>("AmountCompleted")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AmountToComplete")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("ExerciseId")
                         .HasColumnType("bigint");
 

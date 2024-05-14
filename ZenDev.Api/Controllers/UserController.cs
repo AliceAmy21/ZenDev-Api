@@ -36,7 +36,7 @@ namespace ZenDev.Api.Controllers
         [HttpGet(nameof(GetAllUsers))]
         public async Task<ActionResult<List<UserApiModel>>> GetAllUsers() 
         {
-            var result = await _userService.GetAllUsers();
+            var result = await _userService.GetAllUsersAsync();
 
             if (result == null) return NotFound();
             

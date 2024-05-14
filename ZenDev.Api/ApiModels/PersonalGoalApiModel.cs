@@ -1,11 +1,11 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using ZenDev.Persistence.Entities;
 
-namespace ZenDev.Persistence.Entities
+namespace ZenDev.Api.ApiModels
 {
-    public class PersonalGoalEntity
+    public class PersonalGoalApiModel
     {
-        [Key]
         public long GoalId { get; set; }
 
         public DateTimeOffset GoalStartDate { get; set; }
@@ -15,15 +15,9 @@ namespace ZenDev.Persistence.Entities
         public long AmountToComplete { get; set; }
 
         public long AmountCompleted { get; set; }
-        
+
         public long UserId { get; set; }
 
         public long ExerciseId { get; set; }
-
-        [ForeignKey(nameof(UserId))]
-        public UserEntity UserEntity { get; set; }
-
-        [ForeignKey(nameof(ExerciseId))]
-        public ExerciseEntity ExerciseEntity { get; set; }
     }
 }
