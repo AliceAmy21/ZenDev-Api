@@ -10,11 +10,11 @@ namespace ZenDev.BusinessLogic.Services
     public class UserService : IUserService
     {
         private readonly ZenDevDbContext _dbContext;
-        private readonly ILogger<ExampleService> _logger;
+        private readonly ILogger<UserService> _logger;
 
         public UserService(
             ZenDevDbContext dbContext,
-            ILogger<ExampleService> logger)
+            ILogger<UserService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -27,7 +27,7 @@ namespace ZenDev.BusinessLogic.Services
             return user;
         }
 
-        public async Task<List<UserEntity>> GetAllUsers()
+        public async Task<List<UserEntity>> GetAllUsersAsync()
         {
             var result = await _dbContext.Users.ToListAsync();
 

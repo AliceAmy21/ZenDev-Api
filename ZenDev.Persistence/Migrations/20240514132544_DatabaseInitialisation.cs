@@ -80,6 +80,8 @@ namespace ZenDev.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GoalStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     GoalEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
+                    AmountCompleted = table.Column<long>(type: "bigint", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     ExerciseId = table.Column<long>(type: "bigint", nullable: false)
                 },
