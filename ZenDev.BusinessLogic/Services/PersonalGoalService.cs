@@ -31,7 +31,6 @@ namespace ZenDev.BusinessLogic.Services
             try
             {
                 await _dbContext.AddAsync(goal);
-
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -100,7 +99,6 @@ namespace ZenDev.BusinessLogic.Services
             try
             {
                 _dbContext.Update(goal);
-
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

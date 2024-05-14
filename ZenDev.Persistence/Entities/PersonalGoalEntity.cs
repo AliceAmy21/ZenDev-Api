@@ -13,8 +13,9 @@ namespace ZenDev.Persistence.Entities
         public DateTimeOffset GoalEndDate { get; set; }
 
         public long AmountToComplete { get; set; }
-        public long AmountCompleted { get; set; }
 
+        public long AmountCompleted { get; set; }
+        
         public long UserId { get; set; }
 
         public long ExerciseId { get; set; }
