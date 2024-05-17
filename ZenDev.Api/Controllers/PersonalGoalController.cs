@@ -9,7 +9,7 @@ namespace ZenDev.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    //[Authorize]
     public class PersonalGoalController : ControllerBase
     {
         private readonly IPersonalGoalService _personalGoalService;
