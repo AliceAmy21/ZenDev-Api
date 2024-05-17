@@ -108,8 +108,16 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("ExerciseId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("GoalDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset>("GoalEndDate")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("GoalName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("GoalStartDate")
                         .HasColumnType("datetimeoffset");

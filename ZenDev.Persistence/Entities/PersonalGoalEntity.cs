@@ -8,6 +8,10 @@ namespace ZenDev.Persistence.Entities
         [Key]
         public long GoalId { get; set; }
 
+        public string GoalName { get; set; } = string.Empty;
+
+        public string GoalDescription { get; set; } = string.Empty; 
+
         public DateTimeOffset GoalStartDate { get; set; }
 
         public DateTimeOffset GoalEndDate { get; set; }

@@ -78,6 +78,8 @@ namespace ZenDev.Persistence.Migrations
                 {
                     GoalId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    GoalName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GoalDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GoalStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     GoalEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
