@@ -1,18 +1,25 @@
-﻿using ZenDev.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using ZenDev.Migrations;
+using ZenDev.Persistence;
 
 Console.WriteLine("Running ZenDev migrations...");
-Console.WriteLine("This process currently COMPLETELY deletes and recreates the database. Are you sure you want to do this? y/n");
+Console.WriteLine("Do you want to seed data? y/n");
 var choice = Console.ReadLine();
-if (choice == null || choice.ToLower() != "y") return;
 
 var connectionString = "Data Source=127.0.0.1\\ZenDev_DB,1433;database=ZenDev.Dev;User ID=SA;Password=ThreeAWithTAnd1J;TrustServerCertificate=true;";
+
 using (var dbContext = new ZenDevDbContext(connectionString))
 {
-    Console.WriteLine("Deleting database...");
-    dbContext.Database.EnsureDeleted();
+    dbContext.Database.Migrate();
+    Console.WriteLine("Done with migrations......");
 
-    Console.WriteLine("Creating database...");
-    dbContext.Database.EnsureCreated();
+    if (choice == null || choice.ToLower() != "y") return;
+    Console.WriteLine("Starting with seeding...");
+
+    var dbSeeder = new DbSeeder(dbContext);
+    dbSeeder.SeedData();
+
+    Console.WriteLine("Done with seeding......");
 }
 
 Console.WriteLine("Done.");
