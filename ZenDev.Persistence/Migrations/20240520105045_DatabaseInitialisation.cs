@@ -32,8 +32,7 @@ namespace ZenDev.Persistence.Migrations
                 {
                     ExerciseId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ExerciseName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    MeasurementUnit = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ExerciseName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,7 +84,8 @@ namespace ZenDev.Persistence.Migrations
                     AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
                     AmountCompleted = table.Column<long>(type: "bigint", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ExerciseId = table.Column<long>(type: "bigint", nullable: false)
+                    ExerciseId = table.Column<long>(type: "bigint", nullable: false),
+                    MeasurementUnit = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

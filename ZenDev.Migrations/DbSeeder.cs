@@ -49,8 +49,7 @@ namespace ZenDev.Migrations
             {
                 _exercises[i] = new ExerciseEntity
                 {
-                    ExerciseName = jsonData[i].ExerciseName,
-                    MeasurementUnit = jsonData[i].MeasurementUnit
+                    ExerciseName = jsonData[i].ExerciseName
                 };
             }
 

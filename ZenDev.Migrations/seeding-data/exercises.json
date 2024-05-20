@@ -1,194 +1,146 @@
 [
      {
-        "exerciseName": "Run",
-        "measurementUnit": "Distance"
+        "exerciseName": "Run"
      },
      {
-        "exerciseName": "Trail Run",
-        "measurementUnit": "Distance"
+        "exerciseName": "Trail Run"
      },
      {
-        "exerciseName": "Walk",
-        "measurementUnit": "Distance"
+        "exerciseName": "Walk"
      },
      {
-        "exerciseName": "Hike",
-        "measurementUnit": "Distance"
+        "exerciseName": "Hike"
      },
      {
-        "exerciseName": "Virtual Run",
-        "measurementUnit": "Distance"
+        "exerciseName": "Virtual Run"
      },
      {
-        "exerciseName": "Ride",
-        "measurementUnit": "Distance"
+        "exerciseName": "Ride"
      },
      {
-        "exerciseName": "Mountain Bike Ride",
-        "measurementUnit": "Distance"
+        "exerciseName": "Mountain Bike Ride"
      },
      {
-        "exerciseName": "Gravel Ride",
-        "measurementUnit": "Distance"
+        "exerciseName": "Gravel Ride"
      },
      {
-        "exerciseName": "E-Bike Ride",
-        "measurementUnit": "Distance"
+        "exerciseName": "E-Bike Ride"
      },
      {
-        "exerciseName": "E-Mountain Bike Ride",
-        "measurementUnit": "Distance"
+        "exerciseName": "E-Mountain Bike Ride"
      },
      {
-        "exerciseName": "Velomobile",
-        "measurementUnit": "Distance"
+        "exerciseName": "Velomobile"
      },
      {
-        "exerciseName": "Virtual Ride ",
-        "measurementUnit": "Distance"
+        "exerciseName": "Virtual Ride"
      },
      {
-        "exerciseName": "Canoe",
-        "measurementUnit": "Distance"
+        "exerciseName": "Canoe"
      },
      {
-        "exerciseName": "Kayak",
-        "measurementUnit": "Distance"
+        "exerciseName": "Kayak"
      },
      {
-        "exerciseName": "Kitesurf",
-        "measurementUnit": "Distance"
+        "exerciseName": "Kitesurf"
      },
      {
-        "exerciseName": "Rowing",
-        "measurementUnit": "Distance"
+        "exerciseName": "Rowing"
      },
      {
-        "exerciseName": "Stand Up Paddling",
-        "measurementUnit": "Distance"
+        "exerciseName": "Stand Up Paddling"
      },
      {
-        "exerciseName": "Surf",
-        "measurementUnit": "Distance"
+        "exerciseName": "Surf"
      },
      {
-        "exerciseName": "Swim",
-        "measurementUnit": "Distance"
+        "exerciseName": "Swim"
      },
      {
-        "exerciseName": "Windsurf",
-        "measurementUnit": "Distance"
+        "exerciseName": "Windsurf"
      },
      {
-        "exerciseName": "Ice Skate",
-        "measurementUnit": "Distance"
+        "exerciseName": "Ice Skate"
      },
      {
-        "exerciseName": "Alpine Ski",
-        "measurementUnit": "Distance"
+        "exerciseName": "Alpine Ski"
      },
      {
-        "exerciseName": "Backcountry Ski",
-        "measurementUnit": "Distance"
+        "exerciseName": "Backcountry Ski"
      },
      {
-        "exerciseName": "Nordic Ski",
-        "measurementUnit": "Distance"
+        "exerciseName": "Nordic Ski"
      },
      {
-        "exerciseName": "Snowboard",
-        "measurementUnit": "Distance"
+        "exerciseName": "Snowboard"
      },
      {
-        "exerciseName": "Snowshoe",
-        "measurementUnit": "Distance"
+        "exerciseName": "Snowshoe"
      },
      {
-        "exerciseName": "Handcycle",
-        "measurementUnit": "Distance"
+        "exerciseName": "Handcycle"
      },
      {
-        "exerciseName": "Inline Skate",
-        "measurementUnit": "Distance"
+        "exerciseName": "Inline Skate"
      },
      {
-        "exerciseName": "Rock Climb",
-        "measurementUnit": "Time"
+        "exerciseName": "Rock Climb"
      },
      {
-        "exerciseName": "Roller Ski",
-        "measurementUnit": "Distance"
+        "exerciseName": "Roller Ski"
      },
      {
-        "exerciseName": "Golf",
-        "measurementUnit": "Time"
+        "exerciseName": "Golf"
      },
      {
-        "exerciseName": "Skateboard",
-        "measurementUnit": "Distance"
+        "exerciseName": "Skateboard"
      },
      {
-        "exerciseName": "Football (Soccer)",
-        "measurementUnit": "Time"
+        "exerciseName": "Football (Soccer)"
      },
      {
-        "exerciseName": "Wheelchair",
-        "measurementUnit": "Distance"
+        "exerciseName": "Wheelchair"
      },
      {
-        "exerciseName": "Badminton",
-        "measurementUnit": "Time"
+        "exerciseName": "Badminton"
      },
      {
-        "exerciseName": "Tennis",
-        "measurementUnit": "Time"
+        "exerciseName": "Tennis"
      },
      {
-        "exerciseName": "Pickleball",
-        "measurementUnit": "Time"
+        "exerciseName": "Pickleball"
      },
      {
-        "exerciseName": "Crossfit",
-        "measurementUnit": "Distance"
+        "exerciseName": "Crossfit"
      },
      {
-        "exerciseName": "Elliptical",
-        "measurementUnit": "Time"
+        "exerciseName": "Elliptical"
      },
      {
-        "exerciseName": "Stair Stepper",
-        "measurementUnit": "Distance"
+        "exerciseName": "Stair Stepper"
      },
      {
-        "exerciseName": "Weight Training",
-        "measurementUnit": "Time"
+        "exerciseName": "Weight Training"
      },
      {
-        "exerciseName": "Yoga",
-        "measurementUnit": "Time"
+        "exerciseName": "Yoga"
      },
      {
-        "exerciseName": "Workout",
-        "measurementUnit": "Time"
+        "exerciseName": "Workout"
      },
      {
-        "exerciseName": "HIIT",
-        "measurementUnit": "Time"
+        "exerciseName": "HIIT"
      },
      {
-        "exerciseName": "Pilates",
-        "measurementUnit": "Time"
+        "exerciseName": "Pilates"
      },
      {
-        "exerciseName": "Table Tennis",
-        "measurementUnit": "Time"
+        "exerciseName": "Table Tennis"
      },
      {
-        "exerciseName": "Squash",
-        "measurementUnit": "Time"
+        "exerciseName": "Squash"
      },
      {
-        "exerciseName": "Racquetball",
-        "measurementUnit": "Time"
+        "exerciseName": "Racquetball"
      }
 ]

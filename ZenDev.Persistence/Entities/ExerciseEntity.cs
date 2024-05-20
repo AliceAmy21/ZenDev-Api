@@ -9,7 +9,5 @@ namespace ZenDev.Persistence.Entities
 
         [MaxLength(100)]
         public string ExerciseName { get; set; } = string.Empty;
-
-        public string MeasurementUnit { get; set; } = string.Empty;
     }
 }

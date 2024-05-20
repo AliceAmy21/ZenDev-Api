@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240517123425_DatabaseInitialisation")]
+    [Migration("20240520105045_DatabaseInitialisation")]
     partial class DatabaseInitialisation
     {
         /// <inheritdoc />
@@ -62,10 +62,6 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("MeasurementUnit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ExerciseId");
 
@@ -124,6 +120,10 @@ namespace ZenDev.Persistence.Migrations
 
                     b.Property<DateTimeOffset>("GoalStartDate")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("MeasurementUnit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");

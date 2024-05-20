@@ -23,6 +23,8 @@ namespace ZenDev.Persistence.Entities
         public long UserId { get; set; }
 
         public long ExerciseId { get; set; }
+        
+        public string MeasurementUnit { get; set; } = string.Empty;
 
         [ForeignKey(nameof(UserId))]
         public UserEntity UserEntity { get; set; }
