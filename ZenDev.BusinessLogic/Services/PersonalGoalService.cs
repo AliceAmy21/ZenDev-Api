@@ -82,7 +82,9 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<PersonalGoalEntity?> GetGoalByIdAsync(long id)
         {
-            var goal = await _dbContext.PersonalGoals.FirstOrDefaultAsync(goal => goal.GoalId == id);
+            var goal = await _dbContext.PersonalGoals
+                        .Include(goal => goal.ExerciseEntity)
+                        .FirstOrDefaultAsync(goal => goal.GoalId == id);
 
             return goal;
         }
