@@ -10,5 +10,6 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
         public Task<PersonalGoalEntity> CreateGoalAsync(PersonalGoalEntity goal);
         public Task<ResultModel> UpdateGoalAsync(PersonalGoalEntity goal);
         public Task<ResultModel> DeleteGoalAsync(long id);
+        public Task<List<ExerciseEntity>> GetAllExercisesAsync();
     }
 }
