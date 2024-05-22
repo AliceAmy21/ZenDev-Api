@@ -44,13 +44,13 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(CreateGoal))]
-        public async Task<ActionResult<ResultApiModel>> CreateGoal(PersonalGoalApiModel goal)
+        public async Task<ActionResult<PersonalGoalApiModel>> CreateGoal(PersonalGoalApiModel goal)
         {
             var personalGoalEntity = _mapper.Map<PersonalGoalEntity>(goal);
 
             var result = await _personalGoalService.CreateGoalAsync(personalGoalEntity);
 
-            return Ok(_mapper.Map<ResultApiModel>(result));
+            return Ok(_mapper.Map<PersonalGoalApiModel>(result));
         }
 
         [HttpDelete(nameof(DeleteGoal))]
@@ -71,5 +71,14 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<ResultApiModel>(result));
         }
 
+        [HttpGet(nameof(GetAllExercises))]
+        public async Task<ActionResult<List<ExerciseApiModel>>> GetAllExercises() 
+        {
+            var result = await _personalGoalService.GetAllExercisesAsync();
+
+            if (result == null) return NotFound();
+            
+            return Ok(_mapper.Map<List<ExerciseApiModel>>(result));
+        }
     }
 }

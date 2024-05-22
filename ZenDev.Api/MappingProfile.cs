@@ -13,6 +13,7 @@ namespace ZenDev.Api
             CreateMap<ResultModel, ResultApiModel>().ReverseMap();
             CreateMap<UserEntity, UserApiModel>().ReverseMap();
             CreateMap<PersonalGoalEntity, PersonalGoalApiModel>().ReverseMap();
+            CreateMap<ExerciseEntity, ExerciseApiModel>().ReverseMap();
         }
     }
 }

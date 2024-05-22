@@ -21,7 +21,7 @@ namespace ZenDev.BusinessLogic.Services
             _logger = logger;
         }
 
-        public async Task<ResultModel> CreateGoalAsync(PersonalGoalEntity goal)
+        public async Task<PersonalGoalEntity> CreateGoalAsync(PersonalGoalEntity goal)
         {
             var result = new ResultModel
             {
@@ -37,12 +37,10 @@ namespace ZenDev.BusinessLogic.Services
             {
                 _logger.LogError(ex, "Failed to create a personal goal");
                 result.ErrorMessages = new List<string>() { "Failed to create a personal goal" };
-                return result;
+                return new PersonalGoalEntity();
             }
 
-            result.Success = true;
-
-            return result;
+            return goal;
         }
 
         public async Task<ResultModel> DeleteGoalAsync(long id)
@@ -84,7 +82,9 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<PersonalGoalEntity?> GetGoalByIdAsync(long id)
         {
-            var goal = await _dbContext.PersonalGoals.FirstOrDefaultAsync(goal => goal.GoalId == id);
+            var goal = await _dbContext.PersonalGoals
+                        .Include(goal => goal.ExerciseEntity)
+                        .FirstOrDefaultAsync(goal => goal.GoalId == id);
 
             return goal;
         }
@@ -109,6 +109,13 @@ namespace ZenDev.BusinessLogic.Services
             }
 
             result.Success = true;
+
+            return result;
+        }
+
+        public async Task<List<ExerciseEntity>> GetAllExercisesAsync()
+        {
+             var result = await _dbContext.Exercises.ToListAsync();
 
             return result;
         }

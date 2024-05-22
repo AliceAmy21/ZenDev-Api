@@ -8,6 +8,10 @@ namespace ZenDev.Persistence.Entities
         [Key]
         public long GoalId { get; set; }
 
+        public string GoalName { get; set; } = string.Empty;
+
+        public string GoalDescription { get; set; } = string.Empty; 
+
         public DateTimeOffset GoalStartDate { get; set; }
 
         public DateTimeOffset GoalEndDate { get; set; }
@@ -19,6 +23,8 @@ namespace ZenDev.Persistence.Entities
         public long UserId { get; set; }
 
         public long ExerciseId { get; set; }
+        
+        public string MeasurementUnit { get; set; } = string.Empty;
 
         [ForeignKey(nameof(UserId))]
         public UserEntity UserEntity { get; set; }

@@ -7,8 +7,9 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
     {
         public Task<PersonalGoalEntity?> GetGoalByIdAsync(long id);
         public Task<List<PersonalGoalEntity>> GetAllGoalsAsync(long userId);
-        public Task<ResultModel> CreateGoalAsync(PersonalGoalEntity goal);
+        public Task<PersonalGoalEntity> CreateGoalAsync(PersonalGoalEntity goal);
         public Task<ResultModel> UpdateGoalAsync(PersonalGoalEntity goal);
         public Task<ResultModel> DeleteGoalAsync(long id);
+        public Task<List<ExerciseEntity>> GetAllExercisesAsync();
     }
 }
