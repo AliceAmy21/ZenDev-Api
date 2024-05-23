@@ -113,5 +113,12 @@ namespace ZenDev.BusinessLogic.Services
 
             return result;
         }
+
+        public async Task<List<ExerciseEntity>> GetAllExercisesAsync()
+        {
+             var result = await _dbContext.Exercises.ToListAsync();
+
+            return result;
+        }
     }
 }

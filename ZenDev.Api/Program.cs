@@ -64,7 +64,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+if (app.Configuration.GetValue<bool>("EnableSSL"))
+{
+    app.UseHttpsRedirection();
+}
+
 
 app.UseCors(CORS_POLICY_NAME);
 

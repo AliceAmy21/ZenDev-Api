@@ -71,5 +71,14 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<ResultApiModel>(result));
         }
 
+        [HttpGet(nameof(GetAllExercises))]
+        public async Task<ActionResult<List<ExerciseApiModel>>> GetAllExercises() 
+        {
+            var result = await _personalGoalService.GetAllExercisesAsync();
+
+            if (result == null) return NotFound();
+            
+            return Ok(_mapper.Map<List<ExerciseApiModel>>(result));
+        }
     }
 }
