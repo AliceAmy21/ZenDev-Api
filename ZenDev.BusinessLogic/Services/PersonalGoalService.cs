@@ -75,6 +75,7 @@ namespace ZenDev.BusinessLogic.Services
         {
             var result = await _dbContext.PersonalGoals
                 .Where(goal => goal.UserId == userId)
+                .Include(goal => goal.ExerciseEntity)
                 .ToListAsync();
 
             return result;

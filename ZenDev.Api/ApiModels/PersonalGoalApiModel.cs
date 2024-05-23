@@ -26,6 +26,6 @@ namespace ZenDev.Api.ApiModels
         
         public string MeasurementUnit { get; set; } = string.Empty;
 
-        public ExerciseEntity ExerciseEntity { get; set; }
+        public ExerciseEntity? ExerciseEntity { get; set; }
     }
 }
