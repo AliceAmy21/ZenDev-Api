@@ -8,8 +8,11 @@ namespace ZenDev.Persistence.Entities
         [Key]
         public long GroupId { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(50)]
         public string GroupName { get; set; } = string.Empty;
+
+        [MaxLength(100)]
+        public string GroupDescription { get; set; } = string.Empty;
 
         public string GroupIconUrl { get; set; } = string.Empty;
 

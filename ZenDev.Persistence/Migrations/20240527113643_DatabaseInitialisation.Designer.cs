@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240527112149_DatabaseInitialisation")]
+    [Migration("20240527113643_DatabaseInitialisation")]
     partial class DatabaseInitialisation
     {
         /// <inheritdoc />
@@ -97,14 +97,19 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("ExerciseTypeId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("GroupDescription")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("GroupIconUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroupName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("GroupId");
 
