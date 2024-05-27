@@ -11,14 +11,14 @@ namespace ZenDev.Persistence.Entities
         [MaxLength(50)]
         public string GroupName { get; set; } = string.Empty;
 
-        [MaxLength(100)]
+        [MaxLength(500)]
         public string GroupDescription { get; set; } = string.Empty;
 
         public string GroupIconUrl { get; set; } = string.Empty;
 
         public long ExerciseTypeId { get; set; }
 
-         [ForeignKey(nameof(ExerciseTypeId))]
+        [ForeignKey(nameof(ExerciseTypeId))]
         public ExerciseTypeEntity ExerciseTypeEntity { get; set; }
     }
 }
