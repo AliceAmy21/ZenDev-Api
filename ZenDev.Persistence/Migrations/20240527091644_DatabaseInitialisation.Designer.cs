@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240520105045_DatabaseInitialisation")]
+    [Migration("20240527091644_DatabaseInitialisation")]
     partial class DatabaseInitialisation
     {
         /// <inheritdoc />
@@ -66,6 +66,24 @@ namespace ZenDev.Persistence.Migrations
                     b.HasKey("ExerciseId");
 
                     b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ExerciseTypeEntity", b =>
+                {
+                    b.Property<long>("ExerciseTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ExerciseTypeId"));
+
+                    b.Property<string>("ExerciseType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("ExerciseTypeId");
+
+                    b.ToTable("ExerciseTypes");
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.GroupEntity", b =>

@@ -40,6 +40,19 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExerciseTypes",
+                columns: table => new
+                {
+                    ExerciseTypeId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExerciseType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExerciseTypes", x => x.ExerciseTypeId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
@@ -120,6 +133,9 @@ namespace ZenDev.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Examples");
+
+            migrationBuilder.DropTable(
+                name: "ExerciseTypes");
 
             migrationBuilder.DropTable(
                 name: "Groups");
