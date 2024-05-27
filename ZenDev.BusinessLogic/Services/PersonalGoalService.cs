@@ -40,7 +40,9 @@ namespace ZenDev.BusinessLogic.Services
                 return new PersonalGoalEntity();
             }
 
-            return goal;
+            PersonalGoalEntity newGoal = GetGoalById(goal.GoalId);
+
+            return newGoal;
         }
 
         public async Task<ResultModel> DeleteGoalAsync(long id)
@@ -75,6 +77,7 @@ namespace ZenDev.BusinessLogic.Services
         {
             var result = await _dbContext.PersonalGoals
                 .Where(goal => goal.UserId == userId)
+                .Include(goal => goal.ExerciseEntity)
                 .ToListAsync();
 
             return result;
@@ -118,6 +121,15 @@ namespace ZenDev.BusinessLogic.Services
              var result = await _dbContext.Exercises.ToListAsync();
 
             return result;
+        }
+
+        public PersonalGoalEntity GetGoalById(long id)
+        {
+            var goal = _dbContext.PersonalGoals
+                        .Include(goal => goal.ExerciseEntity)
+                        .FirstOrDefault(goal => goal.GoalId == id);
+
+            return goal;
         }
     }
 }

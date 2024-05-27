@@ -40,17 +40,16 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Groups",
+                name: "ExerciseTypes",
                 columns: table => new
                 {
-                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                    ExerciseTypeId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GroupName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    GroupIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ExerciseType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Groups", x => x.GroupId);
+                    table.PrimaryKey("PK_ExerciseTypes", x => x.ExerciseTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,6 +68,28 @@ namespace ZenDev.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    GroupDescription = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    GroupIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExerciseTypeId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.GroupId);
+                    table.ForeignKey(
+                        name: "FK_Groups_ExerciseTypes_ExerciseTypeId",
+                        column: x => x.ExerciseTypeId,
+                        principalTable: "ExerciseTypes",
+                        principalColumn: "ExerciseTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,6 +125,37 @@ namespace ZenDev.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserGroupBridge",
+                columns: table => new
+                {
+                    UserGroupId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGroupBridge", x => x.UserGroupId);
+                    table.ForeignKey(
+                        name: "FK_UserGroupBridge_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserGroupBridge_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_ExerciseTypeId",
+                table: "Groups",
+                column: "ExerciseTypeId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalGoals_ExerciseId",
                 table: "PersonalGoals",
@@ -112,6 +164,16 @@ namespace ZenDev.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalGoals_UserId",
                 table: "PersonalGoals",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGroupBridge_GroupId",
+                table: "UserGroupBridge",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGroupBridge_UserId",
+                table: "UserGroupBridge",
                 column: "UserId");
         }
 
@@ -122,16 +184,22 @@ namespace ZenDev.Persistence.Migrations
                 name: "Examples");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "PersonalGoals");
 
             migrationBuilder.DropTable(
-                name: "PersonalGoals");
+                name: "UserGroupBridge");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
 
             migrationBuilder.DropTable(
+                name: "Groups");
+
+            migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "ExerciseTypes");
         }
     }
 }
