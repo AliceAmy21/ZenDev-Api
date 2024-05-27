@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZenDev.Persistence.Entities
 {
@@ -11,5 +12,10 @@ namespace ZenDev.Persistence.Entities
         public string GroupName { get; set; } = string.Empty;
 
         public string GroupIconUrl { get; set; } = string.Empty;
+
+        public long ExerciseTypeId { get; set; }
+
+         [ForeignKey(nameof(ExerciseTypeId))]
+        public ExerciseTypeEntity ExerciseTypeEntity { get; set; }
     }
 }
