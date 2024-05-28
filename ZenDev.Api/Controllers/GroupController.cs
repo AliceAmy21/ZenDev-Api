@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Services.Interfaces;
-using ZenDev.Persistence.Entities;
+using ZenDev.Common.Helpers;
 
 
 namespace ZenDev.Api.Controllers
@@ -26,9 +24,9 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetAllGroups))]
-        public async Task<ActionResult<List<GroupApiModel>>> GetAllGroups(long userId)
+        public async Task<ActionResult<List<GroupApiModel>>> GetAllGroups([FromQuery] GroupQueryObject query, long userId)
         {
-            var groups = await _groupService.getAllGroupsAsync(userId);
+            var groups = await _groupService.getAllGroupsAsync(query, userId);
             return (Ok(_mapper.Map<List<GroupApiModel>>(groups)));
         }
     }
