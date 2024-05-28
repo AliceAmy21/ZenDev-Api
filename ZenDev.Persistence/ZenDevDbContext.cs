@@ -44,5 +44,21 @@ namespace ZenDev.Persistence
 
             optionsBuilder.UseSqlServer(_connectionString);
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserGroupBridgeEntity>()
+                .HasKey(ug => ug.UserGroupId);
+
+            modelBuilder.Entity<UserGroupBridgeEntity>()
+                .HasOne(ug => ug.UserEntity)
+                .WithMany(u => u.UserGroupBridgeEntities)
+                .HasForeignKey(ug => ug.UserId);
+
+            modelBuilder.Entity<UserGroupBridgeEntity>()
+                .HasOne(ug => ug.GroupEntity)
+                .WithMany(g => g.UserGroupBridgeEntities)
+                .HasForeignKey(ug => ug.GroupId);
+        }
     }
 }

@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZenDev.SignalRHost", "ZenDe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZenDev.UnitTests", "ZenDev.UnitTests\ZenDev.UnitTests.csproj", "{496B9628-7706-415E-901D-70E76BA7AA52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenDev.Common", "ZenDev.Common\ZenDev.Common.csproj", "{450E67AD-AC23-482E-A85C-DD76F92EE94E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{496B9628-7706-415E-901D-70E76BA7AA52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{496B9628-7706-415E-901D-70E76BA7AA52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{496B9628-7706-415E-901D-70E76BA7AA52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{450E67AD-AC23-482E-A85C-DD76F92EE94E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{450E67AD-AC23-482E-A85C-DD76F92EE94E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{450E67AD-AC23-482E-A85C-DD76F92EE94E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{450E67AD-AC23-482E-A85C-DD76F92EE94E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

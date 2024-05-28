@@ -20,5 +20,7 @@ namespace ZenDev.Persistence.Entities
         public string AvatarIconUrl { get; set; } = string.Empty;
 
         public DateTimeOffset LastActive { get; set; }
+
+        public List<UserGroupBridgeEntity> UserGroupBridgeEntities { get; set; } = [];
     }
 }

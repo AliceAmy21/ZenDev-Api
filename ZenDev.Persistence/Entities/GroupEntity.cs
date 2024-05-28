@@ -20,5 +20,7 @@ namespace ZenDev.Persistence.Entities
 
         [ForeignKey(nameof(ExerciseTypeId))]
         public ExerciseTypeEntity ExerciseTypeEntity { get; set; }
+
+        public List<UserGroupBridgeEntity> UserGroupBridgeEntities { get; set; } = [];
     }
 }

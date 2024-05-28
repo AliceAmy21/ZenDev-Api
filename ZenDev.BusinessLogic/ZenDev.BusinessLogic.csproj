@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ZenDev.Common\ZenDev.Common.csproj" />
     <ProjectReference Include="..\ZenDev.Persistence\ZenDev.Persistence.csproj" />
   </ItemGroup>
 
