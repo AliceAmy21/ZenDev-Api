@@ -9,7 +9,7 @@ namespace ZenDev.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -44,13 +44,13 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(CreateUser))]
-        public async Task<ActionResult<ResultApiModel>> CreateUser(UserApiModel user)
+        public async Task<ActionResult<UserResultApiModel>> CreateUser(UserApiModel user)
         {
             var userEntity = _mapper.Map<UserEntity>(user);
 
             var result = await _userService.CreateUserAsync(userEntity);
 
-            return Ok(_mapper.Map<ResultApiModel>(result));
+            return Ok(_mapper.Map<UserResultApiModel>(result));
         }
 
         [HttpPost(nameof(AddRefreshToken))]
