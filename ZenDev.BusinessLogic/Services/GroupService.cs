@@ -19,12 +19,22 @@ namespace ZenDev.BusinessLogic.Services
         public async Task<List<GroupEntity>> getAllGroupsAsync(GroupQueryObject query, long userId)
         {
             var groups = _dbContext.Groups
-                .Include(e => e.ExerciseTypeEntity)
+                .Include(group => group.ExerciseTypeEntity)
                 .AsQueryable();
 
             if (query.GroupExerciseTypeId.HasValue)
             {
                 groups = groups.Where(group => group.ExerciseTypeEntity.ExerciseTypeId == query.GroupExerciseTypeId);
+            }
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                groups = query.SortBy switch
+                {
+                    "name" => groups.OrderBy(g => g.GroupName),
+                   // "members" => groups.OrderByDescending(g => g.Members), 
+                    _ => groups
+                };
             }
 
             return await groups.ToListAsync();

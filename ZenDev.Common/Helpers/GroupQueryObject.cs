@@ -3,5 +3,7 @@
     public class GroupQueryObject
     {
         public int? GroupExerciseTypeId { get; set; } = null;
+
+        public string? SortBy { get; set; } = "";
     }
 }
