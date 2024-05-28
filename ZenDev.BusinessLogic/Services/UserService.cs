@@ -34,38 +34,41 @@ namespace ZenDev.BusinessLogic.Services
             return result;
         }
 
-        public async Task<ResultModel> CreateUserAsync(UserEntity user)
+        public async Task<UserResultModel> CreateUserAsync(UserEntity user)
         {
-            var result = new ResultModel
+            var result = new UserResultModel
             {
-                Success = false
+                Success = false,
+                UserId = -1,
             };
-
+        
             try
             {
-                var matchingUserEntries = _dbContext.Users.Any(record => record.UserEmail == user.UserEmail);
-
-                if(matchingUserEntries)
+                var matchingUserEntries = _dbContext.Users
+                    .FirstOrDefault(record => record.UserEmail == user.UserEmail);
+        
+                if(matchingUserEntries != null)
                 {
                     _logger.LogInformation("User already exists!");
                     result.Success = true;
-
+                    result.UserId = matchingUserEntries.UserId;
+        
                     return result;
                 }
-
-                await _dbContext.AddAsync(user);
+        
+                var newUser = await _dbContext.AddAsync(user);
                 await _dbContext.SaveChangesAsync();
+                result.UserId = newUser.Entity.UserId;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to create the user.");
-
+        
                 return result;
             }
-            
             _logger.LogInformation("User created successfully");
             result.Success = true;
-
+        
             return result;
         }
 
