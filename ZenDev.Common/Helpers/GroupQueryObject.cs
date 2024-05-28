@@ -6,6 +6,6 @@
 
         public string? SortBy { get; set; } = "";
 
-        public bool showMyGroups { get; set; } = true;
+        public bool? ShowMyGroups { get; set; } = null;
     }
 }

@@ -23,11 +23,11 @@ namespace ZenDev.BusinessLogic.Services
                 .AsQueryable();
 
        
-            if(query.showMyGroups.Equals(true)) // My groups: Filter to show groups that the user belongs to
+            if(query.ShowMyGroups.Equals(true)) // My groups: Filter to show groups that the user belongs to
             {
                 groups = groups.Where(group => group.UserGroupBridgeEntities.Any(ug => ug.UserId == userId));
             }
-            else if(query.showMyGroups.Equals(false)) // Available groups: Filter to show groups that the user does not belong to
+            else if(query.ShowMyGroups.Equals(false)) // Available groups: Filter to show groups that the user does not belong to
             {
                 groups = groups.Where(group => group.UserGroupBridgeEntities.Any(ug => ug.UserId != userId));
             }
@@ -53,11 +53,6 @@ namespace ZenDev.BusinessLogic.Services
             }
 
             return await groups.ToListAsync();
-        }
-
-        public async Task<List<GroupEntity>> getAvailableGroupsAsync(long userId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<GroupEntity?> getGroupByIdAsync(long groupId)
