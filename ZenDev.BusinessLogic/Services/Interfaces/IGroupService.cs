@@ -8,5 +8,7 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
         public Task<List<GroupEntity>> getAllGroupsAsync(GroupQueryObject query, long userId);
 
         public Task<GroupEntity?> getGroupByIdAsync(long groupId);
+
+        public Task<GroupEntity> CreateGroupAsync(GroupEntity group);
     }
 }

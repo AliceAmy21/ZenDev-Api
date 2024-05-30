@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
+using ZenDev.Persistence.Entities;
 
 
 namespace ZenDev.Api.Controllers
@@ -27,7 +28,19 @@ namespace ZenDev.Api.Controllers
         public async Task<ActionResult<List<GroupApiModel>>> GetAllGroups([FromQuery] GroupQueryObject query, long userId)
         {
             var groups = await _groupService.getAllGroupsAsync(query, userId);
+            
             return Ok(_mapper.Map<List<GroupApiModel>>(groups));
         }
+
+        [HttpPost(nameof(CreateGroup))]
+        public async Task<ActionResult<GroupApiModel>> CreateGroup(GroupApiModel group)
+        {
+            var groupEntity = _mapper.Map<GroupEntity>(group);
+
+            var result = await _groupService.CreateGroupAsync(groupEntity);
+
+            return Ok(_mapper.Map<GroupApiModel>(result));
+        }
+
     }
 }

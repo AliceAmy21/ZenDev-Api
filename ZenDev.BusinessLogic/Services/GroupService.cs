@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
 using ZenDev.Persistence;
@@ -10,10 +12,14 @@ namespace ZenDev.BusinessLogic.Services
     public class GroupService : IGroupService
     {
         private readonly ZenDevDbContext _dbContext;
+        private readonly ILogger<GroupService> _logger;
 
-        public GroupService(ZenDevDbContext dbContext) 
+        public GroupService(
+            ZenDevDbContext dbContext,
+            ILogger<GroupService> logger) 
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<List<GroupEntity>> getAllGroupsAsync(GroupQueryObject query, long userId)
@@ -62,6 +68,29 @@ namespace ZenDev.BusinessLogic.Services
         public async Task<GroupEntity?> getGroupByIdAsync(long groupId)
         {
             return await _dbContext.Groups.FindAsync(groupId);
+        }
+
+        public GroupEntity getGroupById(long groupId)
+        {
+            return _dbContext.Groups.Find(groupId);
+        }
+
+        public async Task<GroupEntity> CreateGroupAsync(GroupEntity group)
+        {
+            try
+            {
+                await _dbContext.AddAsync(group);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create group");
+                return new GroupEntity();
+            }
+
+            GroupEntity newGroup = getGroupById(group.GroupId);
+
+            return newGroup;
         }
     }
 }

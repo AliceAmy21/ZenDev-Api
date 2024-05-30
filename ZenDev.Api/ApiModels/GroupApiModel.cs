@@ -13,6 +13,8 @@ namespace ZenDev.Api.ApiModels
 
         public string GroupIconUrl { get; set; } = string.Empty;
 
+        public long MemberCount { get; set; }
+
         public ExerciseTypeApiModel? ExerciseType { get; set; }
     }
 }

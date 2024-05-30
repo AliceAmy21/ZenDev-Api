@@ -23,11 +23,6 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<PersonalGoalEntity> CreateGoalAsync(PersonalGoalEntity goal)
         {
-            var result = new ResultModel
-            {
-                Success = false
-            };
-
             try
             {
                 await _dbContext.AddAsync(goal);
@@ -36,7 +31,6 @@ namespace ZenDev.BusinessLogic.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to create a personal goal");
-                result.ErrorMessages = new List<string>() { "Failed to create a personal goal" };
                 return new PersonalGoalEntity();
             }
 
