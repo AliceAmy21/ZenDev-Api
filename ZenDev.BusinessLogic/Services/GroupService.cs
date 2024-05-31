@@ -75,6 +75,11 @@ namespace ZenDev.BusinessLogic.Services
             return _dbContext.Groups.Find(groupId);
         }
 
+        public UserGroupBridgeEntity getUserGroupBridgeById(long userGroupBridge)
+        {
+            return _dbContext.UserGroupBridge.Find(userGroupBridge);
+        }
+
         public async Task<GroupEntity> CreateGroupAsync(GroupEntity group)
         {
             try
@@ -92,5 +97,24 @@ namespace ZenDev.BusinessLogic.Services
 
             return newGroup;
         }
+
+        public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)
+        {
+            try
+            {
+                await _dbContext.AddAsync(userGroupBridge);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create User-Group-Bridge entry");
+                return new UserGroupBridgeEntity();
+            }
+
+            UserGroupBridgeEntity newUserGroupBridge = getUserGroupBridgeById(userGroupBridge.UserGroupId);
+
+            return newUserGroupBridge;
+        }
+
     }
 }
