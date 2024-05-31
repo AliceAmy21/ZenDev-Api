@@ -9,7 +9,7 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<GroupEntity?> getGroupByIdAsync(long groupId);
 
-        public Task<GroupEntity> CreateGroupAsync(GroupEntity group);
+        public Task<GroupEntity> CreateGroupAsync(GroupEntity group, UserGroupBridgeEntity userGroupBridge);
 
         public Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync();
     }

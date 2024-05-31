@@ -34,11 +34,12 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(CreateGroup))]
-        public async Task<ActionResult<GroupApiModel>> CreateGroup(GroupApiModel group)
+        public async Task<ActionResult<GroupApiModel>> CreateGroup(GroupApiModel group, UserGroupBridgeApiModel userGroup)
         {
             var groupEntity = _mapper.Map<GroupEntity>(group);
+            var userGroupBridgeEntity = _mapper.Map<UserGroupBridgeEntity>(userGroup);
 
-            var result = await _groupService.CreateGroupAsync(groupEntity);
+            var result = await _groupService.CreateGroupAsync(groupEntity,userGroupBridgeEntity);
 
             return Ok(_mapper.Map<GroupApiModel>(result));
         }

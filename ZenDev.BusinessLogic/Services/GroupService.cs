@@ -76,12 +76,13 @@ namespace ZenDev.BusinessLogic.Services
             return _dbContext.UserGroupBridge.Find(userGroupBridge);
         }
 
-        public async Task<GroupEntity> CreateGroupAsync(GroupEntity group)
+        public async Task<GroupEntity> CreateGroupAsync(GroupEntity group, UserGroupBridgeEntity userGroupBridge)
         {
             try
             {
                 await _dbContext.AddAsync(group);
                 await _dbContext.SaveChangesAsync();
+                UserGroupBridgeEntity userGroupBridgeEntity = await CreateUserGroupBridgeAsync(userGroupBridge);
             }
             catch (Exception ex)
             {
