@@ -88,5 +88,13 @@ namespace ZenDev.BusinessLogic.Services
 
             return newGroup;
         }
+
+        public async Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync()
+        {
+            var result = await _dbContext.ExerciseTypes.ToListAsync();
+
+            return result;
+        }
+
     }
 }
