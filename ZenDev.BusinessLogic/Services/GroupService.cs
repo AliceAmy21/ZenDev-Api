@@ -106,6 +106,7 @@ namespace ZenDev.BusinessLogic.Services
                 return new GroupResultModel();
             }
 
+            groupResult.GroupId = group.GroupId;
             return groupResult;
         }
 
