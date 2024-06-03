@@ -38,6 +38,11 @@ namespace ZenDev.BusinessLogic.Services
                 groups = groups.Where(group => group.UserGroupBridgeEntities.Any(ug => ug.UserId != userId));
             }
 
+            if(!string.IsNullOrEmpty(query.searchQuery))
+            {
+                groups = groups.Where(group => group.GroupName.Contains(query.searchQuery));
+            }
+
             if (query.GroupExerciseTypeId.HasValue)
             {
                 groups = groups.Where(group => group.ExerciseTypeEntity.ExerciseTypeId == query.GroupExerciseTypeId);
@@ -48,7 +53,7 @@ namespace ZenDev.BusinessLogic.Services
                 groups = query.SortBy switch
                 {
                     "name" => groups.OrderBy(g => g.GroupName),
-                   // "members" => groups.OrderByDescending(g => g.Members), 
+                    "members" => groups.OrderByDescending(g => g.MemberCount), 
                     "exercise" => groups.OrderBy(g => g.ExerciseTypeEntity.ExerciseType),
                     _ => groups
                 };
