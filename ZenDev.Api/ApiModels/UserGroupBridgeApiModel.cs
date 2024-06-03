@@ -1,5 +1,3 @@
-using ZenDev.Persistence.Entities;
-
 namespace ZenDev.Api.ApiModels
 {
     public class UserGroupBridgeApiModel

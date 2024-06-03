@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ZenDev.Api.ApiModels;
+using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
@@ -34,14 +35,13 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(CreateGroup))]
-        public async Task<ActionResult<GroupApiModel>> CreateGroup(GroupApiModel group, UserGroupBridgeApiModel userGroup)
+        public async Task<ActionResult<GroupApiModel>> CreateGroup(GroupResultApiModel groupResult)
         {
-            var groupEntity = _mapper.Map<GroupEntity>(group);
-            var userGroupBridgeEntity = _mapper.Map<UserGroupBridgeEntity>(userGroup);
+            var groupResultModel = _mapper.Map<GroupResultModel>(groupResult);
 
-            var result = await _groupService.CreateGroupAsync(groupEntity,userGroupBridgeEntity);
+            var result = await _groupService.CreateGroupAsync(groupResultModel);
 
-            return Ok(_mapper.Map<GroupApiModel>(result));
+            return Ok(_mapper.Map<GroupResultApiModel>(result));
         }
 
         [HttpGet(nameof(GetAllGroupExercises))]

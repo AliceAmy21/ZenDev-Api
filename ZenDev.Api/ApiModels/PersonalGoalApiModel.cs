@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using ZenDev.Persistence.Entities;
+﻿using ZenDev.Persistence.Entities;
 
 namespace ZenDev.Api.ApiModels
 {

@@ -76,39 +76,45 @@ namespace ZenDev.BusinessLogic.Services
             return _dbContext.UserGroupBridge.Find(userGroupBridge);
         }
 
-        public async Task<GroupEntity> CreateGroupAsync(GroupEntity group, UserGroupBridgeEntity userGroupBridge)
+        public async Task<GroupResultModel> CreateGroupAsync(GroupResultModel groupResult)
         {
+            GroupEntity group = new()
+            {
+                GroupName = groupResult.GroupName,
+                GroupDescription = groupResult.GroupDescription,
+                GroupIconUrl = groupResult.GroupIconUrl,
+                ExerciseTypeId = groupResult.ExerciseType.ExerciseTypeId,
+                MemberCount = groupResult.MemberCount,
+            };
+
+            UserGroupBridgeEntity userGroupBridge = new()
+            {
+                GroupAdmin = groupResult.GroupAdmin,
+                UserId = groupResult.UserId,
+            };
+
             try
             {
                 await _dbContext.AddAsync(group);
                 await _dbContext.SaveChangesAsync();
-                UserGroupBridgeEntity userGroupBridgeEntity = await CreateUserGroupBridgeAsync(userGroupBridge);
+                userGroupBridge.GroupId = group.GroupId;
+                UserGroupBridgeEntity newUserGroupBridge = CreateUserGroupBridge(userGroupBridge);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to create group");
-                return new GroupEntity();
+                return new GroupResultModel();
             }
 
-            GroupEntity newGroup = getGroupById(group.GroupId);
-
-            return newGroup;
+            return groupResult;
         }
 
-        public async Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync()
-        {
-            var result = await _dbContext.ExerciseTypes.ToListAsync();
-
-            return result;
-        }
-
-
-        public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)
+        public UserGroupBridgeEntity CreateUserGroupBridge(UserGroupBridgeEntity userGroupBridge)
         {
             try
             {
-                await _dbContext.AddAsync(userGroupBridge);
-                await _dbContext.SaveChangesAsync();
+                _dbContext.Add(userGroupBridge);
+                _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -121,5 +127,11 @@ namespace ZenDev.BusinessLogic.Services
             return newUserGroupBridge;
         }
 
+        public async Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync()
+        {
+            var result = await _dbContext.ExerciseTypes.ToListAsync();
+
+            return result;
+        }
     }
 }

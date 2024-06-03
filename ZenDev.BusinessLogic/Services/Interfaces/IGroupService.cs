@@ -1,4 +1,5 @@
-﻿using ZenDev.Common.Helpers;
+﻿using ZenDev.BusinessLogic.Models;
+using ZenDev.Common.Helpers;
 using ZenDev.Persistence.Entities;
 
 namespace ZenDev.BusinessLogic.Services.Interfaces
@@ -9,7 +10,7 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<GroupEntity?> getGroupByIdAsync(long groupId);
 
-        public Task<GroupEntity> CreateGroupAsync(GroupEntity group, UserGroupBridgeEntity userGroupBridge);
+        public Task<GroupResultModel> CreateGroupAsync(GroupResultModel groupResult);
 
         public Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync();
     }
