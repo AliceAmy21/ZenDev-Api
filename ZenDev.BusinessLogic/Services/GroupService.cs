@@ -120,7 +120,7 @@ namespace ZenDev.BusinessLogic.Services
             try
             {
                 _dbContext.Add(userGroupBridge);
-                _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
