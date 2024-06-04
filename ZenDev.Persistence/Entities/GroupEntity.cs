@@ -18,6 +18,8 @@ namespace ZenDev.Persistence.Entities
 
         public long ExerciseTypeId { get; set; }
 
+        public long MemberCount { get; set; }
+
         [ForeignKey(nameof(ExerciseTypeId))]
         public ExerciseTypeEntity ExerciseTypeEntity { get; set; }
 

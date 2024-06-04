@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using ZenDev.Persistence.Entities;
+﻿using ZenDev.Persistence.Entities;
 
 namespace ZenDev.Api.ApiModels
 {
@@ -26,6 +24,6 @@ namespace ZenDev.Api.ApiModels
         
         public string MeasurementUnit { get; set; } = string.Empty;
 
-        public ExerciseEntity? ExerciseEntity { get; set; }
+        public ExerciseApiModel? Exercise { get; set; }
     }
 }

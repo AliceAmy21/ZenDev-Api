@@ -77,9 +77,10 @@ namespace ZenDev.Persistence.Migrations
                     GroupId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GroupName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    GroupDescription = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    GroupDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     GroupIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExerciseTypeId = table.Column<long>(type: "bigint", nullable: false)
+                    ExerciseTypeId = table.Column<long>(type: "bigint", nullable: false),
+                    MemberCount = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -131,6 +132,7 @@ namespace ZenDev.Persistence.Migrations
                 {
                     UserGroupId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupAdmin = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     GroupId = table.Column<long>(type: "bigint", nullable: false)
                 },

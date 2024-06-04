@@ -8,6 +8,8 @@ namespace ZenDev.Persistence.Entities
         [Key]
         public long UserGroupId { get; set; }
 
+        public bool GroupAdmin { get; set; }
+
         public long UserId { get; set; }
 
         public long GroupId { get; set; }

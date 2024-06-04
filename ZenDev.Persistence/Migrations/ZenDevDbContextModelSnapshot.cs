@@ -96,8 +96,8 @@ namespace ZenDev.Persistence.Migrations
 
                     b.Property<string>("GroupDescription")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("GroupIconUrl")
                         .IsRequired()
@@ -107,6 +107,9 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("MemberCount")
+                        .HasColumnType("bigint");
 
                     b.HasKey("GroupId");
 
@@ -207,6 +210,9 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserGroupId"));
 
+                    b.Property<bool>("GroupAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
@@ -255,13 +261,13 @@ namespace ZenDev.Persistence.Migrations
             modelBuilder.Entity("ZenDev.Persistence.Entities.UserGroupBridgeEntity", b =>
                 {
                     b.HasOne("ZenDev.Persistence.Entities.GroupEntity", "GroupEntity")
-                        .WithMany()
+                        .WithMany("UserGroupBridgeEntities")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
-                        .WithMany()
+                        .WithMany("UserGroupBridgeEntities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -269,6 +275,16 @@ namespace ZenDev.Persistence.Migrations
                     b.Navigation("GroupEntity");
 
                     b.Navigation("UserEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.GroupEntity", b =>
+                {
+                    b.Navigation("UserGroupBridgeEntities");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.UserEntity", b =>
+                {
+                    b.Navigation("UserGroupBridgeEntities");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,8 @@
-﻿namespace ZenDev.Api.ApiModels
+using ZenDev.Persistence.Entities;
+
+namespace ZenDev.BusinessLogic.Models
 {
-    public class GroupApiModel
+    public class GroupResultModel
     {
 
         public long GroupId { get; set; }
@@ -13,6 +15,10 @@
 
         public long MemberCount { get; set; }
 
-        public ExerciseTypeApiModel? ExerciseType { get; set; }
+        public ExerciseTypeEntity? ExerciseType { get; set; }
+
+        public bool GroupAdmin { get; set; }
+
+        public long UserId { get; set; }
     }
 }
