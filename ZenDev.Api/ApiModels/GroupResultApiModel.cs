@@ -2,7 +2,6 @@ namespace ZenDev.Api.ApiModels
 {
     public class GroupResultApiModel
     {
-
         public long GroupId { get; set; }
 
         public string GroupName { get; set; } = string.Empty;
