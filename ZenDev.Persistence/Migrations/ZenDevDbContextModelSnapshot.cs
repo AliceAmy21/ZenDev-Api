@@ -22,6 +22,38 @@ namespace ZenDev.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>
+                {
+                    b.Property<long>("ChallengeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ChallengeId"));
+
+                    b.Property<long>("AmountToComplete")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("ChallengeEndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("ChallengeStartDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long>("ExerciseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ChallengeId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Challenges");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.ExampleEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -228,6 +260,49 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("UserGroupBridge");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.UserGroupChallengeBridgeEntity", b =>
+                {
+                    b.Property<long>("UserGroupChallengeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserGroupChallengeId"));
+
+                    b.Property<long?>("ChallengeEntityChallengeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ChallengeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserGroupId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("UserGroupChallengeId");
+
+                    b.HasIndex("ChallengeEntityChallengeId");
+
+                    b.ToTable("UserGroupChallengeBridge");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.ExerciseEntity", "ExerciseEntity")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.GroupEntity", "GroupEntity")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExerciseEntity");
+
+                    b.Navigation("GroupEntity");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.GroupEntity", b =>
                 {
                     b.HasOne("ZenDev.Persistence.Entities.ExerciseTypeEntity", "ExerciseTypeEntity")
@@ -275,6 +350,18 @@ namespace ZenDev.Persistence.Migrations
                     b.Navigation("GroupEntity");
 
                     b.Navigation("UserEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.UserGroupChallengeBridgeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.ChallengeEntity", null)
+                        .WithMany("UserGroupChallengeBridgeEntities")
+                        .HasForeignKey("ChallengeEntityChallengeId");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>
+                {
+                    b.Navigation("UserGroupChallengeBridgeEntities");
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.GroupEntity", b =>

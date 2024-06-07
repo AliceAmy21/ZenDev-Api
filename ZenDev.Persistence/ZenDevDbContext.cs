@@ -37,6 +37,9 @@ namespace ZenDev.Persistence
         public virtual DbSet<GroupEntity> Groups { get; set; }
         public virtual DbSet<UserGroupBridgeEntity> UserGroupBridge { get; set; }
         public virtual DbSet<PersonalGoalEntity> PersonalGoals { get; set; }
+        public virtual DbSet<ChallengeEntity> Challenges {get; set;}
+        public virtual DbSet<UserGroupChallengeBridgeEntity> UserGroupChallengeBridge {get; set;}
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
