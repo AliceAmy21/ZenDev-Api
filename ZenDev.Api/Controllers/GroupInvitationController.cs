@@ -30,7 +30,7 @@ namespace ZenDev.Api.Controllers
 
             if (result == null) return NotFound();
 
-            return Ok(_mapper.Map<List<PersonalGoalApiModel>>(result));
+            return Ok(_mapper.Map<List<GroupInvitationApiModel>>(result));
         }
 
     }
