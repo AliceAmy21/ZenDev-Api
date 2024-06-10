@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZenDev.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class DatabaseInitialisation : Migration
+    public partial class databaseinitialisation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -127,6 +127,32 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GroupInvitations",
+                columns: table => new
+                {
+                    GroupInvitationId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupInvitations", x => x.GroupInvitationId);
+                    table.ForeignKey(
+                        name: "FK_GroupInvitations_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupInvitations_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserGroupBridge",
                 columns: table => new
                 {
@@ -152,6 +178,16 @@ namespace ZenDev.Persistence.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupInvitations_GroupId",
+                table: "GroupInvitations",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupInvitations_UserId",
+                table: "GroupInvitations",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Groups_ExerciseTypeId",
@@ -184,6 +220,9 @@ namespace ZenDev.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Examples");
+
+            migrationBuilder.DropTable(
+                name: "GroupInvitations");
 
             migrationBuilder.DropTable(
                 name: "PersonalGoals");
