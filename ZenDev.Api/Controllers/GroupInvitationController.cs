@@ -4,6 +4,7 @@ using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
+using ZenDev.Persistence.Entities;
 
 namespace ZenDev.Api.Controllers
 {
@@ -31,6 +32,16 @@ namespace ZenDev.Api.Controllers
             if (result == null) return NotFound();
 
             return Ok(_mapper.Map<List<GroupInvitationApiModel>>(result));
+        }
+
+         [HttpPost(nameof(CreateGroupInvitation))]
+        public async Task<ActionResult<GroupInvitationApiModel>> CreateGroupInvitation(GroupInvitationApiModel groupInvitation)
+        {
+            var groupInvitationEntity = _mapper.Map<GroupInvitationEntity>(groupInvitation);
+
+            var result = await _groupInvitationService.CreateGroupInvitationAsync(groupInvitationEntity);
+
+            return Ok(_mapper.Map<GroupInvitationApiModel>(result));
         }
 
     }

@@ -28,5 +28,32 @@ namespace ZenDev.BusinessLogic.Services
             return result;
         }
 
+        public async Task<GroupInvitationEntity> CreateGroupInvitationAsync(GroupInvitationEntity groupInvitation)
+        {
+            try
+            {
+                await _dbContext.AddAsync(groupInvitation);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create group invitation.");
+                return new GroupInvitationEntity();
+            }
+
+            _logger.LogInformation("Group invitation created successfully");
+            GroupInvitationEntity newInvitation = GetGroupInvitationById(groupInvitation.GroupInvitationId);
+        
+            return newInvitation;
+        }
+
+        public GroupInvitationEntity GetGroupInvitationById(long id)
+        {
+            var invitation = _dbContext.GroupInvitations
+                        .FirstOrDefault(invite => invite.GroupInvitationId == id);
+
+            return invitation;
+        }
+
     }
 }
