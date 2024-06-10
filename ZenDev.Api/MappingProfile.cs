@@ -24,8 +24,9 @@ namespace ZenDev.Api
             CreateMap<GroupEntity, GroupListApiModel>()
                 .ForMember(dest => dest.ExerciseType, opt => opt.MapFrom(src => src.ExerciseTypeEntity))
                 .ReverseMap();
-            CreateMap<GroupResultApiModel, GroupResultModel>().ReverseMap();
+            CreateMap<GroupResultModel, GroupResultApiModel>().ReverseMap();
             CreateMap<GroupInvitationEntity, GroupInvitationApiModel>().ReverseMap();
+            CreateMap<UserInviteModel, UserInviteApiModel>().ReverseMap();
         }
     }
 }

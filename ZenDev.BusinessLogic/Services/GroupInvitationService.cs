@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Persistence;
 using ZenDev.Persistence.Entities;
@@ -50,9 +51,55 @@ namespace ZenDev.BusinessLogic.Services
         public GroupInvitationEntity GetGroupInvitationById(long id)
         {
             var invitation = _dbContext.GroupInvitations
-                        .FirstOrDefault(invite => invite.GroupInvitationId == id);
+                .FirstOrDefault(invite => invite.GroupInvitationId == id);
 
             return invitation;
+        }
+
+        public async Task<List<UserInviteModel>> getNonGroupMembers(long groupId)
+        {
+            var groupMembers = await _dbContext.UserGroupBridge
+                .Where(userGroup => userGroup.GroupId == groupId)
+                .ToListAsync();
+
+            List<UserEntity> users = GetAllUsers();
+
+            List<UserInviteModel> nonGroupMembers = [];
+
+            foreach (var member in groupMembers)
+            {
+                UserEntity user = users.Find(user => user.UserId == member.UserId);
+
+                if (user != null)
+                {
+                    users.Remove(user);
+                }
+                
+            }
+
+            foreach (var user in users)
+            {
+                UserInviteModel userInviteModel = new()
+                {
+                    UserId = user.UserId,
+                    UserName = user.UserName
+                };
+
+                nonGroupMembers.Add(userInviteModel);
+            }
+
+            return nonGroupMembers;
+        }
+
+        public UserEntity getUserById(long userId)
+        {
+            return _dbContext.Users.Find(userId);
+        }
+
+        public List<UserEntity> GetAllUsers()
+        {
+            var result = _dbContext.Users.ToList();
+            return result;
         }
 
     }

@@ -44,5 +44,15 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<GroupInvitationApiModel>(result));
         }
 
+        [HttpGet(nameof(GetNonGroupMembers))]
+        public async Task<ActionResult<List<UserInviteApiModel>>> GetNonGroupMembers(long groupId)
+        {
+            var result = await _groupInvitationService.getNonGroupMembers(groupId);
+
+            if (result == null) return NotFound();
+
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
+        }
+
     }
 }
