@@ -27,7 +27,7 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetAllGroups))]
-        public async Task<ActionResult<List<GroupApiModel>>> GetAllGroups([FromQuery] GroupQueryObject query, long userId)
+        public async Task<ActionResult<List<GroupListApiModel>>> GetAllGroups([FromQuery] GroupQueryObject query, long userId)
         {
             var groups = await _groupService.getAllGroupsAsync(query, userId);
 
