@@ -6,11 +6,11 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 {
     public interface IChallengeService
     {
-        public Task<ChallengeEntity> CreateChallengeAsync(ChallengeEntity challenge);
+        public Task<ChallengeEntity> CreateChallengeAsync(ChallengeEntity challenge, long UserId);
 
-        public List<ChallengeEntity> GetChallengesForGroupAsync(long groupId);
+        public List<ChallengeListModel> GetChallengesForGroupAsync(long groupId);
 
-        public List<ChallengeEntity> GetChallengesForUserAsync(long userId);
+        public List<ChallengeListModel> GetChallengesForUserAsync(long userId);
 
         public Task<ChallengeEntity> UpdateChallengeAsync(ChallengeEntity challenge);
 
@@ -22,6 +22,6 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<ChallengeEntity> AddUserToChallengeAsync(long challengeId,long userGroupId);
 
-        public Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId,long userId);
+        public Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId,long userGroupId);
     }
 }

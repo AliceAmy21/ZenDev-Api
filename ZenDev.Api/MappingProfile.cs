@@ -24,6 +24,7 @@ namespace ZenDev.Api
             CreateMap<GroupResultApiModel, GroupResultModel>().ReverseMap();
             CreateMap<ChallengeApiModel, ChallengeEntity>().ReverseMap();
             CreateMap<UserGroupChallengeBridgeApiModel, UserGroupChallengeBridgeEntity>().ReverseMap();
+            CreateMap<ChallengeListApiModel, ChallengeListModel>().ReverseMap();
         }
     }
 }

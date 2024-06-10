@@ -16,7 +16,7 @@ namespace ZenDev.Persistence.Entities
         public long GroupId {get;set;}
         [ForeignKey(nameof(GroupId))]
         public required GroupEntity GroupEntity {get;set;}
-        public required List<UserGroupChallengeBridgeEntity> UserGroupChallengeBridgeEntities {get;set;} = [];
+        public required List<UserEntity> UserEntities {get;set;} = [];
 
     }
 }

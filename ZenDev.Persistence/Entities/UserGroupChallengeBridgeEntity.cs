@@ -10,10 +10,10 @@ namespace ZenDev.Persistence.Entities
         public long UserGroupChallengeId {get;set;}
         public long UserGroupId {get;set;}
         [ForeignKey(nameof(UserGroupId))]
-        public required UserGroupBridgeEntity UserGroupBridgeEntity;
+        public required UserGroupBridgeEntity UserGroupBridgeEntity {get;set;}
         public long ChallengeId{get;set;}
         [ForeignKey(nameof(ChallengeId))]
-        public required ChallengeEntity ChallengeEntity;
+        public required ChallengeEntity ChallengeEntity {get;set;}
 
     }
 }
