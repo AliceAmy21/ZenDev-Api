@@ -20,7 +20,7 @@ namespace ZenDev.BusinessLogic.Services
             _logger = logger;
         }
 
-        public async Task<List<GroupInvitationEntity?>> getGroupInvitationsByUserIdAsync(long userId)
+        public async Task<List<GroupInvitationEntity?>> GetGroupInvitationsByUserIdAsync(long userId)
         {
             var result = await _dbContext.GroupInvitations
                 .Where(invitation => invitation.UserId == userId)
@@ -56,7 +56,7 @@ namespace ZenDev.BusinessLogic.Services
             return invitation;
         }
 
-        public async Task<List<UserInviteModel>> getNonGroupMembers(long groupId)
+        public async Task<List<UserInviteModel>> GetNonGroupMembers(long groupId)
         {
             var groupMembers = await _dbContext.UserGroupBridge
                 .Where(userGroup => userGroup.GroupId == groupId)

@@ -139,5 +139,38 @@ namespace ZenDev.BusinessLogic.Services
 
             return result;
         }
+
+        public async Task<List<UserInviteModel>> GetGroupMembers(long groupId)
+        {
+            var groupMembers = await _dbContext.UserGroupBridge
+                .Where(userGroup => userGroup.GroupId == groupId)
+                .ToListAsync();
+
+            List<UserEntity> users = GetAllUsers();
+
+            List<UserInviteModel> members = [];
+
+            foreach (var member in groupMembers)
+            {
+                UserEntity user = users.Find(user => user.UserId == member.UserId);
+
+                UserInviteModel userInviteModel = new()
+                {
+                    UserId = user.UserId,
+                    UserName = user.UserName
+                };
+
+                members.Add(userInviteModel);
+                
+            }
+
+            return members;
+        }
+
+        public List<UserEntity> GetAllUsers()
+        {
+            var result = _dbContext.Users.ToList();
+            return result;
+        }
     }
 }

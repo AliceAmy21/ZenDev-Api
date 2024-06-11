@@ -27,7 +27,7 @@ namespace ZenDev.Api.Controllers
         [HttpGet(nameof(GetInvitationsByUserId))]
         public async Task<ActionResult<List<GroupInvitationApiModel>>> GetInvitationsByUserId(long userId)
         {
-            var result = await _groupInvitationService.getGroupInvitationsByUserIdAsync(userId);
+            var result = await _groupInvitationService.GetGroupInvitationsByUserIdAsync(userId);
 
             if (result == null) return NotFound();
 
@@ -47,7 +47,7 @@ namespace ZenDev.Api.Controllers
         [HttpGet(nameof(GetNonGroupMembers))]
         public async Task<ActionResult<List<UserInviteApiModel>>> GetNonGroupMembers(long groupId)
         {
-            var result = await _groupInvitationService.getNonGroupMembers(groupId);
+            var result = await _groupInvitationService.GetNonGroupMembers(groupId);
 
             if (result == null) return NotFound();
 

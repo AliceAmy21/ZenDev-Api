@@ -52,5 +52,15 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<List<ExerciseTypeApiModel>>(result));
         }
 
+        [HttpGet(nameof(GetGroupMembers))]
+        public async Task<ActionResult<List<UserInviteApiModel>>> GetGroupMembers(long groupId)
+        {
+            var result = await _groupService.GetGroupMembers(groupId);
+
+            if (result == null) return NotFound();
+
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
+        }
+
     }
 }
