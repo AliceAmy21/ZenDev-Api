@@ -21,14 +21,14 @@ namespace ZenDev.Api.Controllers
         private readonly IMapper _mapper = mapper;
 
         [HttpPut(nameof(AddUserToChallenge))]
-        public async Task<ActionResult<ChallengeApiModel>> AddUserToChallenge(long challengeId, long userGroupId){
-                var challenge = await _challengeService.AddUserToChallengeAsync(challengeId,userGroupId);
+        public async Task<ActionResult<ChallengeApiModel>> AddUserToChallenge(long challengeId, long userId){
+                var challenge = await _challengeService.AddUserToChallengeAsync(challengeId,userId);
                 return Ok(_mapper.Map<ChallengeApiModel>(challenge));
         }
 
         [HttpPost(nameof(CreateChallenge))]
         public async Task<ActionResult<ChallengeApiModel>> CreateChallenge(ChallengeApiModel challenge){
-            var UserId = challenge.userId;
+            long UserId = challenge.UserId;
             var challengeModel = _mapper.Map<ChallengeEntity>(challenge);
             var challengeNew = await _challengeService.CreateChallengeAsync(challengeModel,UserId);
             return Ok(_mapper.Map<ChallengeApiModel>(challengeNew));
@@ -54,19 +54,19 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetUsersForChallenge))]
-        public ActionResult<List<UserApiModel>> GetUsersForChallenge(long challengeId){
+        public ActionResult<List<UserChallengeBridgeApiModel>> GetUsersForChallenge(long challengeId){
             var listUsers = _challengeService.GetUsersForChallengeAsync(challengeId);
-            return Ok(_mapper.Map<List<UserApiModel>>(listUsers));
+            return Ok(_mapper.Map<List<UserChallengeBridgeApiModel>>(listUsers));
         }
 
         [HttpGet(nameof(GetUsersToInviteChallenge))]
-        public ActionResult<List<UserApiModel>> GetUsersToInviteChallenge(long challengeId, long userGroupId){
+        public ActionResult<List<UserApiModel>> GetUsersToInviteChallenge(long challengeId, long userId){
             return Ok(new List<UserApiModel>());
         }
 
         [HttpDelete(nameof(RemoveUserFromChallenge))]
-        public async Task<ActionResult<ChallengeApiModel>> RemoveUserFromChallenge(long challengeId, long userGroupId){
-            var challenge = await _challengeService.RemoveUserFromChallengeAsync(challengeId,userGroupId);
+        public async Task<ActionResult<ChallengeApiModel>> RemoveUserFromChallenge(long challengeId, long userId){
+            var challenge = await _challengeService.RemoveUserFromChallengeAsync(challengeId,userId);
             return Ok(_mapper.Map<ChallengeApiModel>(challenge));
         }
 

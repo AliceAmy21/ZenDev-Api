@@ -12,11 +12,11 @@ namespace ZenDev.Persistence.Entities
         public long AmountToComplete {get;set;}
         public long ExerciseId {get;set;}
         [ForeignKey(nameof(ExerciseId))]
-        public required ExerciseEntity ExerciseEntity {get;set;}
+        public ExerciseEntity ExerciseEntity {get;set;}
         public long GroupId {get;set;}
         [ForeignKey(nameof(GroupId))]
-        public required GroupEntity GroupEntity {get;set;}
-        public required List<UserEntity> UserEntities {get;set;} = [];
+        public GroupEntity GroupEntity {get;set;}
+        public List<UserChallengeBridgeEntity> UserChallengeBridgeEntities {get;set;} = [];
 
     }
 }

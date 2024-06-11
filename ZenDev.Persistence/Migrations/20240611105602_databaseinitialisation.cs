@@ -53,17 +53,21 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserGroupChallengeBridge",
+                name: "Users",
                 columns: table => new
                 {
-                    UserGroupChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserGroupId = table.Column<long>(type: "bigint", nullable: false),
-                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                    UserEmail = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    StravaRefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Streak = table.Column<long>(type: "bigint", nullable: false),
+                    AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserGroupChallengeBridge", x => x.UserGroupChallengeId);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,59 +91,6 @@ namespace ZenDev.Persistence.Migrations
                         principalTable: "ExerciseTypes",
                         principalColumn: "ExerciseTypeId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Challenges",
-                columns: table => new
-                {
-                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ChallengeStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ChallengeEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
-                    ExerciseId = table.Column<long>(type: "bigint", nullable: false),
-                    GroupId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Challenges", x => x.ChallengeId);
-                    table.ForeignKey(
-                        name: "FK_Challenges_Exercises_ExerciseId",
-                        column: x => x.ExerciseId,
-                        principalTable: "Exercises",
-                        principalColumn: "ExerciseId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Challenges_Groups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserEmail = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    StravaRefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Streak = table.Column<long>(type: "bigint", nullable: false),
-                    AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ChallengeEntityChallengeId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Challenges_ChallengeEntityChallengeId",
-                        column: x => x.ChallengeEntityChallengeId,
-                        principalTable: "Challenges",
-                        principalColumn: "ChallengeId");
                 });
 
             migrationBuilder.CreateTable(
@@ -176,6 +127,35 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Challenges",
+                columns: table => new
+                {
+                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChallengeStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ChallengeEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
+                    ExerciseId = table.Column<long>(type: "bigint", nullable: false),
+                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Challenges", x => x.ChallengeId);
+                    table.ForeignKey(
+                        name: "FK_Challenges_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Challenges_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserGroupBridge",
                 columns: table => new
                 {
@@ -196,6 +176,32 @@ namespace ZenDev.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserGroupBridge_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserChallengeBridge",
+                columns: table => new
+                {
+                    UserChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserChallengeBridge", x => x.UserChallengeId);
+                    table.ForeignKey(
+                        name: "FK_UserChallengeBridge_Challenges_ChallengeId",
+                        column: x => x.ChallengeId,
+                        principalTable: "Challenges",
+                        principalColumn: "ChallengeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserChallengeBridge_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -228,6 +234,16 @@ namespace ZenDev.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserChallengeBridge_ChallengeId",
+                table: "UserChallengeBridge",
+                column: "ChallengeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChallengeBridge_UserId",
+                table: "UserChallengeBridge",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserGroupBridge_GroupId",
                 table: "UserGroupBridge",
                 column: "GroupId");
@@ -236,11 +252,6 @@ namespace ZenDev.Persistence.Migrations
                 name: "IX_UserGroupBridge_UserId",
                 table: "UserGroupBridge",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_ChallengeEntityChallengeId",
-                table: "Users",
-                column: "ChallengeEntityChallengeId");
         }
 
         /// <inheritdoc />
@@ -253,16 +264,16 @@ namespace ZenDev.Persistence.Migrations
                 name: "PersonalGoals");
 
             migrationBuilder.DropTable(
+                name: "UserChallengeBridge");
+
+            migrationBuilder.DropTable(
                 name: "UserGroupBridge");
 
             migrationBuilder.DropTable(
-                name: "UserGroupChallengeBridge");
+                name: "Challenges");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Challenges");
 
             migrationBuilder.DropTable(
                 name: "Exercises");

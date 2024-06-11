@@ -14,14 +14,14 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<ChallengeEntity> UpdateChallengeAsync(ChallengeEntity challenge);
 
-        public List<UserEntity> GetUsersForChallengeAsync(long challengeId);
+        public List<UserChallengeBridgeEntity> GetUsersForChallengeAsync(long challengeId);
 
-        public List<UserEntity> GetUsersToInviteChallengeAsync(long challengeId, long userGroupBridgeId);
+        public List<UserChallengeBridgeEntity> GetUsersToInviteChallengeAsync(long challengeId, long userId);
 
         public Task<ChallengeEntity> GetChallengeByIdAsync(long ChallengeId);
 
-        public Task<ChallengeEntity> AddUserToChallengeAsync(long challengeId,long userGroupId);
+        public Task<ChallengeEntity> AddUserToChallengeAsync(long challengeId,long userId);
 
-        public Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId,long userGroupId);
+        public Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId,long userId);
     }
 }

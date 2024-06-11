@@ -22,29 +22,19 @@ namespace ZenDev.BusinessLogic.Services
             _logger = logger;
         }
 
-        public async Task<UserGroupBridgeEntity> FindUserGroupBridge(long userId, long groupId){
-            var userGroupBridge = _dbContext.UserGroupBridge
-            .AsQueryable();
-            var userGroupBridgeEntity = userGroupBridge.First(user=> user.UserId == userId && user.GroupId == groupId);
-            return userGroupBridgeEntity;
-        }
-
-        public async Task<ChallengeEntity> AddUserToChallengeAsync(long challengeId, long userGroupId)
+        public async Task<ChallengeEntity> AddUserToChallengeAsync(long challengeId, long userId)
         {
-            var challengeBridge = _dbContext.UserGroupChallengeBridge
-                .Include(userBridge =>userBridge.UserGroupBridgeEntity)
+            var challengeBridge = _dbContext.UserChallengeBridge
                 .AsQueryable();
-            if(challengeId>0 && userGroupId>0){
-                if(!challengeBridge.Any(user=>user.UserGroupBridgeEntity.UserGroupId == userGroupId) && !challengeBridge.Any(challenge => challenge.ChallengeId == challengeId)){
-                    UserGroupChallengeBridgeEntity userGroupChallengeBridgeEntity = new UserGroupChallengeBridgeEntity()
+            if(challengeId>0 && userId>0){
+                if(!(challengeBridge.Any(user=>user.UserId == userId) && challengeBridge.Any(challenge => challenge.ChallengeId == challengeId))){
+                    UserChallengeBridgeEntity userChallengeBridgeEntity = new UserChallengeBridgeEntity()
                     {
-                        UserGroupId = userGroupId,
-                        UserGroupBridgeEntity = _dbContext.UserGroupBridge.Find(userGroupId),
-                        ChallengeId = challengeId,
-                        ChallengeEntity = await GetChallengeByIdAsync(challengeId)
+                        UserId = userId,
+                        ChallengeId = challengeId
                     };
                     try{
-                        await _dbContext.AddAsync(userGroupChallengeBridgeEntity);
+                        await _dbContext.UserChallengeBridge.AddAsync(userChallengeBridgeEntity);
                         await _dbContext.SaveChangesAsync();
 
                     }
@@ -67,22 +57,20 @@ namespace ZenDev.BusinessLogic.Services
                 ChallengeEndDate = challenge.ChallengeEndDate,
                 ChallengeStartDate = challenge.ChallengeStartDate,
                 AmountToComplete = challenge.AmountToComplete,
-                UserEntities = challenge.UserEntities,
                 ExerciseId = challenge.ExerciseId,
                 ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId),
                 GroupId = challenge.GroupId,
                 GroupEntity = _dbContext.Groups.Find(challenge.GroupId)
             };
 
-            UserGroupChallengeBridgeEntity userGroupChallengeBridgeEntity = new(){
-                UserGroupBridgeEntity = await FindUserGroupBridge(UserId,challenge1.GroupId),
-                ChallengeEntity = challenge1
-            };
-
-
             try{
                 await _dbContext.AddAsync(challenge1);
-                await _dbContext.AddAsync(userGroupChallengeBridgeEntity);
+                await _dbContext.SaveChangesAsync();
+                UserChallengeBridgeEntity userChallengeBridgeEntity = new(){
+                UserId = UserId,
+                ChallengeId = challenge1.ChallengeId
+                };
+                await _dbContext.AddAsync(userChallengeBridgeEntity);
                 await _dbContext.SaveChangesAsync();
 
             }
@@ -100,22 +88,20 @@ namespace ZenDev.BusinessLogic.Services
             .AsQueryable();
 
             ChallengeEntity challengeEntity = challenge.First(challenge=>challenge.ChallengeId == ChallengeId);
-            List<UserEntity> userEntities = GetUsersForChallengeAsync(ChallengeId);
-            challengeEntity.UserEntities = userEntities;
             return challengeEntity;
         }
 
         public List<ChallengeListModel> GetChallengesForGroupAsync(long groupId)
         {
-            var userGroupBridge = _dbContext.UserGroupChallengeBridge
-                .Include(group => group.UserGroupBridgeEntity.GroupEntity)
+            var userBridge = _dbContext.UserChallengeBridge
+                .Include(group => group.ChallengeEntity.GroupEntity)
                 .Include(challenge => challenge.ChallengeEntity)
                 .Include(exercise => exercise.ChallengeEntity.ExerciseEntity)
                 .Include(group=>group.ChallengeEntity.GroupEntity)
                 .Include(exercise1=>exercise1.ChallengeEntity.GroupEntity.ExerciseTypeEntity)
                 .AsQueryable();
             List<ChallengeListModel> ListOfChallenges = new List<ChallengeListModel>();
-            var ListOfBridges = userGroupBridge.Where(group=>group.UserGroupBridgeEntity.GroupEntity.GroupId == groupId).ToList();
+            var ListOfBridges = userBridge.Where(group=>group.ChallengeEntity.GroupEntity.GroupId == groupId).ToList();
             Console.WriteLine(ListOfBridges.Count);
             foreach(var Bridge in ListOfBridges){
                 ChallengeListModel challengeListModel = new ChallengeListModel()
@@ -136,15 +122,15 @@ namespace ZenDev.BusinessLogic.Services
 
         public List<ChallengeListModel> GetChallengesForUserAsync(long userId)
         {
-            var userGroupBridge = _dbContext.UserGroupChallengeBridge
-                .Include(user => user.UserGroupBridgeEntity.UserEntity)
+            var userGroupBridge = _dbContext.UserChallengeBridge
+                .Include(user => user.UserEntity)
                 .Include(challenge => challenge.ChallengeEntity)
                 .Include(exercise => exercise.ChallengeEntity.ExerciseEntity)
                 .Include(group=>group.ChallengeEntity.GroupEntity)
                 .Include(exercise1=>exercise1.ChallengeEntity.GroupEntity.ExerciseTypeEntity)
                 .AsQueryable();
             List<ChallengeListModel> ListOfChallenges = new List<ChallengeListModel>();
-            var ListOfBridges = userGroupBridge.Where(group=>group.UserGroupBridgeEntity.UserEntity.UserId == userId).ToList();
+            var ListOfBridges = userGroupBridge.Where(group=>group.UserEntity.UserId == userId).ToList();
             foreach(var Bridge in ListOfBridges){
                 ChallengeListModel challengeListModel = new ChallengeListModel()
                 {
@@ -162,50 +148,40 @@ namespace ZenDev.BusinessLogic.Services
             return ListOfChallenges;
         }
 
-        public List<UserEntity> GetUsersForChallengeAsync(long challengeId)
+        public List<UserChallengeBridgeEntity> GetUsersForChallengeAsync(long challengeId)
         {
-            var challengeBridge = _dbContext.UserGroupChallengeBridge
-            .Include(user=>user.UserGroupBridgeEntity)
-            .Include(users=>users.UserGroupBridgeEntity.UserEntity)
+            var challengeBridge = _dbContext.UserChallengeBridge
+            .Include(user=>user.UserEntity)
             .AsQueryable();
 
             if(challengeId > 0){
                 var ListofBridges = challengeBridge.Where(challenge => challenge.ChallengeId == challengeId).ToList();
-                List<UserEntity> userEntities = new List<UserEntity>();
-                foreach(var Bridge in ListofBridges){
-                    userEntities.Add(Bridge.UserGroupBridgeEntity.UserEntity);
-                }
-                return userEntities;
+                return ListofBridges;
             }
 
             else{
-                return new List<UserEntity>();
+                return new List<UserChallengeBridgeEntity>();
             }
         }
 
-        public List<UserEntity> GetUsersToInviteChallengeAsync(long challengeId, long userGroupId)
+        public List<UserChallengeBridgeEntity> GetUsersToInviteChallengeAsync(long challengeId, long userId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId, long userGroupId)
+        public async Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId, long userId)
         {
-            var challengeBridge = _dbContext.UserGroupChallengeBridge
+            var challengeBridge = _dbContext.UserChallengeBridge
             .AsQueryable();
-            UserGroupChallengeBridgeEntity user = challengeBridge.First(userGroup => userGroup.UserGroupBridgeEntity.UserGroupId == userGroupId && userGroup.ChallengeId == challengeId);
-            _dbContext.UserGroupChallengeBridge.Remove(user);
+            UserChallengeBridgeEntity user = challengeBridge.First(userGroup => userGroup.UserId == userId && userGroup.ChallengeId == challengeId);
+            _dbContext.UserChallengeBridge.Remove(user);
             await _dbContext.SaveChangesAsync();
             return await GetChallengeByIdAsync(challengeId);
         }
 
         public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeEntity challenge)
         {
-            var ChallengeOld = _dbContext.Challenges.Find(challenge.ChallengeId);
-            ChallengeOld.ChallengeStartDate = challenge.ChallengeStartDate;
-            ChallengeOld.ChallengeEndDate= challenge.ChallengeEndDate;
-            ChallengeOld.AmountToComplete = challenge.AmountToComplete;
-            ChallengeOld.ExerciseId = challenge.ExerciseId;
-            ChallengeOld.ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId);
+            _dbContext.Update(challenge);
             await _dbContext.SaveChangesAsync();
             return await GetChallengeByIdAsync(challenge.ChallengeId);
         }
