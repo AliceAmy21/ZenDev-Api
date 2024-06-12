@@ -150,6 +150,29 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.GroupInvitationEntity", b =>
+                {
+                    b.Property<long>("GroupInvitationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("GroupInvitationId"));
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("GroupInvitationId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GroupInvitations");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.PersonalGoalEntity", b =>
                 {
                     b.Property<long>("GoalId")
@@ -311,6 +334,25 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("ExerciseTypeEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.GroupInvitationEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.GroupEntity", "GroupEntity")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GroupEntity");
+
+                    b.Navigation("UserEntity");
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.PersonalGoalEntity", b =>
