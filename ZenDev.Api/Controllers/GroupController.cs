@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Models;
-using ZenDev.BusinessLogic.Services;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
 using ZenDev.Persistence.Entities;
@@ -27,7 +26,7 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetAllGroups))]
-        public async Task<ActionResult<List<GroupApiModel>>> GetAllGroups([FromQuery] GroupQueryObject query, long userId)
+        public async Task<ActionResult<List<GroupListApiModel>>> GetAllGroups([FromQuery] GroupQueryObject query, long userId)
         {
             var groups = await _groupService.getAllGroupsAsync(query, userId);
 
@@ -44,6 +43,16 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<GroupResultApiModel>(result));
         }
 
+        [HttpPost(nameof(CreateUserGroupBridge))]
+        public async Task<ActionResult<UserGroupBridgeApiModel>> CreateUserGroupBridge(UserGroupBridgeApiModel userGroupBridge)
+        {
+            var userGroupBridgeEntity = _mapper.Map<UserGroupBridgeEntity>(userGroupBridge);
+
+            var result = await _groupService.CreateUserGroupBridgeAsync(userGroupBridgeEntity);
+
+            return Ok(_mapper.Map<UserGroupBridgeEntity>(result));
+        }
+
         [HttpGet(nameof(GetAllGroupExercises))]
         public async Task<ActionResult<List<ExerciseTypeApiModel>>> GetAllGroupExercises()
         {
@@ -52,6 +61,16 @@ namespace ZenDev.Api.Controllers
             if (result == null) return NotFound();
 
             return Ok(_mapper.Map<List<ExerciseTypeApiModel>>(result));
+        }
+
+        [HttpGet(nameof(GetGroupMembers))]
+        public async Task<ActionResult<List<UserInviteApiModel>>> GetGroupMembers(long groupId)
+        {
+            var result = await _groupService.GetGroupMembers(groupId);
+
+            if (result == null) return NotFound();
+
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
         }
 
     }
