@@ -43,12 +43,11 @@ namespace ZenDev.BusinessLogic.Services
                     }
                     return await GetChallengeByIdAsync(challengeId);
                 }
-            else{
                 return await GetChallengeByIdAsync(challengeId);
             }
-            }
             return null;
-            }
+        }
+
 
         public async Task<ChallengeEntity> CreateChallengeAsync(ChallengeCreationModel challenge, long UserId)
         {
