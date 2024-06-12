@@ -57,4 +57,3 @@
         public int? suffer_score { get; set; }
     }
 }
-}

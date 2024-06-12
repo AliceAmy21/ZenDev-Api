@@ -3,6 +3,6 @@
     public class MapResponse
     {
         public string id { get; set; }
-        public string summary
+        public string summary { get; set; }
     }
 }
