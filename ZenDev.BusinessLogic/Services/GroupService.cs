@@ -133,6 +133,24 @@ namespace ZenDev.BusinessLogic.Services
             return newUserGroupBridge;
         }
 
+        public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)
+        {
+            try
+            {
+                await _dbContext.AddAsync(userGroupBridge);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create User-Group-Bridge entry");
+                return new UserGroupBridgeEntity();
+            }
+
+            UserGroupBridgeEntity newUserGroupBridge = getUserGroupBridgeById(userGroupBridge.UserGroupId);
+
+            return newUserGroupBridge;
+        }
+
         public async Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync()
         {
             var result = await _dbContext.ExerciseTypes.ToListAsync();

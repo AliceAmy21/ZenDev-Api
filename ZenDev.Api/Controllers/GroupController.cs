@@ -4,6 +4,7 @@ using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
+using ZenDev.Persistence.Entities;
 
 
 namespace ZenDev.Api.Controllers
@@ -40,6 +41,16 @@ namespace ZenDev.Api.Controllers
             var result = await _groupService.CreateGroupAsync(groupResultModel);
 
             return Ok(_mapper.Map<GroupResultApiModel>(result));
+        }
+
+        [HttpPost(nameof(CreateUserGroupBridge))]
+        public async Task<ActionResult<UserGroupBridgeApiModel>> CreateUserGroupBridge(UserGroupBridgeApiModel userGroupBridge)
+        {
+            var userGroupBridgeEntity = _mapper.Map<UserGroupBridgeEntity>(userGroupBridge);
+
+            var result = await _groupService.CreateUserGroupBridgeAsync(userGroupBridgeEntity);
+
+            return Ok(_mapper.Map<UserGroupBridgeEntity>(result));
         }
 
         [HttpGet(nameof(GetAllGroupExercises))]
