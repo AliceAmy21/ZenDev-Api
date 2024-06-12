@@ -2,7 +2,7 @@
 {
     public class ActivitySummaryResponse
     {
-        public int resource_state { get; set; }
+        public int resource_state { get; set; } 
         public AthleteResponse athlete { get; set; }
         public string name { get; set; }
         public double distance { get; set; }
@@ -18,7 +18,7 @@
         public DateTime start_date { get; set; }
         public DateTime start_date_local { get; set; }
         public string timezone { get; set; }
-        public int utc_offset { get; set; }
+        public double utc_offset { get; set; }
         public List<double> start_latlng { get; set; }
         public List<double> end_latlng { get; set; }
         public string location_city { get; set; }
@@ -54,6 +54,6 @@
         public int pr_count { get; set; }
         public int total_photo_count { get; set; }
         public bool has_kudoed { get; set; }
-        public int? suffer_score { get; set; }
+        public double? suffer_score { get; set; }
     }
 }
