@@ -8,6 +8,8 @@ namespace ZenDev.Api.ApiModels
 
         public long UserId { get; set; }
 
+        public required UserApiModel UserApiModel { get; set; } 
+
         public long GroupId { get; set; }
     }
 }
