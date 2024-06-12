@@ -21,18 +21,18 @@ namespace ZenDev.Api
             CreateMap<GroupEntity, GroupApiModel>()
                 .ForMember(dest => dest.ExerciseType, opt => opt.MapFrom(src => src.ExerciseTypeEntity))
                 .ReverseMap();
-            CreateMap<GroupResultApiModel, GroupResultModel>().ReverseMap();
-            CreateMap<ChallengeEntity,ChallengeApiModel>()
+            CreateMap<UserGroupBridgeEntity, UserGroupBridgeApiModel>().ReverseMap(); 
+            CreateMap<ChallengeEntity, ChallengeApiModel>()
             .ForMember(dest=>dest.ExerciseApiModel, opt=>opt.MapFrom(src=>src.ExerciseEntity))
             .ForMember(dest=>dest.GroupApiModel, opt=>opt.MapFrom(src=>src.GroupEntity))
             .ReverseMap();
-            CreateMap<UserChallengeBridgeEntity,UserChallengeBridgeApiModel>().ReverseMap();
-            CreateMap<ChallengeListModel,ChallengeListApiModel>()
+            CreateMap<UserChallengeBridgeEntity, UserChallengeBridgeApiModel>().ReverseMap();
+            CreateMap<ChallengeListModel, ChallengeListApiModel>()
             .ForMember(dest=>dest.ExerciseApiModel, opt=>opt.MapFrom(src=>src.ExerciseEntity))
             .ForMember(dest=>dest.GroupApiModel, opt=>opt.MapFrom(src=>src.GroupEntity))
             .ReverseMap();
-            CreateMap<ChallengeCreationModel,ChallengeCreationApiModel>().ReverseMap();
-            CreateMap<ChallengeUpdateModel,ChallengeUpdateApiModel>().ReverseMap();
+            CreateMap<ChallengeCreationModel, ChallengeCreationApiModel>().ReverseMap();
+            CreateMap<ChallengeUpdateModel, ChallengeUpdateApiModel>().ReverseMap();
             CreateMap<GroupEntity, GroupListApiModel>()
                 .ForMember(dest => dest.ExerciseType, opt => opt.MapFrom(src => src.ExerciseTypeEntity))
                 .ReverseMap();
