@@ -159,10 +159,7 @@ namespace ZenDev.BusinessLogic.Services
                 var ListofBridges = challengeBridge.Where(challenge => challenge.ChallengeId == challengeId).ToList();
                 return ListofBridges;
             }
-
-            else{
-                return new List<UserChallengeBridgeEntity>();
-            }
+            return new List<UserChallengeBridgeEntity>();
         }
 
         public List<UserChallengeBridgeEntity> GetUsersToInviteChallengeAsync(long challengeId, long userId)
