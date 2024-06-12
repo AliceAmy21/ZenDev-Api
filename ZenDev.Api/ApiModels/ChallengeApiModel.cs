@@ -7,9 +7,9 @@ namespace ZenDev.Api.ApiModels
         public DateTimeOffset ChallengeEndDate {get;set;}
         public long AmountToComplete {get;set;}
         public long ExerciseId {get;set;}
-        public ExerciseApiModel ExerciseEntity {get;set;}
+        public ExerciseApiModel ExerciseApiModel {get;set;}
         public long GroupId {get;set;}
-        public GroupApiModel GroupEntity {get;set;}
+        public GroupApiModel GroupApiModel {get;set;}
         public long UserId {get;set;}
     }
 }

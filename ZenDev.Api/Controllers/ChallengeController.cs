@@ -27,9 +27,9 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(CreateChallenge))]
-        public async Task<ActionResult<ChallengeApiModel>> CreateChallenge(ChallengeApiModel challenge){
+        public async Task<ActionResult<ChallengeApiModel>> CreateChallenge(ChallengeCreationApiModel challenge){
             long UserId = challenge.UserId;
-            var challengeModel = _mapper.Map<ChallengeEntity>(challenge);
+            var challengeModel = _mapper.Map<ChallengeCreationModel>(challenge);
             var challengeNew = await _challengeService.CreateChallengeAsync(challengeModel,UserId);
             return Ok(_mapper.Map<ChallengeApiModel>(challengeNew));
 
@@ -71,8 +71,8 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPut(nameof(UpdateChallenge))]
-        public async Task<ActionResult<ChallengeApiModel>> UpdateChallenge(ChallengeApiModel challenge){
-            var challengeModel = _mapper.Map<ChallengeEntity>(challenge);
+        public async Task<ActionResult<ChallengeApiModel>> UpdateChallenge(ChallengeUpdateApiModel challenge){
+            var challengeModel = _mapper.Map<ChallengeUpdateModel>(challenge);
             var challengeNew = await _challengeService.UpdateChallengeAsync(challengeModel);
             return Ok(_mapper.Map<ChallengeEntity>(challengeNew));
         }

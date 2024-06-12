@@ -50,8 +50,10 @@ namespace ZenDev.BusinessLogic.Services
             return null;
             }
 
-        public async Task<ChallengeEntity> CreateChallengeAsync(ChallengeEntity challenge, long UserId)
+        public async Task<ChallengeEntity> CreateChallengeAsync(ChallengeCreationModel challenge, long UserId)
         {
+            var groups = _dbContext.Groups.Include(exercise=>exercise.ExerciseTypeEntity).AsQueryable();
+
             ChallengeEntity challenge1 = new()
             {
                 ChallengeEndDate = challenge.ChallengeEndDate,
@@ -60,7 +62,7 @@ namespace ZenDev.BusinessLogic.Services
                 ExerciseId = challenge.ExerciseId,
                 ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId),
                 GroupId = challenge.GroupId,
-                GroupEntity = _dbContext.Groups.Find(challenge.GroupId)
+                GroupEntity = groups.First(group=> group.GroupId == challenge.GroupId)
             };
 
             try{
@@ -85,6 +87,7 @@ namespace ZenDev.BusinessLogic.Services
             var challenge = _dbContext.Challenges
             .Include(groups=>groups.GroupEntity)
             .Include(exercise=>exercise.ExerciseEntity)
+            .Include(exerciseT=>exerciseT.GroupEntity.ExerciseTypeEntity)
             .AsQueryable();
 
             ChallengeEntity challengeEntity = challenge.First(challenge=>challenge.ChallengeId == ChallengeId);
@@ -102,7 +105,6 @@ namespace ZenDev.BusinessLogic.Services
                 .AsQueryable();
             List<ChallengeListModel> ListOfChallenges = new List<ChallengeListModel>();
             var ListOfBridges = userBridge.Where(group=>group.ChallengeEntity.GroupEntity.GroupId == groupId).ToList();
-            Console.WriteLine(ListOfBridges.Count);
             foreach(var Bridge in ListOfBridges){
                 ChallengeListModel challengeListModel = new ChallengeListModel()
                 {
@@ -179,11 +181,24 @@ namespace ZenDev.BusinessLogic.Services
             return await GetChallengeByIdAsync(challengeId);
         }
 
-        public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeEntity challenge)
+        public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge)
         {
-            _dbContext.Update(challenge);
+            var challenge1 = _dbContext.Challenges.Find(challenge.ChallengeId);
+
+            if(challenge.ChallengeEndDate != null && challenge.ChallengeEndDate != challenge1.ChallengeEndDate)
+            challenge1.ChallengeEndDate = challenge.ChallengeEndDate;
+
+            if(challenge.ExerciseId != null && challenge.ExerciseId != challenge1.ExerciseId){
+            challenge1.ExerciseId = challenge.ExerciseId;
+            challenge1.ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId);
+            }
+
+            if(challenge.AmountToComplete != null && challenge.AmountToComplete != challenge1.AmountToComplete)
+            challenge1.AmountToComplete = challenge.AmountToComplete;
+
+            _dbContext.Update(challenge1);
             await _dbContext.SaveChangesAsync();
-            return await GetChallengeByIdAsync(challenge.ChallengeId);
+            return await GetChallengeByIdAsync(challenge1.ChallengeId);
         }
     }
 }
