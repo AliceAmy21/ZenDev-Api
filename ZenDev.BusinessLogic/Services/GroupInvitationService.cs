@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
+using ZenDev.Common.Helpers;
 using ZenDev.Persistence;
 using ZenDev.Persistence.Entities;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ZenDev.BusinessLogic.Services
 {
@@ -100,6 +103,29 @@ namespace ZenDev.BusinessLogic.Services
         {
             var result = _dbContext.Users.ToList();
             return result;
+        }
+
+        public async Task<List<UserInviteModel>> GetAllUsersAsync(GroupInvitationQueryObject query)
+        {
+            var usersQuery = _dbContext.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(query.searchQuery)) //search query
+            {
+                usersQuery = usersQuery.Where(user => user.UserName.Contains(query.searchQuery));
+            }
+
+            var usersToInvite = usersQuery.Select(user => new UserInviteModel
+            {
+                UserId = user.UserId,
+                UserName = user.UserName
+            });
+
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+            return await usersToInvite
+                .Skip(skipNumber)
+                .Take(query.PageSize)
+                .ToListAsync();
         }
 
     }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Models;
+using ZenDev.BusinessLogic.Services;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
 using ZenDev.Persistence.Entities;
@@ -54,5 +55,12 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
         }
 
+        [HttpGet(nameof(GetAllUsers))]
+        public async Task<ActionResult<List<UserInviteApiModel>>> GetAllUsers([FromQuery] GroupInvitationQueryObject query)
+        {
+            var result = await _groupInvitationService.GetAllUsersAsync(query);
+
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
+        }
     }
 }
