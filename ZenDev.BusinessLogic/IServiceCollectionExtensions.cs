@@ -13,6 +13,7 @@ namespace ZenDev.BusinessLogic
             services.AddScoped<IPersonalGoalService, PersonalGoalService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IGroupInvitationService, GroupInvitationService>();
+            services.AddScoped<IChallengeService, ChallengeService>();
         }
     }
 }
