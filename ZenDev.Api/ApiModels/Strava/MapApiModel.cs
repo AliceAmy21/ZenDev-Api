@@ -2,8 +2,7 @@
 {
     public class MapApiModel
     {
-        public int Id { get; set; }
-        public string summaryPolyline { get; set; } = string.Empty;
-        public int resourceState { get; set; }
+        public string Id { get; set; }
+        public string SummaryPolyline { get; set; } = string.Empty;
     }
 }
