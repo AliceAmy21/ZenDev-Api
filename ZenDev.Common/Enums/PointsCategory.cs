@@ -13,17 +13,17 @@ namespace ZenDev.Common.Enums
 
     public enum PointsCategory
     {
-        Minutes30PlusWorkout,
-        Minutes30To59HeartRate60To69Percent,
-        Minutes60To89HeartRate60To69Percent,
-        Minutes90To119HeartRate60To69Percent,
-        Minutes120To179HeartRate60To69Percent,
-        Minutes180PlusHeartRate60PlusPercent,
-        Minutes15To29HeartRate70PlusPercent,
-        Minutes30To59HeartRate70To79Percent,
-        Minutes60To89HeartRate70PlusPercent,
-        Minutes90To119HeartRate70PlusPercent,
-        Minutes120PlusHeartRate70PlusPercent,
-        Minutes30PlusHeartRate80PlusPercent
+        Minutes30PlusWorkout = 100,
+        Minutes30To59HeartRate60To69Percent = 100,
+        Minutes60To89HeartRate60To69Percent = 200,
+        Minutes90To119HeartRate60To69Percent = 300,
+        Minutes120To179HeartRate60To69Percent = 450,
+        Minutes180PlusHeartRate60PlusPercent = 600,
+        Minutes15To29HeartRate70PlusPercent = 100,
+        Minutes30To59HeartRate70To79Percent = 200,
+        Minutes60To89HeartRate70PlusPercent = 300,
+        Minutes90To119HeartRate70PlusPercent = 450,
+        Minutes120PlusHeartRate70PlusPercent = 600,
+        Minutes30PlusHeartRate80PlusPercent = 300
     }
 }
