@@ -11,7 +11,7 @@ namespace ZenDev.Common.Enums
      * he would earn 100 points for that workout.
      */
 
-    public enum PointCategory
+    public enum PointsCategory
     {
         Minutes30PlusWorkout,
         Minutes30To59HeartRate60To69Percent,
