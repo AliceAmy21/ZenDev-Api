@@ -24,12 +24,12 @@ namespace ZenDev.BusinessLogic.Services
             return totalPoints;
         }
 
-        private int GetMinutes(int movingTime)
+        private static int GetMinutes(int movingTime)
         {
             return (movingTime / 60);
         }
 
-        private int GetPointsForCategory(int time, double? avgHeartRate, double? maxHeartRate)
+        private static int GetPointsForCategory(int time, double? avgHeartRate, double? maxHeartRate)
         {
             if (time >= 30 && !avgHeartRate.HasValue)
             {
