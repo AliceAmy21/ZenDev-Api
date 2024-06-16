@@ -107,17 +107,18 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<List<UserInviteModel>> GetAllUsersAsync(GroupInvitationQueryObject query)
         {
-            var usersQuery = _dbContext.Users.AsQueryable();
+            var usersQuery = _dbContext.Users.Where(user => user.UserId != query.UserToExclude).AsQueryable();
 
-            if (!string.IsNullOrEmpty(query.searchQuery)) //search query
+            if (!string.IsNullOrEmpty(query.SearchQuery)) //search query
             {
-                usersQuery = usersQuery.Where(user => user.UserName.Contains(query.searchQuery));
+                usersQuery = usersQuery.Where(user => user.UserName.Contains(query.SearchQuery));
             }
 
             var usersToInvite = usersQuery.Select(user => new UserInviteModel
             {
                 UserId = user.UserId,
-                UserName = user.UserName
+                UserName = user.UserName,
+                AvatarIconUrl = user.AvatarIconUrl,
             });
 
             var skipNumber = (query.PageNumber - 1) * query.PageSize;

@@ -4,5 +4,7 @@ namespace ZenDev.Api.ApiModels
     {
         public long UserId { get; set; }
         public string UserName { get; set; }
+
+        public string AvatarIconUrl { get; set; }
     }
 }

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ZenDev.Common.Helpers
+﻿namespace ZenDev.Common.Helpers
 {
     public class GroupInvitationQueryObject
     {
-        public string? searchQuery { get; set; } = null;
+        public string? SearchQuery { get; set; } = null;
+        public long? UserToExclude { get; set; } = -1;
 
         public int PageNumber { get; set; } = 1;
 
