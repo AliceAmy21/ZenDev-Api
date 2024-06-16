@@ -10,6 +10,8 @@ using ZenDev.Common.Models;
 namespace ZenDev.Api.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
+
     public class StravaController: ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -31,12 +33,14 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(SyncStravaData))]
-        public async Task <ActionResult<List<ActivitySummaryApiModel>>> SyncStravaData([FromBody] string accessToken)
+        public async Task <ActionResult<List<ActivitySummaryApiModel>>> SyncStravaData([FromHeader] string accessToken, long userId)
         {
             var httpClient = _httpClientFactory.CreateClient("strava");
 
             // The Strava API requires an Authorization header (user access token)
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+           // var httpResponseMessage = await httpClient.GetAsync("athlete/activities?before=1718103013&after=1718102013&page=1&per_page=30");
 
             var httpResponseMessage = await httpClient.GetAsync("athlete/activities");
             _logger.LogInformation("Activities: {Activities}", httpResponseMessage);
