@@ -54,14 +54,15 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetUsersForChallenge))]
-        public ActionResult<List<UserChallengeBridgeApiModel>> GetUsersForChallenge(long challengeId){
+        public ActionResult<List<UserInviteApiModel>> GetUsersForChallenge(long challengeId){
             var listUsers = _challengeService.GetUsersForChallengeAsync(challengeId);
-            return Ok(_mapper.Map<List<UserChallengeBridgeApiModel>>(listUsers));
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(listUsers));
         }
 
         [HttpGet(nameof(GetUsersToInviteChallenge))]
-        public ActionResult<List<UserApiModel>> GetUsersToInviteChallenge(long challengeId, long userId){
-            return Ok(new List<UserApiModel>());
+        public ActionResult<List<UserInviteApiModel>> GetUsersToInviteChallenge(long challengeId, long groupId){
+            var listUsers = _challengeService.GetUsersToInviteChallengeAsync(challengeId,groupId);
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(listUsers));
         }
 
         [HttpDelete(nameof(RemoveUserFromChallenge))]

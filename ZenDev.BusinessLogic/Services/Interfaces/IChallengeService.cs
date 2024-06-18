@@ -14,9 +14,9 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge);
 
-        public List<UserChallengeBridgeEntity> GetUsersForChallengeAsync(long challengeId);
+        public List<UserInviteModel> GetUsersForChallengeAsync(long challengeId);
 
-        public List<UserChallengeBridgeEntity> GetUsersToInviteChallengeAsync(long challengeId, long userId);
+        public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId, long groupId);
 
         public Task<ChallengeEntity> GetChallengeByIdAsync(long ChallengeId);
 
