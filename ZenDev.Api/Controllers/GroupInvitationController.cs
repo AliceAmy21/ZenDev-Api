@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Models;
+using ZenDev.BusinessLogic.Services;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
 using ZenDev.Persistence.Entities;
@@ -34,14 +35,16 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<List<GroupInvitationApiModel>>(result));
         }
 
-         [HttpPost(nameof(CreateGroupInvitation))]
-        public async Task<ActionResult<GroupInvitationApiModel>> CreateGroupInvitation(GroupInvitationApiModel groupInvitation)
+        [HttpPost(nameof(CreateGroupInvitations))]
+        public async Task<ActionResult<List<GroupInvitationApiModel>>> CreateGroupInvitations(List<GroupInvitationApiModel> groupInvitations)
         {
-            var groupInvitationEntity = _mapper.Map<GroupInvitationEntity>(groupInvitation);
+            var groupInvitationsEntity = _mapper.Map<List<GroupInvitationEntity>>(groupInvitations);
 
-            var result = await _groupInvitationService.CreateGroupInvitationAsync(groupInvitationEntity);
+            var result = await _groupInvitationService.CreateGroupInvitationsAsync(groupInvitationsEntity);
 
-            return Ok(_mapper.Map<GroupInvitationApiModel>(result));
+            var groupInvitationsApiModelResult = _mapper.Map<List<GroupInvitationApiModel>>(result);
+
+            return Ok(groupInvitationsApiModelResult);
         }
 
         [HttpGet(nameof(GetNonGroupMembers))]
@@ -54,5 +57,12 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
         }
 
+        [HttpGet(nameof(GetAllUsers))]
+        public async Task<ActionResult<List<UserInviteApiModel>>> GetAllUsers([FromQuery] GroupInvitationQueryObject query)
+        {
+            var result = await _groupInvitationService.GetAllUsersAsync(query);
+
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
+        }
     }
 }
