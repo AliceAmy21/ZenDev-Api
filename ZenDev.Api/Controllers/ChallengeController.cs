@@ -42,14 +42,14 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetChallengesForGroup))]
-        public ActionResult<List<ChallengeListApiModel>> GetChallengesForGroup(long groupId){
-            var listChallenges = _challengeService.GetChallengesForGroupAsync(groupId);
-            return Ok(_mapper.Map<List<ChallengeListApiModel>>(listChallenges));
+        public ActionResult<List<List<ChallengeListApiModel>>> GetChallengesForGroup(long groupId,long userId){
+            var listChallenges = _challengeService.GetChallengesForGroupAsync(groupId,userId);
+            return Ok(_mapper.Map<List<List<ChallengeListApiModel>>>(listChallenges));
         }
 
         [HttpGet(nameof(GetChallengesForUser))]
         public ActionResult<List<ChallengeListApiModel>> GetChallengesForUser(long userId){
-            var listChallenges = _challengeService.GetChallengesForGroupAsync(userId);
+            var listChallenges = _challengeService.GetChallengesForUserAsync(userId);
             return Ok(_mapper.Map<List<ChallengeListApiModel>>(listChallenges));
         }
 

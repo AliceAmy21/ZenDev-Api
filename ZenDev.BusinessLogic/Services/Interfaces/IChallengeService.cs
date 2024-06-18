@@ -8,7 +8,7 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
     {
         public Task<ChallengeEntity> CreateChallengeAsync(ChallengeCreationModel challenge, long UserId);
 
-        public List<ChallengeListModel> GetChallengesForGroupAsync(long groupId);
+        public List<List<ChallengeListModel>> GetChallengesForGroupAsync(long groupId, long userId);
 
         public List<ChallengeListModel> GetChallengesForUserAsync(long userId);
 
