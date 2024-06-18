@@ -33,16 +33,29 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(SyncStravaData))]
-        public async Task <ActionResult<List<ActivitySummaryApiModel>>> SyncStravaData([FromHeader] string accessToken, long userId)
+        public async Task <ActionResult<List<ActivitySummaryApiModel>>> SyncStravaData([FromHeader] string accessToken, [FromBody]StravaUserSyncRequest syncData)
         {
             var httpClient = _httpClientFactory.CreateClient("strava");
 
             // The Strava API requires an Authorization header (user access token)
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-           // var httpResponseMessage = await httpClient.GetAsync("athlete/activities?before=1718103013&after=1718102013&page=1&per_page=30");
+            var lastSyncedDate = await _pointsService.SetLastSyncedDateAsync(syncData.UserId);
+            HttpResponseMessage httpResponseMessage;
 
-            var httpResponseMessage = await httpClient.GetAsync("athlete/activities");
+            if (lastSyncedDate.HasValue)
+            {
+                long epochTime = lastSyncedDate.Value.ToUnixTimeSeconds();
+                httpResponseMessage = await httpClient.GetAsync($"athlete/activities?after={epochTime}");
+            }
+            else
+            {
+                 httpResponseMessage = await httpClient.GetAsync("athlete/activities");
+            }
+
+            //var httpResponseMessage = await httpClient.GetAsync("athlete/activities?before=1718103013&after=1718102013&page=1&per_page=30");
+
+
             _logger.LogInformation("Activities: {Activities}", httpResponseMessage);
 
             if (httpResponseMessage.IsSuccessStatusCode)

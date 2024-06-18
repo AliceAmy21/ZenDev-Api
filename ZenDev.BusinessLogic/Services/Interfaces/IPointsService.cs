@@ -10,6 +10,8 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 {
     public interface IPointsService
     {
+        public Task<DateTimeOffset?> SetLastSyncedDateAsync(long userId);
+        public Task<DateTimeOffset?> GetLastSyncedDateAsync(long userId);
         public int CalculatePoints(List<ActivityPointsApiModel> activities);
     }
 }
