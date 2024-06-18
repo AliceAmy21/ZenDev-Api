@@ -33,29 +33,29 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(SyncStravaData))]
-        public async Task <ActionResult<List<ActivitySummaryApiModel>>> SyncStravaData([FromHeader] string accessToken, [FromBody]StravaUserSyncRequest syncData)
+        public async Task <ActionResult<DateTimeOffset>> SyncStravaData([FromHeader] string accessToken, long userId)
         {
             var httpClient = _httpClientFactory.CreateClient("strava");
 
             // The Strava API requires an Authorization header (user access token)
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-            var lastSyncedDate = await _pointsService.SetLastSyncedDateAsync(syncData.UserId);
+            var lastSyncedDate = await _pointsService.GetLastSyncedDateAsync(userId);
             HttpResponseMessage httpResponseMessage;
 
             if (lastSyncedDate.HasValue)
             {
                 long epochTime = lastSyncedDate.Value.ToUnixTimeSeconds();
-                httpResponseMessage = await httpClient.GetAsync($"athlete/activities?after={epochTime}");
+                httpResponseMessage = await httpClient.GetAsync($"athlete/activities?after={epochTime}&page=1&per_page=200");
             }
             else
             {
-                 httpResponseMessage = await httpClient.GetAsync("athlete/activities");
+                var firstOfJune = new DateTimeOffset(2024, 6, 1, 0, 0, 0, TimeSpan.Zero);
+                long epochTime = firstOfJune.ToUnixTimeSeconds();
+                httpResponseMessage = await httpClient.GetAsync($"athlete/activities?after={epochTime}&page=1&per_page=200");
             }
 
-            //var httpResponseMessage = await httpClient.GetAsync("athlete/activities?before=1718103013&after=1718102013&page=1&per_page=30");
-
-
+            //var newSyncDate = await _pointsService.SetLastSyncedDateAsync(userId);
             _logger.LogInformation("Activities: {Activities}", httpResponseMessage);
 
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -74,7 +74,10 @@ namespace ZenDev.Api.Controllers
                 int points = _pointsService.CalculatePoints(pointsModels);
                 _logger.LogInformation("Points: {MappedPoints}", points);
 
-                return Ok(activitiesApiModel);
+
+                // Only update the last synced date after the calculations have completed successfully
+                var newSyncDate = await _pointsService.SetLastSyncedDateAsync(userId);
+                return Ok(newSyncDate);
 
             }
 
