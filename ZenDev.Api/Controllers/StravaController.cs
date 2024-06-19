@@ -61,10 +61,10 @@ namespace ZenDev.Api.Controllers
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 var stream = await httpResponseMessage.Content.ReadAsStringAsync();
-                var activities = JsonSerializer.Deserialize<List<ActivitySummaryResponse>>(stream);
+                _logger.LogInformation("Raw JSON Response: {JsonResponse}", stream);
 
+                var activities = JsonSerializer.Deserialize<List<ActivitySummaryResponse>>(stream);
                 var activitiesApiModel = _mapper.Map<List<ActivitySummaryApiModel>>(activities);
-                _logger.LogInformation("Mapped Activities: {MappedActivities}", activitiesApiModel);
 
                 var pointsModels = _mapper.Map<List<ActivityPointsApiModel>>(activitiesApiModel);
                 int points = _pointsService.CalculatePoints(pointsModels);
