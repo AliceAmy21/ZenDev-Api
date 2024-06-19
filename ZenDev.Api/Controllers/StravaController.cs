@@ -61,19 +61,14 @@ namespace ZenDev.Api.Controllers
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 var stream = await httpResponseMessage.Content.ReadAsStringAsync();
-                _logger.LogInformation("Raw JSON Response: {JsonResponse}", stream);
-
                 var activities = JsonSerializer.Deserialize<List<ActivitySummaryResponse>>(stream);
-                _logger.LogInformation("Activities: {Activities}", activities);
 
                 var activitiesApiModel = _mapper.Map<List<ActivitySummaryApiModel>>(activities);
                 _logger.LogInformation("Mapped Activities: {MappedActivities}", activitiesApiModel);
 
                 var pointsModels = _mapper.Map<List<ActivityPointsApiModel>>(activitiesApiModel);
-
                 int points = _pointsService.CalculatePoints(pointsModels);
                 _logger.LogInformation("Points: {MappedPoints}", points);
-
 
                 // Only update the last synced date after the calculations have completed successfully
                 var newSyncDate = await _pointsService.SetLastSyncedDateAsync(userId);
