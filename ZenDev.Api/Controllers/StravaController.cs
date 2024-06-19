@@ -55,9 +55,6 @@ namespace ZenDev.Api.Controllers
                 httpResponseMessage = await httpClient.GetAsync($"athlete/activities?after={epochTime}&page=1&per_page=200");
             }
 
-            //var newSyncDate = await _pointsService.SetLastSyncedDateAsync(userId);
-            _logger.LogInformation("Activities: {Activities}", httpResponseMessage);
-
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 var stream = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -75,7 +72,6 @@ namespace ZenDev.Api.Controllers
                 return Ok(newSyncDate);
 
             }
-
             return BadRequest();
         }
     }
