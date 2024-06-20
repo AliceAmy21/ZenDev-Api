@@ -1,6 +1,8 @@
 using AutoMapper;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using System.Net.Http.Headers;
 using ZenDev.Api;
 using ZenDev.BusinessLogic;
 using ZenDev.Persistence;
@@ -50,6 +52,11 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddHttpClient("strava", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("https://www.strava.com/api/v3/");
+});
 
 ///////////////////////////////////////////////////////
 // App configuration
