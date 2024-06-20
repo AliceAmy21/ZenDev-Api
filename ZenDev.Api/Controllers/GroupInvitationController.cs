@@ -62,5 +62,25 @@ namespace ZenDev.Api.Controllers
 
             return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
         }
+
+        [HttpDelete(nameof(DeleteGroupInvitation))]
+        public async Task<ActionResult<ResultApiModel>> DeleteGroupInvitation(GroupInvitationApiModel groupInvitation)
+        {
+            var groupInvitationEntity = _mapper.Map<GroupInvitationEntity>(groupInvitation);
+
+            var result = await _groupInvitationService.DeleteGroupInvitationAsync(groupInvitationEntity);
+
+            return Ok(_mapper.Map<ResultApiModel>(result));
+        }
+
+        [HttpPost(nameof(AcceptGroupInvitationAsync))]
+        public async Task<ActionResult<ResultApiModel>> AcceptGroupInvitationAsync(UserGroupBridgeApiModel userGroupBridgeApiModel)
+        {
+            var userGroupBridgeEntity = _mapper.Map<UserGroupBridgeEntity>(userGroupBridgeApiModel);
+
+            var result = await _groupInvitationService.AcceptGroupInvitationAsync(userGroupBridgeEntity);
+
+            return Ok(_mapper.Map<ResultApiModel>(result));
+        }
     }
 }

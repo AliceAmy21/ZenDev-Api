@@ -10,5 +10,7 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
         public Task<List<GroupInvitationEntity?>> GetGroupInvitationsByUserIdAsync(long userId);
         public Task<List<UserInviteModel>> GetNonGroupMembers(long groupId);
         public Task<List<UserInviteModel>> GetAllUsersAsync(GroupInvitationQueryObject query);
+        public Task<ResultModel> DeleteGroupInvitationAsync(GroupInvitationEntity groupInvitationEntity);
+        public Task<ResultModel> AcceptGroupInvitationAsync(UserGroupBridgeEntity userGroupBridgeEntity);
     }
 }

@@ -28,14 +28,15 @@ namespace ZenDev.BusinessLogic.Services
                 .Include(group => group.ExerciseTypeEntity)
                 .AsQueryable();
 
-       
-            if(query.ShowMyGroups.Equals(true) && userId > 0) // My groups: Filter to show groups that the user belongs to
+            var mygroups = groups.Where(group => group.UserGroupBridgeEntities.Any(ug => ug.UserId == userId));
+
+            if (query.ShowMyGroups.Equals(true) && userId > 0) // My groups: Filter to show groups that the user belongs to
             {
-                groups = groups.Where(group => group.UserGroupBridgeEntities.Any(ug => ug.UserId == userId));
+                groups = mygroups;
             }
             else if(query.ShowMyGroups.Equals(false) && userId > 0) // Available groups: Filter to show groups that the user does not belong to
             {
-                groups = groups.Where(group => group.UserGroupBridgeEntities.Any(ug => ug.UserId != userId));
+                groups = groups.Except(mygroups);
             }
 
             if(!string.IsNullOrEmpty(query.searchQuery))
