@@ -12,8 +12,8 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240612140911_databaseinitialisation")]
-    partial class databaseinitialisation
+    [Migration("20240621085401_DatabaseInitialisation")]
+    partial class DatabaseInitialisation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,14 +164,17 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UserId")
+                    b.Property<long>("InviteSenderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("InvitedUserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("GroupInvitationId");
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("InvitedUserId");
 
                     b.ToTable("GroupInvitations");
                 });
@@ -349,7 +352,7 @@ namespace ZenDev.Persistence.Migrations
 
                     b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("InvitedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

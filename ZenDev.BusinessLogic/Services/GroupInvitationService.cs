@@ -24,13 +24,37 @@ namespace ZenDev.BusinessLogic.Services
             _groupService = groupService;
         }
 
-        public async Task<List<GroupInvitationEntity?>> GetGroupInvitationsByUserIdAsync(long userId)
+        public async Task<List<NotificationModel>> GetGroupInvitationsByUserIdAsync(long userId)
         {
-            var result = await _dbContext.GroupInvitations
-                .Where(invitation => invitation.UserId == userId)
+            var inivtations = await _dbContext.GroupInvitations
+                .Where(invitation => invitation.InvitedUserId == userId)
                 .ToListAsync();
 
-            return result;
+            var notificationModels = new List<NotificationModel>();
+
+            var invitedUser = getUserById(userId);
+
+            foreach (var i in inivtations)
+            {
+                var inviteSender = getUserById(i.InviteSenderId);
+                var group = await _groupService.getGroupByIdAsync(i.GroupId);
+
+                var model = new NotificationModel
+                {
+                    InvitedUserId = invitedUser.UserId,
+                    InvitedUserName = invitedUser.UserName,
+                    InviteSenderId = i.InviteSenderId,
+                    InviteSenderUserName = inviteSender.UserName,
+                    InviteSenderAvatarUrlIcon = inviteSender.AvatarIconUrl,
+                    groupId = group.GroupId,
+                    groupName = group.GroupName,
+                };
+
+                notificationModels.Add(model);
+            }
+          
+
+            return notificationModels;
         }
 
         public async Task<List<GroupInvitationEntity>> CreateGroupInvitationsAsync(List<GroupInvitationEntity> groupInvitations)
@@ -138,7 +162,7 @@ namespace ZenDev.BusinessLogic.Services
             try
             {
                 var recordToRemove = _dbContext.GroupInvitations.FirstOrDefault(record => record.GroupId == groupInvitationEntity.GroupId &&
-                                      record.UserId == groupInvitationEntity.UserId);
+                                      record.InvitedUserId == groupInvitationEntity.InvitedUserId);
                 if (recordToRemove != null)
                 {
                     _dbContext.Remove(recordToRemove);
@@ -172,7 +196,7 @@ namespace ZenDev.BusinessLogic.Services
                 //Remove user from GroupInvitation
                 var groupInvitationEntity = new GroupInvitationEntity()
                 {
-                    UserId = userGroupBridgeEntity.UserId,
+                    InvitedUserId = userGroupBridgeEntity.UserId,
                     GroupId = userGroupBridgeEntity.GroupId,
                 };
                 var deleteGroupInvitation = await DeleteGroupInvitationAsync(groupInvitationEntity);

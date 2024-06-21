@@ -26,13 +26,13 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetInvitationsByUserId))]
-        public async Task<ActionResult<List<GroupInvitationApiModel>>> GetInvitationsByUserId(long userId)
+        public async Task<ActionResult<List<NotificationApiModel>>> GetInvitationsByUserId(long userId)
         {
             var result = await _groupInvitationService.GetGroupInvitationsByUserIdAsync(userId);
 
             if (result == null) return NotFound();
 
-            return Ok(_mapper.Map<List<GroupInvitationApiModel>>(result));
+            return Ok(_mapper.Map<List<NotificationApiModel>>(result));
         }
 
         [HttpPost(nameof(CreateGroupInvitations))]

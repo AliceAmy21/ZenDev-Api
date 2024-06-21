@@ -4,8 +4,10 @@ namespace ZenDev.Api.ApiModels
     {  
         public long GroupInvitationId { get; set; }
 
-        public long UserId { get; set; }
-
         public long GroupId { get; set; }
+
+        public long InvitedUserId { get; set; }
+
+        public long InviteSenderId { get; set; }
     }
 }
