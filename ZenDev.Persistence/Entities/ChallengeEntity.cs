@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ZenDev.Persistence.Constants;
 
 namespace ZenDev.Persistence.Entities
 {
@@ -7,8 +8,12 @@ namespace ZenDev.Persistence.Entities
     {
         [Key]
         public long ChallengeId {get;set;}
+        [MaxLength(500)]
+        public string ChallengeDescription {get;set;}
         public DateTimeOffset ChallengeStartDate {get;set;}   
         public DateTimeOffset ChallengeEndDate {get;set;}
+        public Measurement Measurement {get;set;}
+        public long AmountCompleted {get;set;}
         public long AmountToComplete {get;set;}
         public long ExerciseId {get;set;}
         [ForeignKey(nameof(ExerciseId))]

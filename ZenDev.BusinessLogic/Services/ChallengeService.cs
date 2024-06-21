@@ -58,13 +58,17 @@ namespace ZenDev.BusinessLogic.Services
 
             ChallengeEntity challenge1 = new()
             {
+                ChallengeDescription = challenge.ChallengeDescription,
                 ChallengeEndDate = challenge.ChallengeEndDate,
                 ChallengeStartDate = challenge.ChallengeStartDate,
+                AmountCompleted = 0,
                 AmountToComplete = challenge.AmountToComplete,
+                Measurement = challenge.Measurement,
                 ExerciseId = challenge.ExerciseId,
                 ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId),
                 GroupId = challenge.GroupId,
-                GroupEntity = groups.First(group=> group.GroupId == challenge.GroupId)
+                GroupEntity = groups.First(group=> group.GroupId == challenge.GroupId),
+                Admin = challenge.UserId
             };
 
             try{
@@ -251,6 +255,13 @@ namespace ZenDev.BusinessLogic.Services
             challenge1.AmountToComplete = challenge.AmountToComplete;
 
             if(challenge.Admin != null && challenge.Admin != challenge1.Admin)
+            challenge1.Admin = challenge.Admin;
+
+            if(challenge.ChallengeDescription  != null && challenge.ChallengeDescription != challenge1.ChallengeDescription)
+            challenge1.ChallengeDescription = challenge.ChallengeDescription;
+
+            if(challenge.Measurement  != null && challenge.Measurement.Equals(challenge1.Measurement))
+            challenge1.Measurement = challenge.Measurement;
 
             _dbContext.Update(challenge1);
             await _dbContext.SaveChangesAsync();

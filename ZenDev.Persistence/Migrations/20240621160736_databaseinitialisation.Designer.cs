@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240621144330_databaseinitialisation")]
+    [Migration("20240621160736_databaseinitialisation")]
     partial class databaseinitialisation
     {
         /// <inheritdoc />
@@ -36,8 +36,16 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("Admin")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("AmountCompleted")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("AmountToComplete")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("ChallengeDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTimeOffset>("ChallengeEndDate")
                         .HasColumnType("datetimeoffset");
@@ -50,6 +58,9 @@ namespace ZenDev.Persistence.Migrations
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Measurement")
+                        .HasColumnType("int");
 
                     b.HasKey("ChallengeId");
 
