@@ -11,5 +11,6 @@ namespace ZenDev.Api.ApiModels
         public long GroupId {get;set;}
         public GroupApiModel GroupApiModel {get;set;}
         public long UserId {get;set;}
+        public long Admin {get;set;}
     }
 }

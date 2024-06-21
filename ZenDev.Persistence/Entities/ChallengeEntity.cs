@@ -17,6 +17,7 @@ namespace ZenDev.Persistence.Entities
         [ForeignKey(nameof(GroupId))]
         public GroupEntity GroupEntity {get;set;}
         public List<UserChallengeBridgeEntity> UserChallengeBridgeEntities {get;set;} = [];
+        public long Admin {get;set;}
 
     }
 }

@@ -21,9 +21,9 @@ namespace ZenDev.Api.Controllers
         private readonly IMapper _mapper = mapper;
 
         [HttpPut(nameof(AddUserToChallenge))]
-        public async Task<ActionResult<ChallengeApiModel>> AddUserToChallenge(long challengeId, long userId){
-                var challenge = await _challengeService.AddUserToChallengeAsync(challengeId,userId);
-                return Ok(_mapper.Map<ChallengeApiModel>(challenge));
+        public async Task<ActionResult<int>> AddUserToChallenge(long challengeId, long userId){
+                await _challengeService.AddUserToChallengeAsync(challengeId,userId);
+                return Ok(userId);
         }
 
         [HttpPost(nameof(CreateChallenge))]
@@ -66,9 +66,9 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpDelete(nameof(RemoveUserFromChallenge))]
-        public async Task<ActionResult<ChallengeApiModel>> RemoveUserFromChallenge(long challengeId, long userId){
-            var challenge = await _challengeService.RemoveUserFromChallengeAsync(challengeId,userId);
-            return Ok(_mapper.Map<ChallengeApiModel>(challenge));
+        public async Task<ActionResult<int>> RemoveUserFromChallenge(long challengeId, long userId){
+            await _challengeService.RemoveUserFromChallengeAsync(challengeId,userId);
+            return Ok(userId);
         }
 
         [HttpPut(nameof(UpdateChallenge))]
@@ -77,5 +77,19 @@ namespace ZenDev.Api.Controllers
             var challengeNew = await _challengeService.UpdateChallengeAsync(challengeModel);
             return Ok(_mapper.Map<ChallengeEntity>(challengeNew));
         }
+
+        [HttpGet(nameof(GetAllExercises))]
+        public async Task<ActionResult<List<ExerciseApiModel>>> GetAllExercises() 
+        {
+            var result = await _challengeService.GetAllExercisesAsync();
+            if (result == null) return NotFound();
+            return Ok(_mapper.Map<List<ExerciseApiModel>>(result));
+        }
+
+        [HttpDelete(nameof(DeleteChallenge))]
+        public async Task<long> DeleteChallenge(long challengeId){
+            return _challengeService.DeleteChallengeAsync(challengeId).Result;
+        }
+
     }
 }

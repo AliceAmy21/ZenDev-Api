@@ -12,5 +12,6 @@ namespace ZenDev.BusinessLogic.Models
         public required ExerciseEntity ExerciseEntity {get;set;}
         public long GroupId {get;set;}
         public required GroupEntity GroupEntity {get;set;}
+        public long Admin {get;set;}
     }
 }

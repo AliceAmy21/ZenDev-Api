@@ -11,5 +11,6 @@ namespace ZenDev.Api.ApiModels
         public DateTimeOffset ChallengeEndDate {get;set;}
         public long AmountToComplete {get;set;}
         public long ExerciseId {get;set;}
+        public long Admin {get;set;}
     }
 }

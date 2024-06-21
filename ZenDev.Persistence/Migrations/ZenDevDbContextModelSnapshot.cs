@@ -30,6 +30,9 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ChallengeId"));
 
+                    b.Property<long>("Admin")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("AmountToComplete")
                         .HasColumnType("bigint");
 

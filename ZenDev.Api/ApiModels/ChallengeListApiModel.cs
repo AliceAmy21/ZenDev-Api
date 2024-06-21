@@ -13,5 +13,6 @@ namespace ZenDev.Api.ApiModels
         public long AmountToComplete {get;set;}
         public required ExerciseApiModel ExerciseApiModel {get;set;}
         public required GroupApiModel GroupApiModel {get;set;}
+        public long Admin {get;set;}
     }
 }

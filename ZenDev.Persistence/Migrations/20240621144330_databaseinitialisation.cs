@@ -136,7 +136,8 @@ namespace ZenDev.Persistence.Migrations
                     ChallengeEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
                     ExerciseId = table.Column<long>(type: "bigint", nullable: false),
-                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                    GroupId = table.Column<long>(type: "bigint", nullable: false),
+                    Admin = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {

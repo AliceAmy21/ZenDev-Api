@@ -20,8 +20,12 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<ChallengeEntity> GetChallengeByIdAsync(long ChallengeId);
 
-        public Task<ChallengeEntity> AddUserToChallengeAsync(long challengeId,long userId);
+        public Task AddUserToChallengeAsync(long challengeId,long userId);
 
-        public Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId,long userId);
+        public Task RemoveUserFromChallengeAsync(long challengeId,long userId);
+
+        public Task<List<ExerciseEntity>> GetAllExercisesAsync();
+
+        public Task<long> DeleteChallengeAsync(long challengeId);
     }
 }

@@ -23,30 +23,32 @@ namespace ZenDev.BusinessLogic.Services
             _logger = logger;
         }
 
-        public async Task<ChallengeEntity> AddUserToChallengeAsync(long challengeId, long userId)
+        public async Task AddUserToChallengeAsync(long challengeId, long userId)
         {
             var challengeBridge = _dbContext.UserChallengeBridge
                 .AsQueryable();
             if(challengeId>0 && userId>0){
-                if(!(challengeBridge.Any(user=>user.UserId == userId) && challengeBridge.Any(challenge => challenge.ChallengeId == challengeId))){
-                    UserChallengeBridgeEntity userChallengeBridgeEntity = new UserChallengeBridgeEntity()
-                    {
-                        UserId = userId,
-                        ChallengeId = challengeId
-                    };
-                    try{
-                        await _dbContext.UserChallengeBridge.AddAsync(userChallengeBridgeEntity);
-                        await _dbContext.SaveChangesAsync();
+                try{
+                    if(!(challengeBridge.Any(user=>user.UserId == userId) && challengeBridge.Any(challenge => challenge.ChallengeId == challengeId))){
+                        UserChallengeBridgeEntity userChallengeBridgeEntity = new UserChallengeBridgeEntity()
+                        {
+                            UserId = userId,
+                            ChallengeId = challengeId
+                        };
+                        try{
+                            await _dbContext.UserChallengeBridge.AddAsync(userChallengeBridgeEntity);
+                            await _dbContext.SaveChangesAsync();
 
+                        }
+                        catch(Exception ex){
+                            _logger.LogError(ex,"Failed to add user");
+                        }
                     }
-                    catch(Exception ex){
-                        _logger.LogError(ex,"Failed to add user");
-                    }
-                    return await GetChallengeByIdAsync(challengeId);
                 }
-                return await GetChallengeByIdAsync(challengeId);
+                catch(Exception ex){
+                _logger.LogError(ex,"Failed to add user to challenge");
+                }
             }
-            return null;
         }
 
 
@@ -219,14 +221,18 @@ namespace ZenDev.BusinessLogic.Services
             return new List<UserInviteModel>();
         }
 
-        public async Task<ChallengeEntity> RemoveUserFromChallengeAsync(long challengeId, long userId)
+        public async Task RemoveUserFromChallengeAsync(long challengeId, long userId)
         {
+            try{
             var challengeBridge = _dbContext.UserChallengeBridge
             .AsQueryable();
             UserChallengeBridgeEntity user = await challengeBridge.FirstAsync(userGroup => userGroup.UserId == userId && userGroup.ChallengeId == challengeId);
             _dbContext.UserChallengeBridge.Remove(user);
             await _dbContext.SaveChangesAsync();
-            return await GetChallengeByIdAsync(challengeId);
+            }
+            catch(Exception ex){
+                _logger.LogError(ex,"Failed to remove user from challenge");
+            }
         }
 
         public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge)
@@ -244,9 +250,22 @@ namespace ZenDev.BusinessLogic.Services
             if(challenge.AmountToComplete != null && challenge.AmountToComplete != challenge1.AmountToComplete)
             challenge1.AmountToComplete = challenge.AmountToComplete;
 
+            if(challenge.Admin != null && challenge.Admin != challenge1.Admin)
+
             _dbContext.Update(challenge1);
             await _dbContext.SaveChangesAsync();
             return await GetChallengeByIdAsync(challenge1.ChallengeId);
+        }
+        public async Task<long> DeleteChallengeAsync(long challengeId)
+        {
+            var challenge = await _dbContext.Challenges.FindAsync(challengeId);
+            _dbContext.Challenges.Remove(challenge);
+            await _dbContext.SaveChangesAsync();
+            return challengeId;
+        }
+        public async Task<List<ExerciseEntity>> GetAllExercisesAsync()
+        {
+            return await _dbContext.Exercises.ToListAsync();
         }
     }
 }
