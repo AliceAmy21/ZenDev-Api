@@ -25,7 +25,7 @@ namespace ZenDev.BusinessLogic.Services
             var challengeBridge = _dbContext.UserChallengeBridge
                 .AsQueryable();
             if(challengeId>0 && userId>0){
-                try{
+                try{ 
                     if(!(challengeBridge.Any(user=>user.UserId == userId) && challengeBridge.Any(challenge => challenge.ChallengeId == challengeId))){
                         UserChallengeBridgeEntity userChallengeBridgeEntity = new UserChallengeBridgeEntity()
                         {
@@ -88,9 +88,9 @@ namespace ZenDev.BusinessLogic.Services
         }
 
         public async Task<ChallengeEntity> GetChallengeByIdAsync(long ChallengeId){
-            var challenge = _dbContext.Challenges
-            .Include(groups=>groups.GroupEntity)
-            .Include(exercise=>exercise.ExerciseEntity)
+            var challenge = _dbContext.Challenges 
+            .Include(groups=>groups.GroupEntity) 
+            .Include(exercise=>exercise.ExerciseEntity) 
             .Include(exerciseT=>exerciseT.GroupEntity.ExerciseTypeEntity)
             .AsQueryable();
 
@@ -103,8 +103,8 @@ namespace ZenDev.BusinessLogic.Services
             var userBridge = _dbContext.UserChallengeBridge
                 .Include(group => group.ChallengeEntity.GroupEntity)
                 .Include(challenge => challenge.ChallengeEntity)
-                .Include(exercise => exercise.ChallengeEntity.ExerciseEntity)
-                .Include(group=>group.ChallengeEntity.GroupEntity)
+                .Include(exercise => exercise.ChallengeEntity.ExerciseEntity) 
+                .Include(group=>group.ChallengeEntity.GroupEntity) 
                 .Include(exercise1=>exercise1.ChallengeEntity.GroupEntity.ExerciseTypeEntity)
                 .AsQueryable();
             List<List<ChallengeListModel>> ListOfChallenges = new List<List<ChallengeListModel>>();
@@ -158,8 +158,8 @@ namespace ZenDev.BusinessLogic.Services
             var userGroupBridge = _dbContext.UserChallengeBridge
                 .Include(user => user.UserEntity)
                 .Include(challenge => challenge.ChallengeEntity)
-                .Include(exercise => exercise.ChallengeEntity.ExerciseEntity)
-                .Include(group=>group.ChallengeEntity.GroupEntity)
+                .Include(exercise => exercise.ChallengeEntity.ExerciseEntity) 
+                .Include(group=>group.ChallengeEntity.GroupEntity) 
                 .Include(exercise1=>exercise1.ChallengeEntity.GroupEntity.ExerciseTypeEntity)
                 .AsQueryable();
             List<ChallengeListModel> ListOfChallenges = new List<ChallengeListModel>();
@@ -187,7 +187,7 @@ namespace ZenDev.BusinessLogic.Services
 
         public List<UserInviteModel> GetUsersForChallengeAsync(long challengeId)
         {
-            var challengeBridge = _dbContext.UserChallengeBridge
+            var challengeBridge = _dbContext.UserChallengeBridge 
             .Include(user=>user.UserEntity)
             .AsQueryable();
 
@@ -209,11 +209,11 @@ namespace ZenDev.BusinessLogic.Services
 
         public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId, long groupId)
         {
-            var userGroupBridge = _dbContext.UserGroupBridge
+            var userGroupBridge = _dbContext.UserGroupBridge 
             .Include(user=>user.UserEntity)
             .AsQueryable();
 
-            var challengeBridge = _dbContext.UserChallengeBridge
+            var challengeBridge = _dbContext.UserChallengeBridge 
             .Include(user=>user.UserEntity)
             .AsQueryable();
 
@@ -252,39 +252,29 @@ namespace ZenDev.BusinessLogic.Services
         public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge)
         {
             var challenge1 = await _dbContext.Challenges.FindAsync(challenge.ChallengeId);
-
-            if(challenge.ChallengeName != null && challenge.ChallengeName != challenge1.ChallengeName)
+            if(challenge1 != null){
             challenge1.ChallengeName = challenge.ChallengeName;
-
-            if(challenge.ChallengeEndDate != null && challenge.ChallengeEndDate != challenge1.ChallengeEndDate)
             challenge1.ChallengeEndDate = challenge.ChallengeEndDate;
-
-            if(challenge.ExerciseId != null && challenge.ExerciseId != challenge1.ExerciseId){
             challenge1.ExerciseId = challenge.ExerciseId;
-            challenge1.ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId);
-            }
-
-            if(challenge.AmountToComplete != null && challenge.AmountToComplete != challenge1.AmountToComplete)
+            var exercise = await _dbContext.Exercises.FindAsync(challenge.ExerciseId); 
+            if(exercise!=null)
+                challenge1.ExerciseEntity = exercise;
             challenge1.AmountToComplete = challenge.AmountToComplete;
-
-            if(challenge.Admin != null && challenge.Admin != challenge1.Admin)
             challenge1.Admin = challenge.Admin;
-
-            if(challenge.ChallengeDescription  != null && challenge.ChallengeDescription != challenge1.ChallengeDescription)
             challenge1.ChallengeDescription = challenge.ChallengeDescription;
-
-            if(challenge.Measurement  != null && challenge.Measurement.Equals(challenge1.Measurement))
             challenge1.Measurement = challenge.Measurement;
 
-            _dbContext.Update(challenge1);
+            _dbContext.Challenges.Update(challenge1);
             await _dbContext.SaveChangesAsync();
             return await GetChallengeByIdAsync(challenge1.ChallengeId);
+            }
+            return new ChallengeEntity();
         }
         public async Task<long> DeleteChallengeAsync(long challengeId)
         {
-            var challenge = _dbContext.Challenges.FirstOrDefault(challenge => challenge.ChallengeId == challengeId);
+            var challenge = await _dbContext.Challenges.FirstOrDefaultAsync(challenge => challenge.ChallengeId == challengeId);
             if(challenge != null)
-            _dbContext.Remove(challenge);
+                _dbContext.Remove(challenge);
             await _dbContext.SaveChangesAsync();
             return challengeId;
         }
