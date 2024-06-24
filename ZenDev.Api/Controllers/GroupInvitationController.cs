@@ -26,13 +26,13 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetInvitationsByUserId))]
-        public async Task<ActionResult<List<GroupInvitationApiModel>>> GetInvitationsByUserId(long userId)
+        public async Task<ActionResult<List<NotificationApiModel>>> GetInvitationsByUserId(long userId)
         {
             var result = await _groupInvitationService.GetGroupInvitationsByUserIdAsync(userId);
 
             if (result == null) return NotFound();
 
-            return Ok(_mapper.Map<List<GroupInvitationApiModel>>(result));
+            return Ok(_mapper.Map<List<NotificationApiModel>>(result));
         }
 
         [HttpPost(nameof(CreateGroupInvitations))]
@@ -63,6 +63,26 @@ namespace ZenDev.Api.Controllers
             var result = await _groupInvitationService.GetAllUsersAsync(query);
 
             return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
+        }
+
+        [HttpDelete(nameof(DeleteGroupInvitation))]
+        public async Task<ActionResult<ResultApiModel>> DeleteGroupInvitation(GroupInvitationApiModel groupInvitation)
+        {
+            var groupInvitationEntity = _mapper.Map<GroupInvitationEntity>(groupInvitation);
+
+            var result = await _groupInvitationService.DeleteGroupInvitationAsync(groupInvitationEntity);
+
+            return Ok(_mapper.Map<ResultApiModel>(result));
+        }
+
+        [HttpPost(nameof(AcceptGroupInvitationAsync))]
+        public async Task<ActionResult<ResultApiModel>> AcceptGroupInvitationAsync(UserGroupBridgeApiModel userGroupBridgeApiModel)
+        {
+            var userGroupBridgeEntity = _mapper.Map<UserGroupBridgeEntity>(userGroupBridgeApiModel);
+
+            var result = await _groupInvitationService.AcceptGroupInvitationAsync(userGroupBridgeEntity);
+
+            return Ok(_mapper.Map<ResultApiModel>(result));
         }
     }
 }

@@ -1,12 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Text.RegularExpressions;
 using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Helpers;
 using ZenDev.Persistence;
 using ZenDev.Persistence.Entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ZenDev.BusinessLogic.Services
 {
@@ -14,22 +12,49 @@ namespace ZenDev.BusinessLogic.Services
     {
         private readonly ZenDevDbContext _dbContext;
         private readonly ILogger<GroupService> _logger;
+        private readonly IGroupService _groupService;
 
         public GroupInvitationService(
             ZenDevDbContext dbContext,
-            ILogger<GroupService> logger) 
+            ILogger<GroupService> logger,
+            IGroupService groupService) 
         {
             _dbContext = dbContext;
             _logger = logger;
+            _groupService = groupService;
         }
 
-        public async Task<List<GroupInvitationEntity?>> GetGroupInvitationsByUserIdAsync(long userId)
+        public async Task<List<NotificationModel>> GetGroupInvitationsByUserIdAsync(long userId)
         {
-            var result = await _dbContext.GroupInvitations
-                .Where(invitation => invitation.UserId == userId)
+            var inivtations = await _dbContext.GroupInvitations
+                .Where(invitation => invitation.InvitedUserId == userId)
                 .ToListAsync();
 
-            return result;
+            var notificationModels = new List<NotificationModel>();
+
+            var invitedUser = getUserById(userId);
+
+            foreach (var i in inivtations)
+            {
+                var inviteSender = getUserById(i.InviteSenderId);
+                var group = await _groupService.getGroupByIdAsync(i.GroupId);
+
+                var model = new NotificationModel
+                {
+                    InvitedUserId = invitedUser.UserId,
+                    InvitedUserName = invitedUser.UserName,
+                    InviteSenderId = i.InviteSenderId,
+                    InviteSenderUserName = inviteSender.UserName,
+                    InviteSenderAvatarUrlIcon = inviteSender.AvatarIconUrl,
+                    groupId = group.GroupId,
+                    groupName = group.GroupName,
+                };
+
+                notificationModels.Add(model);
+            }
+          
+
+            return notificationModels;
         }
 
         public async Task<List<GroupInvitationEntity>> CreateGroupInvitationsAsync(List<GroupInvitationEntity> groupInvitations)
@@ -127,5 +152,88 @@ namespace ZenDev.BusinessLogic.Services
                 .ToListAsync();
         }
 
+        public async Task<ResultModel> DeleteGroupInvitationAsync(GroupInvitationEntity groupInvitationEntity)
+        {
+            var result = new ResultModel()
+            {
+                Success = false
+            };
+
+            try
+            {
+                var recordToRemove = _dbContext.GroupInvitations.FirstOrDefault(record => record.GroupId == groupInvitationEntity.GroupId &&
+                                      record.InvitedUserId == groupInvitationEntity.InvitedUserId);
+                if (recordToRemove != null)
+                {
+                    _dbContext.Remove(recordToRemove);
+                    await _dbContext.SaveChangesAsync();
+                    result.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to remove user from group invitation table");
+                result.ErrorMessages = new List<string>() { "Failed to remove user from group invitation table" };
+                return result;
+            }
+
+            return result;
+        }
+
+        public async Task<ResultModel> AcceptGroupInvitationAsync(UserGroupBridgeEntity userGroupBridgeEntity)
+        {
+            var result = new ResultModel()
+            {
+                Success = false
+            };
+
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try 
+            {
+                //Add user to UserGroupBridge
+                UserGroupBridgeEntity userGroupBridge = new()
+                {
+                    GroupAdmin = false,
+                    UserId = userGroupBridgeEntity.UserId,
+                    GroupId = userGroupBridgeEntity.GroupId,
+                };
+                var addUserGroupBridge = await _groupService.CreateUserGroupBridgeAsync(userGroupBridge);
+
+                //Remove user from GroupInvitation
+                var groupInvitationEntity = new GroupInvitationEntity()
+                {
+                    InvitedUserId = userGroupBridgeEntity.UserId,
+                    GroupId = userGroupBridgeEntity.GroupId,
+                };
+                var deleteGroupInvitation = await DeleteGroupInvitationAsync(groupInvitationEntity);
+
+                //Update member count in Groups table
+                var group = await _dbContext.Groups.FirstOrDefaultAsync(group => group.GroupId == groupInvitationEntity.GroupId);
+
+                if (group != null)
+                {
+                    group.MemberCount++;
+                }
+
+                // Save changes
+                await _dbContext.SaveChangesAsync();
+
+                // Commit transaction
+                await transaction.CommitAsync();
+
+                result.Success = true;
+            }
+            catch(Exception ex)
+            {
+                //Roll back on fail
+                await transaction.RollbackAsync();
+
+                result.ErrorMessages = new List<string> { "Failed to accept invitation" };
+                _logger.LogError(ex, "Failed to accept invitation");
+                return result;
+            }
+
+            return result;
+        }
     }
 }

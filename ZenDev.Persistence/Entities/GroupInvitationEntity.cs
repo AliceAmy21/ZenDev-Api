@@ -10,12 +10,14 @@ namespace ZenDev.Persistence.Entities
 
         public long GroupId { get; set; }
 
-         public long UserId { get; set; }
+        public long InvitedUserId { get; set; }
+
+        public long InviteSenderId {  get; set; }
 
         [ForeignKey(nameof(GroupId))]
         public GroupEntity GroupEntity { get; set; }
 
-        [ForeignKey(nameof(UserId))]
+        [ForeignKey(nameof(InvitedUserId))]
         public UserEntity UserEntity { get; set; }
     }
 }

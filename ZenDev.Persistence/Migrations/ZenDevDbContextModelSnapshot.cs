@@ -180,14 +180,17 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UserId")
+                    b.Property<long>("InviteSenderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("InvitedUserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("GroupInvitationId");
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("InvitedUserId");
 
                     b.ToTable("GroupInvitations");
                 });
@@ -365,7 +368,7 @@ namespace ZenDev.Persistence.Migrations
 
                     b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("InvitedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
