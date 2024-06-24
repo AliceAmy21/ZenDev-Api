@@ -10,6 +10,7 @@ namespace ZenDev.BusinessLogic.Models
     public class ChallengeUpdateModel
     {
         public long ChallengeId {get;set;} 
+        public string ChallengeName {get;set;}
         public string ChallengeDescription {get;set;}
         public Measurement Measurement {get;set;}
         public DateTimeOffset ChallengeEndDate {get;set;}

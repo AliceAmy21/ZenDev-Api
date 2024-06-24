@@ -7,6 +7,7 @@ namespace ZenDev.BusinessLogic.Models
     public class ChallengeListModel
     {
         public long ChallengeId {get;set;}
+        public string ChallengeName {get;set;}
         public DateTimeOffset ChallengeStartDate {get;set;}   
         public DateTimeOffset ChallengeEndDate {get;set;}
         public long AmountCompleted {get;set;}

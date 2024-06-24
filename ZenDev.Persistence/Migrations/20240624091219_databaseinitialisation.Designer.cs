@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240621160736_databaseinitialisation")]
+    [Migration("20240624091219_databaseinitialisation")]
     partial class databaseinitialisation
     {
         /// <inheritdoc />
@@ -49,6 +49,11 @@ namespace ZenDev.Persistence.Migrations
 
                     b.Property<DateTimeOffset>("ChallengeEndDate")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ChallengeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTimeOffset>("ChallengeStartDate")
                         .HasColumnType("datetimeoffset");

@@ -9,6 +9,7 @@ namespace ZenDev.Api.ApiModels
     public class ChallengeCreationApiModel
     {
         public long ChallengeId {get;set;}
+        public string ChallengeName {get;set;}
         public string ChallengeDescription {get;set;}
         public DateTimeOffset ChallengeStartDate {get;set;}   
         public DateTimeOffset ChallengeEndDate {get;set;}

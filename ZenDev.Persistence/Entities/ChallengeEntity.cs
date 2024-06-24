@@ -8,6 +8,8 @@ namespace ZenDev.Persistence.Entities
     {
         [Key]
         public long ChallengeId {get;set;}
+        [MaxLength(100)]
+        public string ChallengeName {get;set;}
         [MaxLength(500)]
         public string ChallengeDescription {get;set;}
         public DateTimeOffset ChallengeStartDate {get;set;}   

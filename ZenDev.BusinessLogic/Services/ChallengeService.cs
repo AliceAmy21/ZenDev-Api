@@ -58,6 +58,7 @@ namespace ZenDev.BusinessLogic.Services
 
             ChallengeEntity challenge1 = new()
             {
+                ChallengeName = challenge.ChallengeName,
                 ChallengeDescription = challenge.ChallengeDescription,
                 ChallengeEndDate = challenge.ChallengeEndDate,
                 ChallengeStartDate = challenge.ChallengeStartDate,
@@ -116,6 +117,10 @@ namespace ZenDev.BusinessLogic.Services
             foreach(var Bridge in ListOfBridges){
                 ChallengeListModel challengeListModel = new ChallengeListModel()
                 {
+                ChallengeName = Bridge.ChallengeEntity.ChallengeName,
+                AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                Measurement = Bridge.ChallengeEntity.Measurement,
+                Admin = Bridge.ChallengeEntity.Admin,
                 ChallengeId = Bridge.ChallengeId,
                 ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
                 ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
@@ -132,6 +137,10 @@ namespace ZenDev.BusinessLogic.Services
                 ChallengeListModel challengeListModel = new ChallengeListModel()
                 {
                 ChallengeId = Bridge.ChallengeId,
+                ChallengeName = Bridge.ChallengeEntity.ChallengeName,
+                AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                Measurement = Bridge.ChallengeEntity.Measurement,
+                Admin = Bridge.ChallengeEntity.Admin,
                 ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
                 ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
                 AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
@@ -162,6 +171,10 @@ namespace ZenDev.BusinessLogic.Services
                 ChallengeListModel challengeListModel = new ChallengeListModel()
                 {
                 ChallengeId = Bridge.ChallengeId,
+                ChallengeName = Bridge.ChallengeEntity.ChallengeName,
+                AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                Measurement = Bridge.ChallengeEntity.Measurement,
+                Admin = Bridge.ChallengeEntity.Admin,
                 ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
                 ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
                 AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
@@ -242,6 +255,9 @@ namespace ZenDev.BusinessLogic.Services
         public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge)
         {
             var challenge1 = _dbContext.Challenges.Find(challenge.ChallengeId);
+
+            if(challenge.ChallengeName != null && challenge.ChallengeName != challenge1.ChallengeName)
+            challenge1.ChallengeName = challenge.ChallengeName;
 
             if(challenge.ChallengeEndDate != null && challenge.ChallengeEndDate != challenge1.ChallengeEndDate)
             challenge1.ChallengeEndDate = challenge.ChallengeEndDate;

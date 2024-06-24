@@ -9,7 +9,8 @@ namespace ZenDev.Api.ApiModels
 {
     public class ChallengeUpdateApiModel
     {
-        public long ChallengeId {get;set;}   
+        public long ChallengeId {get;set;} 
+        public string ChallengeName {get;set;}  
         public string ChallengeDescription {get;set;}
         public DateTimeOffset ChallengeEndDate {get;set;}
         public Measurement Measurement {get;set;}

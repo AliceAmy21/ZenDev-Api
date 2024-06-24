@@ -47,6 +47,11 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<DateTimeOffset>("ChallengeEndDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("ChallengeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTimeOffset>("ChallengeStartDate")
                         .HasColumnType("datetimeoffset");
 

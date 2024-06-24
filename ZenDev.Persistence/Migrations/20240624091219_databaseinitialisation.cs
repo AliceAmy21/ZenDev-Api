@@ -132,6 +132,7 @@ namespace ZenDev.Persistence.Migrations
                 {
                     ChallengeId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ChallengeName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ChallengeDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     ChallengeStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ChallengeEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
