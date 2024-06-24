@@ -191,7 +191,13 @@ namespace ZenDev.BusinessLogic.Services
             try 
             {
                 //Add user to UserGroupBridge
-                var addUserGroupBridge = await _groupService.CreateUserGroupBridgeAsync(userGroupBridgeEntity);
+                UserGroupBridgeEntity userGroupBridge = new()
+                {
+                    GroupAdmin = false,
+                    UserId = userGroupBridgeEntity.UserId,
+                    GroupId = userGroupBridgeEntity.GroupId,
+                };
+                var addUserGroupBridge = await _groupService.CreateUserGroupBridgeAsync(userGroupBridge);
 
                 //Remove user from GroupInvitation
                 var groupInvitationEntity = new GroupInvitationEntity()
