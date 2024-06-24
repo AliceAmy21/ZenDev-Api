@@ -4,9 +4,6 @@ using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Persistence;
 using ZenDev.Persistence.Entities;
 using ZenDev.BusinessLogic.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Azure.Identity;
 
 namespace ZenDev.BusinessLogic.Services
 {
@@ -254,7 +251,7 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge)
         {
-            var challenge1 = _dbContext.Challenges.Find(challenge.ChallengeId);
+            var challenge1 = await _dbContext.Challenges.FindAsync(challenge.ChallengeId);
 
             if(challenge.ChallengeName != null && challenge.ChallengeName != challenge1.ChallengeName)
             challenge1.ChallengeName = challenge.ChallengeName;
@@ -285,8 +282,9 @@ namespace ZenDev.BusinessLogic.Services
         }
         public async Task<long> DeleteChallengeAsync(long challengeId)
         {
-            var challenge = await _dbContext.Challenges.FindAsync(challengeId);
-            _dbContext.Challenges.Remove(challenge);
+            var challenge = _dbContext.Challenges.FirstOrDefault(challenge => challenge.ChallengeId == challengeId);
+            if(challenge != null)
+            _dbContext.Remove(challenge);
             await _dbContext.SaveChangesAsync();
             return challengeId;
         }
