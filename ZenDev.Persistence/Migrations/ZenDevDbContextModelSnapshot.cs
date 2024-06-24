@@ -280,6 +280,9 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<DateTimeOffset>("LastActive")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTimeOffset?>("LastSynced")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("StravaRefreshToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

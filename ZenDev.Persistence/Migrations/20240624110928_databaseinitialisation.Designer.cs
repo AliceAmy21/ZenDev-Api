@@ -12,13 +12,8 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-<<<<<<<< HEAD:ZenDev.Persistence/Migrations/20240624091219_databaseinitialisation.Designer.cs
-    [Migration("20240624091219_databaseinitialisation")]
+    [Migration("20240624110928_databaseinitialisation")]
     partial class databaseinitialisation
-========
-    [Migration("20240621085401_DatabaseInitialisation")]
-    partial class DatabaseInitialisation
->>>>>>>> b3934e2c9f031e87470f31f746fcd1a206d22b3f:ZenDev.Persistence/Migrations/20240621085401_DatabaseInitialisation.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -286,6 +281,9 @@ namespace ZenDev.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("LastActive")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("LastSynced")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("StravaRefreshToken")

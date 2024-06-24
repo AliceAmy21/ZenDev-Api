@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZenDev.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class DatabaseInitialisation : Migration
+    public partial class databaseinitialisation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,7 +63,8 @@ namespace ZenDev.Persistence.Migrations
                     StravaRefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Streak = table.Column<long>(type: "bigint", nullable: false),
                     AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
