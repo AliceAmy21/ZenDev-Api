@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZenDev.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class databaseinitialisation : Migration
+    public partial class DatabaseInitialisation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -162,7 +162,8 @@ namespace ZenDev.Persistence.Migrations
                     GroupInvitationId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GroupId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                    InvitedUserId = table.Column<long>(type: "bigint", nullable: false),
+                    InviteSenderId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -174,8 +175,8 @@ namespace ZenDev.Persistence.Migrations
                         principalColumn: "GroupId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GroupInvitations_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_GroupInvitations_Users_InvitedUserId",
+                        column: x => x.InvitedUserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
@@ -250,9 +251,9 @@ namespace ZenDev.Persistence.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupInvitations_UserId",
+                name: "IX_GroupInvitations_InvitedUserId",
                 table: "GroupInvitations",
-                column: "UserId");
+                column: "InvitedUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Groups_ExerciseTypeId",
