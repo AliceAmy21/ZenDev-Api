@@ -52,6 +52,10 @@ namespace ZenDev.BusinessLogic.Services
                     _logger.LogInformation("User already exists!");
                     result.Success = true;
                     result.UserId = matchingUserEntries.UserId;
+
+                    matchingUserEntries.LastActive = DateTime.Now;
+                    _dbContext.Update(matchingUserEntries);
+                    await _dbContext.SaveChangesAsync();
         
                     return result;
                 }
