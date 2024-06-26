@@ -21,6 +21,10 @@ namespace ZenDev.Persistence.Entities
 
         public DateTimeOffset LastActive { get; set; }
 
+        public DateTimeOffset? LastSynced { get; set; }
+
         public List<UserGroupBridgeEntity> UserGroupBridgeEntities { get; set; } = [];
+
+        public List<UserChallengeBridgeEntity> UserChallengeBridgeEntities {get;set;} = [];
     }
 }

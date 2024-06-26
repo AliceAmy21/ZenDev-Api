@@ -35,8 +35,12 @@ namespace ZenDev.Persistence
         public virtual DbSet<ExerciseEntity> Exercises { get; set; }
         public virtual DbSet<ExerciseTypeEntity> ExerciseTypes { get; set; }
         public virtual DbSet<GroupEntity> Groups { get; set; }
+         public virtual DbSet<GroupInvitationEntity> GroupInvitations { get; set; }
         public virtual DbSet<UserGroupBridgeEntity> UserGroupBridge { get; set; }
         public virtual DbSet<PersonalGoalEntity> PersonalGoals { get; set; }
+        public virtual DbSet<ChallengeEntity> Challenges {get; set;}
+        public virtual DbSet<UserChallengeBridgeEntity> UserChallengeBridge {get; set;}
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -59,6 +63,19 @@ namespace ZenDev.Persistence
                 .HasOne(ug => ug.GroupEntity)
                 .WithMany(g => g.UserGroupBridgeEntities)
                 .HasForeignKey(ug => ug.GroupId);
+
+            modelBuilder.Entity<UserChallengeBridgeEntity>()
+                .HasKey(ug => ug.UserChallengeId);
+
+            modelBuilder.Entity<UserChallengeBridgeEntity>()
+                .HasOne(ug => ug.UserEntity)
+                .WithMany(u => u.UserChallengeBridgeEntities)
+                .HasForeignKey(ug => ug.UserId);
+
+            modelBuilder.Entity<UserChallengeBridgeEntity>()
+                .HasOne(ug => ug.ChallengeEntity)
+                .WithMany(g => g.UserChallengeBridgeEntities)
+                .HasForeignKey(ug => ug.ChallengeId);   
         }
     }
 }

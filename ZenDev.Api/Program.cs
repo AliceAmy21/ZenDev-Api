@@ -1,6 +1,8 @@
 using AutoMapper;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using System.Net.Http.Headers;
 using ZenDev.Api;
 using ZenDev.BusinessLogic;
 using ZenDev.Persistence;
@@ -51,6 +53,11 @@ IMapper mapper = mapperConfig.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
+builder.Services.AddHttpClient("strava", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("https://www.strava.com/api/v3/");
+});
+
 ///////////////////////////////////////////////////////
 // App configuration
 ///////////////////////////////////////////////////////
@@ -60,7 +67,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.DisplayRequestDuration();
+    });
 }
 
 if (app.Configuration.GetValue<bool>("EnableSSL"))

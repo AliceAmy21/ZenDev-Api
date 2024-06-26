@@ -12,6 +12,10 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<GroupResultModel> CreateGroupAsync(GroupResultModel groupResult);
 
+        public Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge);
+
         public Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync();
+
+         public Task<List<UserInviteModel>> GetGroupMembers(long groupId);
     }
 }

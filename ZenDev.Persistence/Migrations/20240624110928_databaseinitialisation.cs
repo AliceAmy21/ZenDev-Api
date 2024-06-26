@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZenDev.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class DatabaseInitialisation : Migration
+    public partial class databaseinitialisation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,7 +63,8 @@ namespace ZenDev.Persistence.Migrations
                     StravaRefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Streak = table.Column<long>(type: "bigint", nullable: false),
                     AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -127,6 +128,67 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Challenges",
+                columns: table => new
+                {
+                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChallengeName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ChallengeDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ChallengeStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ChallengeEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Measurement = table.Column<int>(type: "int", nullable: false),
+                    AmountCompleted = table.Column<long>(type: "bigint", nullable: false),
+                    AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
+                    ExerciseId = table.Column<long>(type: "bigint", nullable: false),
+                    GroupId = table.Column<long>(type: "bigint", nullable: false),
+                    Admin = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Challenges", x => x.ChallengeId);
+                    table.ForeignKey(
+                        name: "FK_Challenges_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Challenges_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GroupInvitations",
+                columns: table => new
+                {
+                    GroupInvitationId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<long>(type: "bigint", nullable: false),
+                    InvitedUserId = table.Column<long>(type: "bigint", nullable: false),
+                    InviteSenderId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupInvitations", x => x.GroupInvitationId);
+                    table.ForeignKey(
+                        name: "FK_GroupInvitations_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupInvitations_Users_InvitedUserId",
+                        column: x => x.InvitedUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserGroupBridge",
                 columns: table => new
                 {
@@ -153,6 +215,52 @@ namespace ZenDev.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserChallengeBridge",
+                columns: table => new
+                {
+                    UserChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserChallengeBridge", x => x.UserChallengeId);
+                    table.ForeignKey(
+                        name: "FK_UserChallengeBridge_Challenges_ChallengeId",
+                        column: x => x.ChallengeId,
+                        principalTable: "Challenges",
+                        principalColumn: "ChallengeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserChallengeBridge_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Challenges_ExerciseId",
+                table: "Challenges",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Challenges_GroupId",
+                table: "Challenges",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupInvitations_GroupId",
+                table: "GroupInvitations",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupInvitations_InvitedUserId",
+                table: "GroupInvitations",
+                column: "InvitedUserId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Groups_ExerciseTypeId",
                 table: "Groups",
@@ -166,6 +274,16 @@ namespace ZenDev.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalGoals_UserId",
                 table: "PersonalGoals",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChallengeBridge_ChallengeId",
+                table: "UserChallengeBridge",
+                column: "ChallengeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChallengeBridge_UserId",
+                table: "UserChallengeBridge",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -186,19 +304,28 @@ namespace ZenDev.Persistence.Migrations
                 name: "Examples");
 
             migrationBuilder.DropTable(
+                name: "GroupInvitations");
+
+            migrationBuilder.DropTable(
                 name: "PersonalGoals");
 
             migrationBuilder.DropTable(
+                name: "UserChallengeBridge");
+
+            migrationBuilder.DropTable(
                 name: "UserGroupBridge");
+
+            migrationBuilder.DropTable(
+                name: "Challenges");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
 
             migrationBuilder.DropTable(
                 name: "Groups");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "ExerciseTypes");
