@@ -53,9 +53,7 @@ namespace ZenDev.BusinessLogic.Services
                     result.Success = true;
                     result.UserId = matchingUserEntries.UserId;
 
-                    matchingUserEntries.LastActive = DateTime.Now;
-                    _dbContext.Update(matchingUserEntries);
-                    await _dbContext.SaveChangesAsync();
+                    updateLastActive(matchingUserEntries);
         
                     return result;
                 }
@@ -106,5 +104,12 @@ namespace ZenDev.BusinessLogic.Services
 
             return result;
         }
+
+        public void updateLastActive(UserEntity user){
+            user.LastActive = DateTime.Now;
+            _dbContext.Update(user);
+            _dbContext.SaveChanges();
+        }
+
     }
 }
