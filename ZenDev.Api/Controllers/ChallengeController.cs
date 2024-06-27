@@ -75,7 +75,7 @@ namespace ZenDev.Api.Controllers
         public async Task<ActionResult<ChallengeApiModel>> UpdateChallenge(ChallengeUpdateApiModel challenge){
             var challengeModel = _mapper.Map<ChallengeUpdateModel>(challenge);
             var challengeNew = await _challengeService.UpdateChallengeAsync(challengeModel);
-            return Ok(_mapper.Map<ChallengeEntity>(challengeNew));
+            return Ok(_mapper.Map<ChallengeApiModel>(challengeNew));
         }
 
         [HttpGet(nameof(GetAllExercises))]
