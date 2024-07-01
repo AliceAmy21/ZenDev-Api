@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240624110928_databaseinitialisation")]
+    [Migration("20240701115935_databaseinitialisation")]
     partial class databaseinitialisation
     {
         /// <inheritdoc />
@@ -24,6 +24,33 @@ namespace ZenDev.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.AchievementEntity", b =>
+                {
+                    b.Property<long>("AchievementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AchievementId"));
+
+                    b.Property<string>("AchievementDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("AchievementIcon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AchievementName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("AchievementId");
+
+                    b.ToTable("Achievements");
+                });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>
                 {
@@ -245,6 +272,29 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("PersonalGoals");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.UserAchievementBridgeEntity", b =>
+                {
+                    b.Property<long>("UserAchievementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserAchievementId"));
+
+                    b.Property<long>("AchievementId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("UserAchievementId");
+
+                    b.HasIndex("AchievementId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAchievementBridge");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.UserChallengeBridgeEntity", b =>
                 {
                     b.Property<long>("UserChallengeId")
@@ -398,6 +448,25 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("ExerciseEntity");
+
+                    b.Navigation("UserEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.UserAchievementBridgeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.AchievementEntity", "AchievementEntity")
+                        .WithMany()
+                        .HasForeignKey("AchievementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AchievementEntity");
 
                     b.Navigation("UserEntity");
                 });

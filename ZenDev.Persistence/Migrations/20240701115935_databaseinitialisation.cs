@@ -12,6 +12,21 @@ namespace ZenDev.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Achievements",
+                columns: table => new
+                {
+                    AchievementId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AchievementName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AchievementDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    AchievementIcon = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Achievements", x => x.AchievementId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Examples",
                 columns: table => new
                 {
@@ -121,6 +136,32 @@ namespace ZenDev.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PersonalGoals_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserAchievementBridge",
+                columns: table => new
+                {
+                    UserAchievementId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    AchievementId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAchievementBridge", x => x.UserAchievementId);
+                    table.ForeignKey(
+                        name: "FK_UserAchievementBridge_Achievements_AchievementId",
+                        column: x => x.AchievementId,
+                        principalTable: "Achievements",
+                        principalColumn: "AchievementId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserAchievementBridge_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -277,6 +318,16 @@ namespace ZenDev.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserAchievementBridge_AchievementId",
+                table: "UserAchievementBridge",
+                column: "AchievementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAchievementBridge_UserId",
+                table: "UserAchievementBridge",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserChallengeBridge_ChallengeId",
                 table: "UserChallengeBridge",
                 column: "ChallengeId");
@@ -310,10 +361,16 @@ namespace ZenDev.Persistence.Migrations
                 name: "PersonalGoals");
 
             migrationBuilder.DropTable(
+                name: "UserAchievementBridge");
+
+            migrationBuilder.DropTable(
                 name: "UserChallengeBridge");
 
             migrationBuilder.DropTable(
                 name: "UserGroupBridge");
+
+            migrationBuilder.DropTable(
+                name: "Achievements");
 
             migrationBuilder.DropTable(
                 name: "Challenges");

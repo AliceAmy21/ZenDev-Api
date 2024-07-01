@@ -40,6 +40,8 @@ namespace ZenDev.Persistence
         public virtual DbSet<PersonalGoalEntity> PersonalGoals { get; set; }
         public virtual DbSet<ChallengeEntity> Challenges {get; set;}
         public virtual DbSet<UserChallengeBridgeEntity> UserChallengeBridge {get; set;}
+        public virtual DbSet<AchievementEntity> Achievements {get; set;}
+        public virtual DbSet<UserAchievementBridgeEntity> UserAchievementBridge {get; set;}
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
