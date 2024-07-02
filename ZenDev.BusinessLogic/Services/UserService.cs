@@ -53,9 +53,10 @@ namespace ZenDev.BusinessLogic.Services
                     result.Success = true;
                     result.UserId = matchingUserEntries.UserId;
 
-                    matchingUserEntries.LastActive = DateTime.Now;
-                    _dbContext.Update(matchingUserEntries);
-                    await _dbContext.SaveChangesAsync();
+                    var lastActive = matchingUserEntries.LastActive;
+                    UpdateLastActive(matchingUserEntries);
+
+                    long streak = UpdateStreak(lastActive, matchingUserEntries);
         
                     return result;
                 }
@@ -106,5 +107,32 @@ namespace ZenDev.BusinessLogic.Services
 
             return result;
         }
+
+        public void UpdateLastActive(UserEntity user){
+            user.LastActive = DateTime.Now;
+            _dbContext.Update(user);
+            _dbContext.SaveChanges();
+        }
+
+        public long UpdateStreak(DateTimeOffset lastActive, UserEntity user){
+            var updatedLastActive = user.LastActive;
+            int daysSinceLastActive = (updatedLastActive - lastActive).Days;
+
+            if (daysSinceLastActive == 1)
+            {
+                user.Streak++;
+            }
+            else if (daysSinceLastActive > 1)
+            {
+                user.Streak = 0;
+            }
+
+            _dbContext.Update(user);
+            _dbContext.SaveChanges();
+
+            _logger.LogInformation(daysSinceLastActive.ToString() + " " + user.Streak.ToString() + "TTTTTTTTTTTTTT");
+            return user.Streak;
+        }
+
     }
 }
