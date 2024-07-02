@@ -15,7 +15,6 @@ namespace ZenDev.Persistence.Entities
         public DateTimeOffset ChallengeStartDate {get;set;}   
         public DateTimeOffset ChallengeEndDate {get;set;}
         public Measurement Measurement {get;set;}
-        public long AmountCompleted {get;set;}
         public long AmountToComplete {get;set;}
         public long ExerciseId {get;set;}
         [ForeignKey(nameof(ExerciseId))]

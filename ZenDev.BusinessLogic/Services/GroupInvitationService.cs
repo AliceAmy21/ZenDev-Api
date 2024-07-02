@@ -196,6 +196,7 @@ namespace ZenDev.BusinessLogic.Services
                     GroupAdmin = false,
                     UserId = userGroupBridgeEntity.UserId,
                     GroupId = userGroupBridgeEntity.GroupId,
+                    Points =0
                 };
                 var addUserGroupBridge = await _groupService.CreateUserGroupBridgeAsync(userGroupBridge);
 

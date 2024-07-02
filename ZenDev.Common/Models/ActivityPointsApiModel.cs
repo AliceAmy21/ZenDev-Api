@@ -8,5 +8,9 @@
         public bool HasHeartrate { get; set; }
         public double? AverageHeartrate { get; set; }
         public double? MaxHeartrate { get; set; }
+        public string Exercise { get; set; }
+        public int? Duration { get; set; }
+        public double? Distance { get; set; }
+        public DateTime StartDateLocal { get; set; }
     }
 }
