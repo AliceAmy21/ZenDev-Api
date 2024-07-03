@@ -15,7 +15,7 @@ namespace ZenDev.Persistence.Entities
 
         public long TotalPoints { get; set; }
 
-        public long TotalMinutes { get; set; }
+        public Double TotalMinutes { get; set; }
 
         public DateTimeOffset? LastUpdate { get; set; }
 

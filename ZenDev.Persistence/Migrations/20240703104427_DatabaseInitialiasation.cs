@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZenDev.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class databaseinitialisation : Migration
+    public partial class DatabaseInitialiasation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,7 +117,7 @@ namespace ZenDev.Persistence.Migrations
                     MindfulnessId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TotalPoints = table.Column<long>(type: "bigint", nullable: false),
-                    TotalMinutes = table.Column<long>(type: "bigint", nullable: false),
+                    TotalMinutes = table.Column<double>(type: "float", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },

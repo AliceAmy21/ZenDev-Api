@@ -233,8 +233,8 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<DateTimeOffset?>("LastUpdate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long>("TotalMinutes")
-                        .HasColumnType("bigint");
+                    b.Property<double>("TotalMinutes")
+                        .HasColumnType("float");
 
                     b.Property<long>("TotalPoints")
                         .HasColumnType("bigint");
