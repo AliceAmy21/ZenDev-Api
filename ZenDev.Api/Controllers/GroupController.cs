@@ -62,7 +62,7 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(UpdateGroup))]
-        public async Task<ActionResult<GroupEntity>> UpdateGroup(GroupApiModel group)
+        public async Task<ActionResult<GroupApiModel>> UpdateGroup(GroupApiModel group)
         {
             var groupEntity = _mapper.Map<GroupEntity>(group);
 
