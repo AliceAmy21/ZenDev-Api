@@ -35,11 +35,11 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetMindfulnessPoints))]
-        public async Task<ActionResult<MindfulnessApiModel>> GetMindfulnessPoints(long userId)
+        public async Task<ActionResult<MindfulnessApiModel?>> GetMindfulnessPoints(long userId)
         {
             var result = await _mindfulnessService.GetMindfulnessPoints(userId);
 
-            if (result == null) return NotFound();
+            if (result == null) return Empty;
 
             return Ok(_mapper.Map<MindfulnessApiModel>(result));
         }
