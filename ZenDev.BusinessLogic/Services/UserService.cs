@@ -116,7 +116,7 @@ namespace ZenDev.BusinessLogic.Services
 
         public long UpdateStreak(DateTimeOffset lastActive, UserEntity user){
             var updatedLastActive = user.LastActive;
-            int daysSinceLastActive = (updatedLastActive - lastActive).Days;
+            int daysSinceLastActive = (updatedLastActive.Date - lastActive.Date).Days;
 
             if (daysSinceLastActive == 1)
             {
@@ -130,7 +130,7 @@ namespace ZenDev.BusinessLogic.Services
             _dbContext.Update(user);
             _dbContext.SaveChanges();
 
-            _logger.LogInformation(user.Streak.ToString() + " day streak");
+            _logger.LogInformation(user.Streak.ToString() + " day streak" + daysSinceLastActive);
             return user.Streak;
         }
 
