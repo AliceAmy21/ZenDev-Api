@@ -53,6 +53,24 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<UserGroupBridgeEntity>(result));
         }
 
+        [HttpDelete(nameof(DeleteGroup))]
+        public async Task<ActionResult<ResultApiModel>> DeleteGroup(long groupId)
+        {
+            var result = await _groupService.DeleteGroupAsync(groupId);
+
+            return Ok(_mapper.Map<ResultApiModel>(result));
+        }
+
+        [HttpPost(nameof(UpdateGroup))]
+        public async Task<ActionResult<GroupEntity>> UpdateGroup(GroupApiModel group)
+        {
+            var groupEntity = _mapper.Map<GroupEntity>(group);
+
+            var result = await _groupService.UpdateGroupAsync(groupEntity);
+
+            return Ok(_mapper.Map<GroupApiModel>(result));
+        }
+
         [HttpGet(nameof(GetAllGroupExercises))]
         public async Task<ActionResult<List<ExerciseTypeApiModel>>> GetAllGroupExercises()
         {
