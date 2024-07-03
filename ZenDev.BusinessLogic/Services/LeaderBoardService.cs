@@ -43,7 +43,7 @@ namespace ZenDev.BusinessLogic.Services
                         UserName = activity.UserEntity.UserName,
                         AvatarIconUrl = activity.UserEntity.AvatarIconUrl
                     },
-                    Points = Convert.ToDouble(activity.AmountCompleted)/Convert.ToDouble(activity.ChallengeEntity.AmountToComplete)*100
+                    Points = Math.Round(Convert.ToDouble(activity.AmountCompleted)/Convert.ToDouble(activity.ChallengeEntity.AmountToComplete)*100,2)
                 };
                 leaderBoardListModels.Add(leaderBoardModel);
             }
