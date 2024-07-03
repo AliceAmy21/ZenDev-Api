@@ -43,7 +43,7 @@ namespace ZenDev.Api
             CreateMap<UserInviteModel, UserInviteApiModel>().ReverseMap();
             CreateMap<NotificationModel, NotificationApiModel>().ReverseMap();
             CreateMap<AchievementEntity, AchievementApiModel>().ReverseMap();
-             CreateMap<UserAchievementBridgeEntity, UserAchievementBridgeApiModel>().ReverseMap();
+            CreateMap<UserAchievementBridgeEntity, UserAchievementBridgeApiModel>().ReverseMap();
             CreateMap<ActivitySummaryResponse, ActivitySummaryApiModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
                 .ForMember(dest => dest.Athlete, opt => opt.MapFrom(src => src.athlete))
@@ -80,7 +80,7 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.summary_polyline));
 
             CreateMap<ActivitySummaryApiModel, ActivityPointsApiModel>().ReverseMap();
-
+            CreateMap<MindfulnessEntity, MindfulnessApiModel>().ReverseMap();
         }
     }
 }

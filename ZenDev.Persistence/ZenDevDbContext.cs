@@ -42,7 +42,7 @@ namespace ZenDev.Persistence
         public virtual DbSet<UserChallengeBridgeEntity> UserChallengeBridge {get; set;}
         public virtual DbSet<AchievementEntity> Achievements {get; set;}
         public virtual DbSet<UserAchievementBridgeEntity> UserAchievementBridge {get; set;}
-
+        public virtual DbSet<MindfulnessEntity> Mindfulness { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

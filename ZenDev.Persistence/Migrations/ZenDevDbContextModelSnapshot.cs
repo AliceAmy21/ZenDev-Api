@@ -222,6 +222,33 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("GroupInvitations");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.MindfulnessEntity", b =>
+                {
+                    b.Property<long>("MindfulnessId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("MindfulnessId"));
+
+                    b.Property<DateTimeOffset?>("LastUpdate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long>("TotalMinutes")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TotalPoints")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("MindfulnessId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Mindfulness");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.PersonalGoalEntity", b =>
                 {
                     b.Property<long>("GoalId")
@@ -340,6 +367,9 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("Streak")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("TotalPoints")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -426,6 +456,17 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("GroupEntity");
+
+                    b.Navigation("UserEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.MindfulnessEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserEntity");
                 });

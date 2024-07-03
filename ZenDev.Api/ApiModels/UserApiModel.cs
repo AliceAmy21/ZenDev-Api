@@ -9,6 +9,7 @@ namespace ZenDev.Api.ApiModels
         public long Streak { get; set; }
         public string AvatarIconUrl { get; set; } = string.Empty;
         public DateTimeOffset LastActive { get; set; }
-        public DateTimeOffset? LastSynced { get; set; } 
+        public DateTimeOffset? LastSynced { get; set; }
+        public long TotalPoints { get; set; }
     }
 }

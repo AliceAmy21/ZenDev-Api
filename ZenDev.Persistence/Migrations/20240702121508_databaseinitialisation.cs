@@ -79,7 +79,8 @@ namespace ZenDev.Persistence.Migrations
                     Streak = table.Column<long>(type: "bigint", nullable: false),
                     AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    TotalPoints = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,6 +107,28 @@ namespace ZenDev.Persistence.Migrations
                         column: x => x.ExerciseTypeId,
                         principalTable: "ExerciseTypes",
                         principalColumn: "ExerciseTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Mindfulness",
+                columns: table => new
+                {
+                    MindfulnessId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalPoints = table.Column<long>(type: "bigint", nullable: false),
+                    TotalMinutes = table.Column<long>(type: "bigint", nullable: false),
+                    LastUpdate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mindfulness", x => x.MindfulnessId);
+                    table.ForeignKey(
+                        name: "FK_Mindfulness_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -308,6 +331,11 @@ namespace ZenDev.Persistence.Migrations
                 column: "ExerciseTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Mindfulness_UserId",
+                table: "Mindfulness",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonalGoals_ExerciseId",
                 table: "PersonalGoals",
                 column: "ExerciseId");
@@ -356,6 +384,9 @@ namespace ZenDev.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "GroupInvitations");
+
+            migrationBuilder.DropTable(
+                name: "Mindfulness");
 
             migrationBuilder.DropTable(
                 name: "PersonalGoals");
