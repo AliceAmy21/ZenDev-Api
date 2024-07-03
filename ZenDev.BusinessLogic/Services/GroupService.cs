@@ -134,6 +134,50 @@ namespace ZenDev.BusinessLogic.Services
             return newUserGroupBridge;
         }
 
+        public async Task<GroupEntity> UpdateGroupAsync(GroupEntity group)
+        {
+            try
+            {
+                _dbContext.Update(group);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to update group");
+                return new GroupEntity();
+            }
+
+            return group;
+        }
+
+        public async Task<ResultModel> DeleteGroupAsync(long groupId)
+        {
+            var result = new ResultModel
+            {
+                Success = false
+            };
+
+            try
+            {
+                var recordToRemove = _dbContext.Groups.FirstOrDefault(group => group.GroupId == groupId);
+                if (recordToRemove != null)
+                {
+                    _dbContext.Remove(recordToRemove);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to delete personal group");
+                result.ErrorMessages = new List<string>() { "Failed to delete group" };
+                return result;
+            }
+
+            result.Success = true;
+
+            return result;
+        }
+
         public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)
         {
             try
