@@ -130,7 +130,7 @@ namespace ZenDev.BusinessLogic.Services
             _dbContext.Update(user);
             _dbContext.SaveChanges();
 
-            _logger.LogInformation(user.Streak.ToString() + " day streak" + daysSinceLastActive);
+            _logger.LogInformation(user.Streak.ToString() + " day streak");
             return user.Streak;
         }
 
