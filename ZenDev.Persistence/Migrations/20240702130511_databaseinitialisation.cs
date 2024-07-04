@@ -95,6 +95,29 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ActivityRecords",
+                columns: table => new
+                {
+                    ActivityRecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Points = table.Column<long>(type: "bigint", nullable: false),
+                    Distance = table.Column<long>(type: "bigint", nullable: false),
+                    Duration = table.Column<long>(type: "bigint", nullable: false),
+                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityRecords", x => x.ActivityRecordId);
+                    table.ForeignKey(
+                        name: "FK_ActivityRecords_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PersonalGoals",
                 columns: table => new
                 {
@@ -138,7 +161,6 @@ namespace ZenDev.Persistence.Migrations
                     ChallengeStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ChallengeEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Measurement = table.Column<int>(type: "int", nullable: false),
-                    AmountCompleted = table.Column<long>(type: "bigint", nullable: false),
                     AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
                     ExerciseId = table.Column<long>(type: "bigint", nullable: false),
                     GroupId = table.Column<long>(type: "bigint", nullable: false),
@@ -196,7 +218,8 @@ namespace ZenDev.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GroupAdmin = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                    GroupId = table.Column<long>(type: "bigint", nullable: false),
+                    Points = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,7 +245,9 @@ namespace ZenDev.Persistence.Migrations
                     UserChallengeId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                    ChallengeId = table.Column<long>(type: "bigint", nullable: false),
+                    DateCompleted = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    AmountCompleted = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,6 +265,11 @@ namespace ZenDev.Persistence.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityRecords_UserId",
+                table: "ActivityRecords",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Challenges_ExerciseId",
@@ -300,6 +330,9 @@ namespace ZenDev.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ActivityRecords");
+
             migrationBuilder.DropTable(
                 name: "Examples");
 
