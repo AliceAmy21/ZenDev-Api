@@ -61,7 +61,7 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<long>(result));
         }
 
-        [HttpPost(nameof(UpdateGroup))]
+        [HttpPut(nameof(UpdateGroup))]
         public async Task<ActionResult<GroupApiModel>> UpdateGroup(GroupApiModel group)
         {
             var groupEntity = _mapper.Map<GroupEntity>(group);
@@ -69,6 +69,16 @@ namespace ZenDev.Api.Controllers
             var result = await _groupService.UpdateGroupAsync(groupEntity);
 
             return Ok(_mapper.Map<GroupApiModel>(result));
+        }
+
+        [HttpDelete(nameof(LeaveGroup))]
+        public async Task<ActionResult<UserGroupResultApiModel>> LeaveGroup(UserGroupResultApiModel userGroup)
+        {
+            var userGroupModel = _mapper.Map<UserGroupResultModel>(userGroup);
+
+            var result = await _groupService.LeaveGroupAsync(userGroupModel);
+
+            return Ok(_mapper.Map<UserGroupResultApiModel>(result));
         }
 
         [HttpGet(nameof(GetAllGroupExercises))]

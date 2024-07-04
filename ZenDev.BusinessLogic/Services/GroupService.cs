@@ -170,6 +170,42 @@ namespace ZenDev.BusinessLogic.Services
             return groupId;
         }
 
+        public async Task<UserGroupResultModel> LeaveGroupAsync(UserGroupResultModel userGroup)
+        {
+            userGroup.Success = false;
+
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try 
+            {
+                //Delete UserGroupBridge
+                 var userGroupBridge = _dbContext.UserGroupBridge.FirstOrDefault(bridge => bridge.GroupId == userGroup.GroupId && bridge.UserId == userGroup.UserId);
+                _dbContext.UserGroupBridge.Remove(userGroupBridge);
+
+                //Update member count in Groups table
+                var group = _dbContext.Groups.FirstOrDefault(group => group.GroupId == userGroup.GroupId);
+                if (group != null)
+                {
+                    group.MemberCount--;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                userGroup.Success = true;
+            }
+            catch(Exception ex)
+            {
+                //Roll back on fail
+                await transaction.RollbackAsync();
+
+                userGroup.ErrorMessages = new List<string> { "Failed to leave group" };
+                _logger.LogError(ex, "Failed to leave group");
+                return userGroup;
+            }
+
+            return userGroup;
+        }
+
         public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)
         {
             try

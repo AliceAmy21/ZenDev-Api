@@ -18,6 +18,8 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<long> DeleteGroupAsync(long groupId);
 
+        public Task<UserGroupResultModel> LeaveGroupAsync(UserGroupResultModel userGroup);
+
         public Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync();
 
          public Task<List<UserInviteModel>> GetGroupMembers(long groupId);
