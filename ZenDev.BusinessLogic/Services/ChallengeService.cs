@@ -30,7 +30,8 @@ namespace ZenDev.BusinessLogic.Services
                         UserChallengeBridgeEntity userChallengeBridgeEntity = new UserChallengeBridgeEntity()
                         {
                             UserId = userId,
-                            ChallengeId = challengeId
+                            ChallengeId = challengeId,
+                            AmountCompleted = 0
                         };
                         try{
                             await _dbContext.UserChallengeBridge.AddAsync(userChallengeBridgeEntity);
@@ -59,7 +60,6 @@ namespace ZenDev.BusinessLogic.Services
                 ChallengeDescription = challenge.ChallengeDescription,
                 ChallengeEndDate = challenge.ChallengeEndDate,
                 ChallengeStartDate = challenge.ChallengeStartDate,
-                AmountCompleted = 0,
                 AmountToComplete = challenge.AmountToComplete,
                 Measurement = challenge.Measurement,
                 ExerciseId = challenge.ExerciseId,
@@ -74,7 +74,8 @@ namespace ZenDev.BusinessLogic.Services
                 await _dbContext.SaveChangesAsync();
                 UserChallengeBridgeEntity userChallengeBridgeEntity = new(){
                 UserId = UserId,
-                ChallengeId = challenge1.ChallengeId
+                ChallengeId = challenge1.ChallengeId,
+                AmountCompleted = 0
                 };
                 await _dbContext.AddAsync(userChallengeBridgeEntity);
                 await _dbContext.SaveChangesAsync();
@@ -119,10 +120,11 @@ namespace ZenDev.BusinessLogic.Services
             var ListOfBridges = challenges.Where(group=>group.GroupEntity.GroupId == groupId).ToList();
             foreach(var Bridge in ListOfBridges){
                 if(userBridge.Any(user=>user.UserId == userId && user.ChallengeId == Bridge.ChallengeId)){
+                    var challenge = userBridge.First(user=> user.UserId == userId && user.ChallengeId == Bridge.ChallengeId);
                     ChallengeListModel challengeListModel = new ChallengeListModel()
                     {
                     ChallengeName = Bridge.ChallengeName,
-                    AmountCompleted = Bridge.AmountCompleted,
+                    AmountCompleted = challenge.AmountCompleted,
                     Measurement = Bridge.Measurement,
                     Admin = Bridge.Admin,
                     ChallengeId = Bridge.ChallengeId,
@@ -141,7 +143,7 @@ namespace ZenDev.BusinessLogic.Services
                 {
                 ChallengeId = Bridge.ChallengeId,
                 ChallengeName = Bridge.ChallengeName,
-                AmountCompleted = Bridge.AmountCompleted,
+                AmountCompleted = 0,
                 Measurement = Bridge.Measurement,
                 Admin = Bridge.Admin,
                 ChallengeEndDate = Bridge.ChallengeEndDate,
@@ -179,7 +181,7 @@ namespace ZenDev.BusinessLogic.Services
                     {
                         ChallengeId = Bridge.ChallengeId,
                         ChallengeName = Bridge.ChallengeEntity.ChallengeName,
-                        AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                        AmountCompleted = Bridge.AmountCompleted,
                         Measurement = Bridge.ChallengeEntity.Measurement,
                         Admin = Bridge.ChallengeEntity.Admin,
                         ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
@@ -197,7 +199,7 @@ namespace ZenDev.BusinessLogic.Services
                     {
                         ChallengeId = Bridge.ChallengeId,
                         ChallengeName = Bridge.ChallengeEntity.ChallengeName,
-                        AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                        AmountCompleted = Bridge.AmountCompleted,
                         Measurement = Bridge.ChallengeEntity.Measurement,
                         Admin = Bridge.ChallengeEntity.Admin,
                         ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
