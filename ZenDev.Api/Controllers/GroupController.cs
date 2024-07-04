@@ -54,11 +54,11 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpDelete(nameof(DeleteGroup))]
-        public async Task<ActionResult<ResultApiModel>> DeleteGroup(long groupId)
+        public async Task<ActionResult<long>> DeleteGroup(long groupId)
         {
             var result = await _groupService.DeleteGroupAsync(groupId);
 
-            return Ok(_mapper.Map<ResultApiModel>(result));
+            return Ok(_mapper.Map<long>(result));
         }
 
         [HttpPost(nameof(UpdateGroup))]

@@ -150,13 +150,8 @@ namespace ZenDev.BusinessLogic.Services
             return group;
         }
 
-        public async Task<ResultModel> DeleteGroupAsync(long groupId)
+        public async Task<long> DeleteGroupAsync(long groupId)
         {
-            var result = new ResultModel
-            {
-                Success = false
-            };
-
             try
             {
                 var recordToRemove = _dbContext.Groups.FirstOrDefault(group => group.GroupId == groupId);
@@ -169,13 +164,10 @@ namespace ZenDev.BusinessLogic.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to delete personal group");
-                result.ErrorMessages = new List<string>() { "Failed to delete group" };
-                return result;
+                return groupId;
             }
 
-            result.Success = true;
-
-            return result;
+            return groupId;
         }
 
         public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)
