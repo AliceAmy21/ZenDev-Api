@@ -48,9 +48,9 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetChallengesForUser))]
-        public ActionResult<List<ChallengeListApiModel>> GetChallengesForUser(long userId){
+        public ActionResult<List<List<ChallengeListApiModel>>> GetChallengesForUser(long userId){
             var listChallenges = _challengeService.GetChallengesForUserAsync(userId);
-            return Ok(_mapper.Map<List<ChallengeListApiModel>>(listChallenges));
+            return Ok(_mapper.Map<List<List<ChallengeListApiModel>>>(listChallenges));
         }
 
         [HttpGet(nameof(GetUsersForChallenge))]

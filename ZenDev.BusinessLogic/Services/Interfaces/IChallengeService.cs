@@ -10,7 +10,7 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public List<List<ChallengeListModel>> GetChallengesForGroupAsync(long groupId, long userId);
 
-        public List<ChallengeListModel> GetChallengesForUserAsync(long userId);
+        public List<List<ChallengeListModel>> GetChallengesForUserAsync(long userId);
 
         public Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge);
 

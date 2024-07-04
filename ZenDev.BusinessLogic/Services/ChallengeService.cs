@@ -160,7 +160,7 @@ namespace ZenDev.BusinessLogic.Services
             return ListOfChallenges;
         }
 
-        public List<ChallengeListModel> GetChallengesForUserAsync(long userId)
+        public List<List<ChallengeListModel>> GetChallengesForUserAsync(long userId)
         {
             var userGroupBridge = _dbContext.UserChallengeBridge
                 .Include(user => user.UserEntity)
@@ -169,26 +169,50 @@ namespace ZenDev.BusinessLogic.Services
                 .Include(group=>group.ChallengeEntity.GroupEntity)
                 .Include(exercise1=>exercise1.ChallengeEntity.GroupEntity.ExerciseTypeEntity)
                 .AsQueryable();
-            List<ChallengeListModel> ListOfChallenges = new List<ChallengeListModel>();
+            List<ChallengeListModel> ListOfChallengesMine = new List<ChallengeListModel>();
+            List<ChallengeListModel> ListOfChallengesAvailable = new List<ChallengeListModel>();
+            List<List<ChallengeListModel>> ListOfChallenges = new List<List<ChallengeListModel>>();
             var ListOfBridges = userGroupBridge.Where(group=>group.UserEntity.UserId == userId).ToList();
             foreach(var Bridge in ListOfBridges){
-                ChallengeListModel challengeListModel = new ChallengeListModel()
-                {
-                ChallengeId = Bridge.ChallengeId,
-                ChallengeName = Bridge.ChallengeEntity.ChallengeName,
-                AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
-                Measurement = Bridge.ChallengeEntity.Measurement,
-                Admin = Bridge.ChallengeEntity.Admin,
-                ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
-                ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
-                AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
-                ExerciseId = Bridge.ChallengeEntity.ExerciseId,
-                ExerciseEntity = Bridge.ChallengeEntity.ExerciseEntity,
-                GroupId = Bridge.ChallengeEntity.GroupId,
-                GroupEntity = Bridge.ChallengeEntity.GroupEntity
-                };
-                ListOfChallenges.Add(challengeListModel);
+                if(userGroupBridge.Any(user=>user.ChallengeId == Bridge.ChallengeId && user.UserId == Bridge.UserId)){
+                    ChallengeListModel challengeListModel = new ChallengeListModel()
+                    {
+                        ChallengeId = Bridge.ChallengeId,
+                        ChallengeName = Bridge.ChallengeEntity.ChallengeName,
+                        AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                        Measurement = Bridge.ChallengeEntity.Measurement,
+                        Admin = Bridge.ChallengeEntity.Admin,
+                        ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
+                        ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
+                        AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
+                        ExerciseId = Bridge.ChallengeEntity.ExerciseId,
+                        ExerciseEntity = Bridge.ChallengeEntity.ExerciseEntity,
+                        GroupId = Bridge.ChallengeEntity.GroupId,
+                        GroupEntity = Bridge.ChallengeEntity.GroupEntity
+                    };
+                    ListOfChallengesMine.Add(challengeListModel);
+                }
+                else{
+                    ChallengeListModel challengeListModel = new ChallengeListModel()
+                    {
+                        ChallengeId = Bridge.ChallengeId,
+                        ChallengeName = Bridge.ChallengeEntity.ChallengeName,
+                        AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                        Measurement = Bridge.ChallengeEntity.Measurement,
+                        Admin = Bridge.ChallengeEntity.Admin,
+                        ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
+                        ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
+                        AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
+                        ExerciseId = Bridge.ChallengeEntity.ExerciseId,
+                        ExerciseEntity = Bridge.ChallengeEntity.ExerciseEntity,
+                        GroupId = Bridge.ChallengeEntity.GroupId,
+                        GroupEntity = Bridge.ChallengeEntity.GroupEntity
+                    };
+                    ListOfChallengesAvailable.Add(challengeListModel);
+                }
             }
+            ListOfChallenges.Add(ListOfChallengesMine);
+            ListOfChallenges.Add(ListOfChallengesAvailable);
             return ListOfChallenges;
         }
 
