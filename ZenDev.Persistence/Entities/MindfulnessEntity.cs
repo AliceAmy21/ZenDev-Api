@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZenDev.Persistence.Entities
 {
@@ -15,7 +10,11 @@ namespace ZenDev.Persistence.Entities
 
         public long TotalPoints { get; set; }
 
+        public long TodaysPoints { get; set; }
+
         public Double TotalMinutes { get; set; }
+
+        public Double TodaysMinutes { get; set; }
 
         public DateTimeOffset? LastUpdate { get; set; }
 

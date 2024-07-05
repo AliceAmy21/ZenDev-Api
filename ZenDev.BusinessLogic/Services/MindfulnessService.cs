@@ -33,9 +33,11 @@ namespace ZenDev.BusinessLogic.Services
             {
                 try
                 {
-                    record.TotalPoints = mindfulnessEntity.TotalPoints;
-                    userUpdate.TotalPoints += mindfulnessEntity.TotalPoints;
-                    record.TotalMinutes = mindfulnessEntity.TotalMinutes;
+                    record.TotalPoints += mindfulnessEntity.TodaysPoints;
+                    userUpdate.TotalPoints += mindfulnessEntity.TodaysPoints;
+                    record.TotalMinutes += mindfulnessEntity.TodaysMinutes;
+                    record.TodaysMinutes += mindfulnessEntity.TodaysMinutes;
+                    record.TodaysPoints += mindfulnessEntity.TodaysPoints;
                     record.LastUpdate = DateTime.Now;
 
                     _dbContext.Update(record);
@@ -55,7 +57,7 @@ namespace ZenDev.BusinessLogic.Services
                 {
 
                     mindfulnessEntity.LastUpdate = DateTime.Now;
-                    userUpdate.TotalPoints += mindfulnessEntity.TotalPoints;
+                    userUpdate.TotalPoints += mindfulnessEntity.TodaysPoints;
 
                     await _dbContext.AddAsync(mindfulnessEntity);
                     await _dbContext.SaveChangesAsync();

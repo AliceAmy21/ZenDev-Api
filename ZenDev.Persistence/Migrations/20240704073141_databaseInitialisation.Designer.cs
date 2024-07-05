@@ -12,8 +12,8 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240703104427_DatabaseInitialiasation")]
-    partial class DatabaseInitialiasation
+    [Migration("20240704073141_databaseInitialisation")]
+    partial class databaseInitialisation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -235,6 +235,12 @@ namespace ZenDev.Persistence.Migrations
 
                     b.Property<DateTimeOffset?>("LastUpdate")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<double>("TodaysMinutes")
+                        .HasColumnType("float");
+
+                    b.Property<long>("TodaysPoints")
+                        .HasColumnType("bigint");
 
                     b.Property<double>("TotalMinutes")
                         .HasColumnType("float");
