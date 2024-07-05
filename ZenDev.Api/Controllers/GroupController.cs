@@ -54,21 +54,31 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpDelete(nameof(DeleteGroup))]
-        public async Task<ActionResult<ResultApiModel>> DeleteGroup(long groupId)
+        public async Task<ActionResult<long>> DeleteGroup(long groupId)
         {
             var result = await _groupService.DeleteGroupAsync(groupId);
 
-            return Ok(_mapper.Map<ResultApiModel>(result));
+            return Ok(_mapper.Map<long>(result));
         }
 
-        [HttpPost(nameof(UpdateGroup))]
-        public async Task<ActionResult<GroupEntity>> UpdateGroup(GroupApiModel group)
+        [HttpPut(nameof(UpdateGroup))]
+        public async Task<ActionResult<GroupApiModel>> UpdateGroup(GroupApiModel group)
         {
             var groupEntity = _mapper.Map<GroupEntity>(group);
 
             var result = await _groupService.UpdateGroupAsync(groupEntity);
 
             return Ok(_mapper.Map<GroupApiModel>(result));
+        }
+
+        [HttpDelete(nameof(LeaveGroup))]
+        public async Task<ActionResult<UserGroupResultApiModel>> LeaveGroup(UserGroupResultApiModel userGroup)
+        {
+            var userGroupModel = _mapper.Map<UserGroupResultModel>(userGroup);
+
+            var result = await _groupService.LeaveGroupAsync(userGroupModel);
+
+            return Ok(_mapper.Map<UserGroupResultApiModel>(result));
         }
 
         [HttpGet(nameof(GetAllGroupExercises))]

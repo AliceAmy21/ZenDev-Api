@@ -150,13 +150,8 @@ namespace ZenDev.BusinessLogic.Services
             return group;
         }
 
-        public async Task<ResultModel> DeleteGroupAsync(long groupId)
+        public async Task<long> DeleteGroupAsync(long groupId)
         {
-            var result = new ResultModel
-            {
-                Success = false
-            };
-
             try
             {
                 var recordToRemove = _dbContext.Groups.FirstOrDefault(group => group.GroupId == groupId);
@@ -169,13 +164,46 @@ namespace ZenDev.BusinessLogic.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to delete personal group");
-                result.ErrorMessages = new List<string>() { "Failed to delete group" };
-                return result;
+                return groupId;
             }
 
-            result.Success = true;
+            return groupId;
+        }
 
-            return result;
+        public async Task<UserGroupResultModel> LeaveGroupAsync(UserGroupResultModel userGroup)
+        {
+            userGroup.Success = false;
+
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try 
+            {
+                //Delete UserGroupBridge
+                 var userGroupBridge = _dbContext.UserGroupBridge.FirstOrDefault(bridge => bridge.GroupId == userGroup.GroupId && bridge.UserId == userGroup.UserId);
+                _dbContext.UserGroupBridge.Remove(userGroupBridge);
+
+                //Update member count in Groups table
+                var group = _dbContext.Groups.FirstOrDefault(group => group.GroupId == userGroup.GroupId);
+                if (group != null)
+                {
+                    group.MemberCount--;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                userGroup.Success = true;
+            }
+            catch(Exception ex)
+            {
+                //Roll back on fail
+                await transaction.RollbackAsync();
+
+                userGroup.ErrorMessages = new List<string> { "Failed to leave group" };
+                _logger.LogError(ex, "Failed to leave group");
+                return userGroup;
+            }
+
+            return userGroup;
         }
 
         public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)

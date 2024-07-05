@@ -208,7 +208,7 @@ namespace ZenDev.BusinessLogic.Services
                 var deleteGroupInvitation = await DeleteGroupInvitationAsync(groupInvitationEntity);
 
                 //Update member count in Groups table
-                var group = await _dbContext.Groups.FirstOrDefaultAsync(group => group.GroupId == groupInvitationEntity.GroupId);
+                var group = _dbContext.Groups.FirstOrDefault(group => group.GroupId == groupInvitationEntity.GroupId);
 
                 if (group != null)
                 {
