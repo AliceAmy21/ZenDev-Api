@@ -130,26 +130,61 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<List<UserInviteModel>> GetAllUsersAsync(GroupInvitationQueryObject query)
         {
-            var usersQuery = _dbContext.Users.Where(user => user.UserId != query.UserToExclude).AsQueryable();
-
-            if (!string.IsNullOrEmpty(query.SearchQuery)) //search query
+            if (query.UserToExclude > 0)
             {
-                usersQuery = usersQuery.Where(user => user.UserName.Contains(query.SearchQuery));
+                var usersQuery = _dbContext.Users
+               .Where(user => user.UserId != query.UserToExclude)
+               .AsQueryable();
+
+                if (!string.IsNullOrEmpty(query.SearchQuery)) //search query
+                {
+                    usersQuery = usersQuery.Where(user => user.UserName.Contains(query.SearchQuery));
+                }
+
+                var usersToInvite = usersQuery.Select(user => new UserInviteModel
+                {
+                    UserId = user.UserId,
+                    UserName = user.UserName,
+                    AvatarIconUrl = user.AvatarIconUrl,
+                });
+
+                var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+                return await usersToInvite
+                    .Skip(skipNumber)
+                    .Take(query.PageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                var groupMembers = await _groupService.GetGroupMembers(query.GroupId);
+
+                var usersToExclude = groupMembers.Select(user => user.UserId);
+
+                var usersQuery = _dbContext.Users
+                    .Where(user => !usersToExclude.Contains(user.UserId))
+                    .AsQueryable();
+
+                if (!string.IsNullOrEmpty(query.SearchQuery)) //search query
+                {
+                    usersQuery = usersQuery.Where(user => user.UserName.Contains(query.SearchQuery));
+                }
+
+                var usersToInvite = usersQuery.Select(user => new UserInviteModel
+                {
+                    UserId = user.UserId,
+                    UserName = user.UserName,
+                    AvatarIconUrl = user.AvatarIconUrl,
+                });
+
+                var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+                return await usersToInvite
+                    .Skip(skipNumber)
+                    .Take(query.PageSize)
+                    .ToListAsync();
             }
 
-            var usersToInvite = usersQuery.Select(user => new UserInviteModel
-            {
-                UserId = user.UserId,
-                UserName = user.UserName,
-                AvatarIconUrl = user.AvatarIconUrl,
-            });
-
-            var skipNumber = (query.PageNumber - 1) * query.PageSize;
-
-            return await usersToInvite
-                .Skip(skipNumber)
-                .Take(query.PageSize)
-                .ToListAsync();
         }
 
         public async Task<ResultModel> DeleteGroupInvitationAsync(GroupInvitationEntity groupInvitationEntity)

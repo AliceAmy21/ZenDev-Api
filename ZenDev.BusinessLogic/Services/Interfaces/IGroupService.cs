@@ -22,6 +22,6 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public Task<List<ExerciseTypeEntity>> GetGroupExercisesAsync();
 
-         public Task<List<UserInviteModel>> GetGroupMembers(long groupId);
+         public Task<List<UserInviteModel>> GetGroupMembers(long? groupId);
     }
 }

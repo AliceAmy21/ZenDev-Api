@@ -231,7 +231,7 @@ namespace ZenDev.BusinessLogic.Services
             return result;
         }
 
-        public async Task<List<UserInviteModel>> GetGroupMembers(long groupId)
+        public async Task<List<UserInviteModel>> GetGroupMembers(long? groupId)
         {
             var groupMembers = await _dbContext.UserGroupBridge
                 .Where(userGroup => userGroup.GroupId == groupId)
