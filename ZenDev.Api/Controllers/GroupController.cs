@@ -101,5 +101,14 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
         }
 
+        [HttpGet(nameof(GetUserGroupBridgeByUserAndGroupId))]
+        public async Task<ActionResult<UserGroupBridgeApiModel>> GetUserGroupBridgeByUserAndGroupId(long userId, long groupId)
+        {
+            var result = await _groupService.GetUserGroupBridgeByUserAndGroupIdAsync(userId, groupId);
+
+            if (result == null) return NotFound();
+
+            return Ok(_mapper.Map<UserGroupBridgeApiModel>(result));
+        }
     }
 }

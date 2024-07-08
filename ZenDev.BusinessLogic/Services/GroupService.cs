@@ -263,5 +263,13 @@ namespace ZenDev.BusinessLogic.Services
             var result = _dbContext.Users.ToList();
             return result;
         }
+
+        public async Task<UserGroupBridgeEntity> GetUserGroupBridgeByUserAndGroupIdAsync(long userId, long groupId)
+        {
+            var userGroups = await _dbContext.UserGroupBridge
+                .FirstOrDefaultAsync(userGroupBridge => userGroupBridge.UserId == userId && userGroupBridge.GroupId == groupId);
+
+            return userGroups;
+        }
     }
 }
