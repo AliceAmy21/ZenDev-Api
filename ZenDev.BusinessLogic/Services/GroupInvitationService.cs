@@ -132,6 +132,7 @@ namespace ZenDev.BusinessLogic.Services
         {
             if (query.UserToExclude > 0 && query.GroupId < 0)
             {
+                //Creating a group
                 var usersQuery = _dbContext.Users
                .Where(user => user.UserId != query.UserToExclude)
                .AsQueryable();
@@ -157,9 +158,12 @@ namespace ZenDev.BusinessLogic.Services
             }
             else
             {
+                //Inviting more members to a group
                 var groupMembers = await _groupService.GetGroupMembers(query.GroupId);
+                var alreadyInvited = GetAlreadyInvitedMembersByGroupId(query.GroupId);
 
-                var usersToExclude = groupMembers.Select(user => user.UserId);
+                var usersToExclude = groupMembers.Select(user => user.UserId)
+                                                 .Concat(alreadyInvited.Select(user => user.InvitedUserId));
 
                 var usersQuery = _dbContext.Users
                     .Where(user => !usersToExclude.Contains(user.UserId))
@@ -185,6 +189,15 @@ namespace ZenDev.BusinessLogic.Services
                     .ToListAsync();
             }
 
+        }
+
+        private List<GroupInvitationEntity> GetAlreadyInvitedMembersByGroupId(long? groupId)
+        {
+            var inivtations = _dbContext.GroupInvitations
+               .Where(invitation => invitation.GroupId == groupId)
+               .ToList();
+
+            return inivtations;
         }
 
         public async Task<ResultModel> DeleteGroupInvitationAsync(GroupInvitationEntity groupInvitationEntity)
