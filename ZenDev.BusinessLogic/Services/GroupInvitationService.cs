@@ -130,7 +130,7 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<List<UserInviteModel>> GetAllUsersAsync(GroupInvitationQueryObject query)
         {
-            if (query.UserToExclude > 0)
+            if (query.UserToExclude > 0 && query.GroupId < 0)
             {
                 var usersQuery = _dbContext.Users
                .Where(user => user.UserId != query.UserToExclude)
