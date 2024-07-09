@@ -71,15 +71,12 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.HasHeartrate, opt => opt.MapFrom(src => src.has_heartrate))
                 .ForMember(dest => dest.AverageHeartrate, opt => opt.MapFrom(src => src.average_heartrate))
                 .ForMember(dest => dest.MaxHeartrate, opt => opt.MapFrom(src => src.max_heartrate));
-
             CreateMap<AthleteResponse, AthleteApiModel>()
               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
               .ForMember(dest => dest.ResourceState, opt => opt.MapFrom(src => src.resource_state));
-
             CreateMap<MapResponse, MapApiModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
                 .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.summary_polyline));
-
             CreateMap<ActivitySummaryApiModel, ActivityPointsApiModel>()
                 .ForMember(dest => dest.Exercise, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.ElapsedTime))
@@ -88,8 +85,6 @@ namespace ZenDev.Api
             CreateMap<LeaderBoardListModel,LeaderBoardListApiModel>()
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserInviteModel))
                 .ReverseMap();
-
-            CreateMap<ActivitySummaryApiModel, ActivityPointsApiModel>().ReverseMap();
             CreateMap<MindfulnessEntity, MindfulnessApiModel>().ReverseMap();
         }
     }

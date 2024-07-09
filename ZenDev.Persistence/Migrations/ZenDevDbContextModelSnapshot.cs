@@ -22,7 +22,6 @@ namespace ZenDev.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-<<<<<<< HEAD
             modelBuilder.Entity("ZenDev.Persistence.Entities.AchievementEntity", b =>
                 {
                     b.Property<long>("AchievementId")
@@ -48,7 +47,8 @@ namespace ZenDev.Persistence.Migrations
                     b.HasKey("AchievementId");
 
                     b.ToTable("Achievements");
-=======
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.ActivityRecordEntity", b =>
                 {
                     b.Property<long>("ActivityRecordId")
@@ -77,7 +77,6 @@ namespace ZenDev.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ActivityRecords");
->>>>>>> dev
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>

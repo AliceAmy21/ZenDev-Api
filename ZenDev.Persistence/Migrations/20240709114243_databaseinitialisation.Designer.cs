@@ -12,13 +12,8 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-<<<<<<<< HEAD:ZenDev.Persistence/Migrations/20240704073141_databaseInitialisation.Designer.cs
-    [Migration("20240704073141_databaseInitialisation")]
-    partial class databaseInitialisation
-========
-    [Migration("20240702130511_databaseinitialisation")]
+    [Migration("20240709114243_databaseinitialisation")]
     partial class databaseinitialisation
->>>>>>>> dev:ZenDev.Persistence/Migrations/20240702130511_databaseinitialisation.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,7 +25,6 @@ namespace ZenDev.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-<<<<<<<< HEAD:ZenDev.Persistence/Migrations/20240704073141_databaseInitialisation.Designer.cs
             modelBuilder.Entity("ZenDev.Persistence.Entities.AchievementEntity", b =>
                 {
                     b.Property<long>("AchievementId")
@@ -56,7 +50,8 @@ namespace ZenDev.Persistence.Migrations
                     b.HasKey("AchievementId");
 
                     b.ToTable("Achievements");
-========
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.ActivityRecordEntity", b =>
                 {
                     b.Property<long>("ActivityRecordId")
@@ -85,7 +80,6 @@ namespace ZenDev.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ActivityRecords");
->>>>>>>> dev:ZenDev.Persistence/Migrations/20240702130511_databaseinitialisation.Designer.cs
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>

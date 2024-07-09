@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZenDev.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class databaseInitialisation : Migration
+    public partial class databaseinitialisation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -111,7 +111,29 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:ZenDev.Persistence/Migrations/20240704073141_databaseInitialisation.cs
+                name: "ActivityRecords",
+                columns: table => new
+                {
+                    ActivityRecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Points = table.Column<long>(type: "bigint", nullable: false),
+                    Distance = table.Column<long>(type: "bigint", nullable: false),
+                    Duration = table.Column<long>(type: "bigint", nullable: false),
+                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityRecords", x => x.ActivityRecordId);
+                    table.ForeignKey(
+                        name: "FK_ActivityRecords_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Mindfulness",
                 columns: table => new
                 {
@@ -129,24 +151,6 @@ namespace ZenDev.Persistence.Migrations
                     table.PrimaryKey("PK_Mindfulness", x => x.MindfulnessId);
                     table.ForeignKey(
                         name: "FK_Mindfulness_Users_UserId",
-========
-                name: "ActivityRecords",
-                columns: table => new
-                {
-                    ActivityRecordId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Points = table.Column<long>(type: "bigint", nullable: false),
-                    Distance = table.Column<long>(type: "bigint", nullable: false),
-                    Duration = table.Column<long>(type: "bigint", nullable: false),
-                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActivityRecords", x => x.ActivityRecordId);
-                    table.ForeignKey(
-                        name: "FK_ActivityRecords_Users_UserId",
->>>>>>>> dev:ZenDev.Persistence/Migrations/20240702130511_databaseinitialisation.cs
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
