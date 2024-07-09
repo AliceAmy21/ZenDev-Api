@@ -80,6 +80,15 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
                 .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.summary_polyline));
 
+            CreateMap<ActivitySummaryApiModel, ActivityPointsApiModel>()
+                .ForMember(dest => dest.Exercise, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.ElapsedTime))
+                .ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
+                .ReverseMap();
+            CreateMap<LeaderBoardListModel,LeaderBoardListApiModel>()
+                .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserInviteModel))
+                .ReverseMap();
+
             CreateMap<ActivitySummaryApiModel, ActivityPointsApiModel>().ReverseMap();
             CreateMap<MindfulnessEntity, MindfulnessApiModel>().ReverseMap();
         }

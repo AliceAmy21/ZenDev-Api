@@ -64,9 +64,11 @@ namespace ZenDev.Api.Controllers
                 var activitiesApiModel = _mapper.Map<List<ActivitySummaryApiModel>>(activities);
 
                 var pointsModels = _mapper.Map<List<ActivityPointsApiModel>>(activitiesApiModel);
-                int points = _pointsService.CalculatePoints(pointsModels);
-                _logger.LogInformation("Points: {MappedPoints}", points);
+                _pointsService.CalculatePoints(pointsModels);
 
+                await _pointsService.UpdatePointsGroups(userId,pointsModels);
+                await _pointsService.UpdateAmountCompleteChallenges(userId,pointsModels);
+                
                 // Only update the last synced date after the calculations have completed successfully
                 var newSyncDate = await _pointsService.SetLastSyncedDateAsync(userId);
                 return Ok(newSyncDate);

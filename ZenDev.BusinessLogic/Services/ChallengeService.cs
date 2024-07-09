@@ -26,11 +26,12 @@ namespace ZenDev.BusinessLogic.Services
                 .AsQueryable();
             if(challengeId>0 && userId>0){
                 try{
-                    if(!challengeBridge.Any(user=>user.UserId == userId && user.ChallengeId == challengeId)){
+                    if(!await challengeBridge.AnyAsync(user=>user.UserId == userId && user.ChallengeId == challengeId)){
                         UserChallengeBridgeEntity userChallengeBridgeEntity = new UserChallengeBridgeEntity()
                         {
                             UserId = userId,
-                            ChallengeId = challengeId
+                            ChallengeId = challengeId,
+                            AmountCompleted = 0
                         };
                         try{
                             await _dbContext.UserChallengeBridge.AddAsync(userChallengeBridgeEntity);
@@ -59,13 +60,12 @@ namespace ZenDev.BusinessLogic.Services
                 ChallengeDescription = challenge.ChallengeDescription,
                 ChallengeEndDate = challenge.ChallengeEndDate,
                 ChallengeStartDate = challenge.ChallengeStartDate,
-                AmountCompleted = 0,
                 AmountToComplete = challenge.AmountToComplete,
                 Measurement = challenge.Measurement,
                 ExerciseId = challenge.ExerciseId,
-                ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId),
+                ExerciseEntity = await _dbContext.Exercises.FindAsync(challenge.ExerciseId),
                 GroupId = challenge.GroupId,
-                GroupEntity = groups.First(group=> group.GroupId == challenge.GroupId),
+                GroupEntity = await groups.FirstAsync(group=> group.GroupId == challenge.GroupId),
                 Admin = challenge.UserId
             };
 
@@ -74,7 +74,8 @@ namespace ZenDev.BusinessLogic.Services
                 await _dbContext.SaveChangesAsync();
                 UserChallengeBridgeEntity userChallengeBridgeEntity = new(){
                 UserId = UserId,
-                ChallengeId = challenge1.ChallengeId
+                ChallengeId = challenge1.ChallengeId,
+                AmountCompleted = 0
                 };
                 await _dbContext.AddAsync(userChallengeBridgeEntity);
                 await _dbContext.SaveChangesAsync();
@@ -107,46 +108,54 @@ namespace ZenDev.BusinessLogic.Services
                 .Include(group=>group.ChallengeEntity.GroupEntity)
                 .Include(exercise1=>exercise1.ChallengeEntity.GroupEntity.ExerciseTypeEntity)
                 .AsQueryable();
+            var challenges = _dbContext.Challenges
+                .Include(group => group.GroupEntity)
+                .Include(exercise => exercise.ExerciseEntity)
+                .Include(group=>group.GroupEntity)
+                .Include(exercise1=>exercise1.GroupEntity.ExerciseTypeEntity)
+                .AsQueryable();
             List<List<ChallengeListModel>> ListOfChallenges = new List<List<ChallengeListModel>>();
             List<ChallengeListModel> ListOfChallengesGroup = new List<ChallengeListModel>();
             List<ChallengeListModel> ListOfChallengesUser = new List<ChallengeListModel>();
-            var ListOfBridges = userBridge.Where(group=>group.ChallengeEntity.GroupEntity.GroupId == groupId && group.UserId != userId).ToList();
+            var ListOfBridges = challenges.Where(group=>group.GroupEntity.GroupId == groupId).ToList();
             foreach(var Bridge in ListOfBridges){
-                ChallengeListModel challengeListModel = new ChallengeListModel()
-                {
-                ChallengeName = Bridge.ChallengeEntity.ChallengeName,
-                AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
-                Measurement = Bridge.ChallengeEntity.Measurement,
-                Admin = Bridge.ChallengeEntity.Admin,
-                ChallengeId = Bridge.ChallengeId,
-                ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
-                ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
-                AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
-                ExerciseId = Bridge.ChallengeEntity.ExerciseId,
-                ExerciseEntity = Bridge.ChallengeEntity.ExerciseEntity,
-                GroupId = Bridge.ChallengeEntity.GroupId,
-                GroupEntity = Bridge.ChallengeEntity.GroupEntity
-                };
-                ListOfChallengesGroup.Add(challengeListModel);
-            }
-            var ListOfBridges1 = userBridge.Where(group=>group.ChallengeEntity.GroupEntity.GroupId == groupId && group.UserId == userId).ToList();
-            foreach(var Bridge in ListOfBridges1){
-                ChallengeListModel challengeListModel = new ChallengeListModel()
-                {
-                ChallengeId = Bridge.ChallengeId,
-                ChallengeName = Bridge.ChallengeEntity.ChallengeName,
-                AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
-                Measurement = Bridge.ChallengeEntity.Measurement,
-                Admin = Bridge.ChallengeEntity.Admin,
-                ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
-                ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
-                AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
-                ExerciseId = Bridge.ChallengeEntity.ExerciseId,
-                ExerciseEntity = Bridge.ChallengeEntity.ExerciseEntity,
-                GroupId = Bridge.ChallengeEntity.GroupId,
-                GroupEntity = Bridge.ChallengeEntity.GroupEntity
-                };
+                if(userBridge.Any(user=>user.UserId == userId && user.ChallengeId == Bridge.ChallengeId)){
+                    var challenge = userBridge.First(user=> user.UserId == userId && user.ChallengeId == Bridge.ChallengeId);
+                    ChallengeListModel challengeListModel = new ChallengeListModel()
+                    {
+                    ChallengeName = Bridge.ChallengeName,
+                    AmountCompleted = challenge.AmountCompleted,
+                    Measurement = Bridge.Measurement,
+                    Admin = Bridge.Admin,
+                    ChallengeId = Bridge.ChallengeId,
+                    ChallengeEndDate = Bridge.ChallengeEndDate,
+                    ChallengeStartDate = Bridge.ChallengeStartDate,
+                    AmountToComplete = Bridge.AmountToComplete,
+                    ExerciseId = Bridge.ExerciseId,
+                    ExerciseEntity = Bridge.ExerciseEntity,
+                    GroupId = Bridge.GroupId,
+                    GroupEntity = Bridge.GroupEntity
+                    };
                 ListOfChallengesUser.Add(challengeListModel);
+            }   
+            else{
+                ChallengeListModel challengeListModel = new ChallengeListModel()
+                {
+                ChallengeId = Bridge.ChallengeId,
+                ChallengeName = Bridge.ChallengeName,
+                AmountCompleted = 0,
+                Measurement = Bridge.Measurement,
+                Admin = Bridge.Admin,
+                ChallengeEndDate = Bridge.ChallengeEndDate,
+                ChallengeStartDate = Bridge.ChallengeStartDate,
+                AmountToComplete = Bridge.AmountToComplete,
+                ExerciseId = Bridge.ExerciseId,
+                ExerciseEntity = Bridge.ExerciseEntity,
+                GroupId = Bridge.GroupId,
+                GroupEntity = Bridge.GroupEntity
+                };
+            ListOfChallengesGroup.Add(challengeListModel);
+            }
             }
             ListOfChallenges.Add(ListOfChallengesUser);
             ListOfChallenges.Add(ListOfChallengesGroup);
@@ -169,7 +178,7 @@ namespace ZenDev.BusinessLogic.Services
                 {
                 ChallengeId = Bridge.ChallengeId,
                 ChallengeName = Bridge.ChallengeEntity.ChallengeName,
-                AmountCompleted = Bridge.ChallengeEntity.AmountCompleted,
+                AmountCompleted = Bridge.AmountCompleted,
                 Measurement = Bridge.ChallengeEntity.Measurement,
                 Admin = Bridge.ChallengeEntity.Admin,
                 ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
@@ -252,39 +261,30 @@ namespace ZenDev.BusinessLogic.Services
         public async Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge)
         {
             var challenge1 = await _dbContext.Challenges.FindAsync(challenge.ChallengeId);
-
-            if(challenge.ChallengeName != null && challenge.ChallengeName != challenge1.ChallengeName)
+            if(challenge1!=null){
             challenge1.ChallengeName = challenge.ChallengeName;
-
-            if(challenge.ChallengeEndDate != null && challenge.ChallengeEndDate != challenge1.ChallengeEndDate)
             challenge1.ChallengeEndDate = challenge.ChallengeEndDate;
-
-            if(challenge.ExerciseId != null && challenge.ExerciseId != challenge1.ExerciseId){
             challenge1.ExerciseId = challenge.ExerciseId;
-            challenge1.ExerciseEntity = _dbContext.Exercises.Find(challenge.ExerciseId);
+            var ex = await _dbContext.Exercises.FindAsync(challenge.ExerciseId);
+            if(ex !=null){
+            challenge1.ExerciseEntity = ex;
             }
-
-            if(challenge.AmountToComplete != null && challenge.AmountToComplete != challenge1.AmountToComplete)
             challenge1.AmountToComplete = challenge.AmountToComplete;
-
-            if(challenge.Admin != null && challenge.Admin != challenge1.Admin)
             challenge1.Admin = challenge.Admin;
-
-            if(challenge.ChallengeDescription  != null && challenge.ChallengeDescription != challenge1.ChallengeDescription)
             challenge1.ChallengeDescription = challenge.ChallengeDescription;
-
-            if(challenge.Measurement  != null && challenge.Measurement.Equals(challenge1.Measurement))
             challenge1.Measurement = challenge.Measurement;
 
             _dbContext.Update(challenge1);
             await _dbContext.SaveChangesAsync();
-            return await GetChallengeByIdAsync(challenge1.ChallengeId);
+            return challenge1;
+            }
+            return null;
         }
         public async Task<long> DeleteChallengeAsync(long challengeId)
         {
-            var challenge = _dbContext.Challenges.FirstOrDefault(challenge => challenge.ChallengeId == challengeId);
+            var challenge = await _dbContext.Challenges.FirstOrDefaultAsync(challenge => challenge.ChallengeId == challengeId);
             if(challenge != null)
-            _dbContext.Remove(challenge);
+                _dbContext.Remove(challenge);
             await _dbContext.SaveChangesAsync();
             return challengeId;
         }

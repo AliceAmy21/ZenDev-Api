@@ -97,6 +97,7 @@ namespace ZenDev.BusinessLogic.Services
             {
                 GroupAdmin = groupResult.GroupAdmin,
                 UserId = groupResult.UserId,
+                Points = 0,
             };
 
             try

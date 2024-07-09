@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Enums;
 using ZenDev.Common.Models;
@@ -17,7 +18,7 @@ namespace ZenDev.BusinessLogic.Services
         public PointsService(ZenDevDbContext dbContext) {
             _dbContext = dbContext;
         }
-        public int CalculatePoints(List<ActivityPointsApiModel> activities)
+        public void CalculatePoints(List<ActivityPointsApiModel> activities)
         {
             int totalPoints = 0;
 
@@ -27,6 +28,13 @@ namespace ZenDev.BusinessLogic.Services
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
                 totalPoints += GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
             }
+        }
+
+        public int CalculatePointsGroups(ActivityPointsApiModel activity)
+        {
+            int totalPoints = 0;
+            int movingTimeInMinutes = GetMinutes(activity.MovingTime);
+            totalPoints += GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
             return totalPoints;
         }
 
@@ -75,6 +83,43 @@ namespace ZenDev.BusinessLogic.Services
                 .Where(user => user.UserId == userId)
                 .Select(user => user.LastSynced)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateAmountCompleteChallenges(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var challenge = _dbContext.UserChallengeBridge
+            .Include(challenge=>challenge.ChallengeEntity)
+            .Include(exercise => exercise.ChallengeEntity.ExerciseEntity)
+            .AsQueryable();
+            foreach(var activity in activities){
+                var bridges = challenge.Where(challenges => challenges.UserId == userId && 
+                challenges.ChallengeEntity.ExerciseEntity.ExerciseName == activity.Exercise &&
+                challenges.ChallengeEntity.ChallengeStartDate <= activity.StartDateLocal &&
+                challenges.ChallengeEntity.ChallengeEndDate >= activity.StartDateLocal);
+                foreach(var bridge in bridges){
+                    if(bridge.ChallengeEntity.Measurement == Persistence.Constants.Measurement.Distance)
+                        bridge.AmountCompleted += Convert.ToInt64(activity.Distance);
+                    else
+                        bridge.AmountCompleted += Convert.ToInt64(activity.Duration);
+                }
+            }
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdatePointsGroups(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var group = _dbContext.UserGroupBridge
+            .Include(challenge=>challenge.GroupEntity)
+            .Include(exercise => exercise.GroupEntity.ExerciseTypeEntity)
+            .AsQueryable();
+            foreach(var activity in activities){
+                var bridges = group.Where(groups => groups.UserId == userId && 
+                groups.GroupEntity.ExerciseTypeEntity.ExerciseType == activity.Exercise);
+                foreach(var bridge in bridges){
+                    bridge.Points += CalculatePointsGroups(activity);
+                }
+            }
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

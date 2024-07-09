@@ -22,6 +22,7 @@ namespace ZenDev.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+<<<<<<< HEAD
             modelBuilder.Entity("ZenDev.Persistence.Entities.AchievementEntity", b =>
                 {
                     b.Property<long>("AchievementId")
@@ -47,6 +48,36 @@ namespace ZenDev.Persistence.Migrations
                     b.HasKey("AchievementId");
 
                     b.ToTable("Achievements");
+=======
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ActivityRecordEntity", b =>
+                {
+                    b.Property<long>("ActivityRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ActivityRecordId"));
+
+                    b.Property<DateTimeOffset>("DateTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long>("Distance")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Duration")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Points")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ActivityRecordId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ActivityRecords");
+>>>>>>> dev
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>
@@ -58,9 +89,6 @@ namespace ZenDev.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ChallengeId"));
 
                     b.Property<long>("Admin")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("AmountCompleted")
                         .HasColumnType("bigint");
 
                     b.Property<long>("AmountToComplete")
@@ -333,8 +361,14 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserChallengeId"));
 
+                    b.Property<long>("AmountCompleted")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("ChallengeId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("DateCompleted")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -405,6 +439,9 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("Points")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -415,6 +452,17 @@ namespace ZenDev.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserGroupBridge");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ActivityRecordEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntities")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserEntities");
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>
