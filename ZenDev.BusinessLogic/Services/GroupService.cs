@@ -97,6 +97,7 @@ namespace ZenDev.BusinessLogic.Services
             {
                 GroupAdmin = groupResult.GroupAdmin,
                 UserId = groupResult.UserId,
+                Points = 0,
             };
 
             try
@@ -134,6 +135,78 @@ namespace ZenDev.BusinessLogic.Services
             return newUserGroupBridge;
         }
 
+        public async Task<GroupEntity> UpdateGroupAsync(GroupEntity group)
+        {
+            try
+            {
+                _dbContext.Update(group);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to update group");
+                return new GroupEntity();
+            }
+
+            return group;
+        }
+
+        public async Task<long> DeleteGroupAsync(long groupId)
+        {
+            try
+            {
+                var recordToRemove = _dbContext.Groups.FirstOrDefault(group => group.GroupId == groupId);
+                if (recordToRemove != null)
+                {
+                    _dbContext.Remove(recordToRemove);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to delete personal group");
+                return groupId;
+            }
+
+            return groupId;
+        }
+
+        public async Task<UserGroupResultModel> LeaveGroupAsync(UserGroupResultModel userGroup)
+        {
+            userGroup.Success = false;
+
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try 
+            {
+                //Delete UserGroupBridge
+                 var userGroupBridge = _dbContext.UserGroupBridge.FirstOrDefault(bridge => bridge.GroupId == userGroup.GroupId && bridge.UserId == userGroup.UserId);
+                _dbContext.UserGroupBridge.Remove(userGroupBridge);
+
+                //Update member count in Groups table
+                var group = _dbContext.Groups.FirstOrDefault(group => group.GroupId == userGroup.GroupId);
+                if (group != null)
+                {
+                    group.MemberCount--;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                userGroup.Success = true;
+            }
+            catch(Exception ex)
+            {
+                //Roll back on fail
+                await transaction.RollbackAsync();
+
+                userGroup.ErrorMessages = new List<string> { "Failed to leave group" };
+                _logger.LogError(ex, "Failed to leave group");
+                return userGroup;
+            }
+
+            return userGroup;
+        }
+
         public async Task<UserGroupBridgeEntity> CreateUserGroupBridgeAsync(UserGroupBridgeEntity userGroupBridge)
         {
             try
@@ -159,7 +232,7 @@ namespace ZenDev.BusinessLogic.Services
             return result;
         }
 
-        public async Task<List<UserInviteModel>> GetGroupMembers(long groupId)
+        public async Task<List<UserInviteModel>> GetGroupMembers(long? groupId)
         {
             var groupMembers = await _dbContext.UserGroupBridge
                 .Where(userGroup => userGroup.GroupId == groupId)
@@ -190,6 +263,14 @@ namespace ZenDev.BusinessLogic.Services
         {
             var result = _dbContext.Users.ToList();
             return result;
+        }
+
+        public async Task<UserGroupBridgeEntity> GetUserGroupBridgeByUserAndGroupIdAsync(long userId, long groupId)
+        {
+            var userGroups = await _dbContext.UserGroupBridge
+                .FirstOrDefaultAsync(userGroupBridge => userGroupBridge.UserId == userId && userGroupBridge.GroupId == groupId);
+
+            return userGroups;
         }
     }
 }

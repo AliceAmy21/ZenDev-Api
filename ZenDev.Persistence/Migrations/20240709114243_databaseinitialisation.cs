@@ -12,6 +12,21 @@ namespace ZenDev.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Achievements",
+                columns: table => new
+                {
+                    AchievementId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AchievementName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AchievementDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    AchievementIcon = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Achievements", x => x.AchievementId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Examples",
                 columns: table => new
                 {
@@ -64,7 +79,8 @@ namespace ZenDev.Persistence.Migrations
                     Streak = table.Column<long>(type: "bigint", nullable: false),
                     AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    TotalPoints = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,6 +107,53 @@ namespace ZenDev.Persistence.Migrations
                         column: x => x.ExerciseTypeId,
                         principalTable: "ExerciseTypes",
                         principalColumn: "ExerciseTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActivityRecords",
+                columns: table => new
+                {
+                    ActivityRecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Points = table.Column<long>(type: "bigint", nullable: false),
+                    Distance = table.Column<long>(type: "bigint", nullable: false),
+                    Duration = table.Column<long>(type: "bigint", nullable: false),
+                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityRecords", x => x.ActivityRecordId);
+                    table.ForeignKey(
+                        name: "FK_ActivityRecords_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Mindfulness",
+                columns: table => new
+                {
+                    MindfulnessId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalPoints = table.Column<long>(type: "bigint", nullable: false),
+                    TodaysPoints = table.Column<long>(type: "bigint", nullable: false),
+                    TotalMinutes = table.Column<double>(type: "float", nullable: false),
+                    TodaysMinutes = table.Column<double>(type: "float", nullable: false),
+                    LastUpdate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mindfulness", x => x.MindfulnessId);
+                    table.ForeignKey(
+                        name: "FK_Mindfulness_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -128,6 +191,32 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserAchievementBridge",
+                columns: table => new
+                {
+                    UserAchievementId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    AchievementId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAchievementBridge", x => x.UserAchievementId);
+                    table.ForeignKey(
+                        name: "FK_UserAchievementBridge_Achievements_AchievementId",
+                        column: x => x.AchievementId,
+                        principalTable: "Achievements",
+                        principalColumn: "AchievementId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserAchievementBridge_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Challenges",
                 columns: table => new
                 {
@@ -138,7 +227,6 @@ namespace ZenDev.Persistence.Migrations
                     ChallengeStartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ChallengeEndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Measurement = table.Column<int>(type: "int", nullable: false),
-                    AmountCompleted = table.Column<long>(type: "bigint", nullable: false),
                     AmountToComplete = table.Column<long>(type: "bigint", nullable: false),
                     ExerciseId = table.Column<long>(type: "bigint", nullable: false),
                     GroupId = table.Column<long>(type: "bigint", nullable: false),
@@ -196,7 +284,8 @@ namespace ZenDev.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GroupAdmin = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                    GroupId = table.Column<long>(type: "bigint", nullable: false),
+                    Points = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,7 +311,9 @@ namespace ZenDev.Persistence.Migrations
                     UserChallengeId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ChallengeId = table.Column<long>(type: "bigint", nullable: false)
+                    ChallengeId = table.Column<long>(type: "bigint", nullable: false),
+                    DateCompleted = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    AmountCompleted = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,6 +331,11 @@ namespace ZenDev.Persistence.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityRecords_UserId",
+                table: "ActivityRecords",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Challenges_ExerciseId",
@@ -267,6 +363,11 @@ namespace ZenDev.Persistence.Migrations
                 column: "ExerciseTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Mindfulness_UserId",
+                table: "Mindfulness",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonalGoals_ExerciseId",
                 table: "PersonalGoals",
                 column: "ExerciseId");
@@ -274,6 +375,16 @@ namespace ZenDev.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalGoals_UserId",
                 table: "PersonalGoals",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAchievementBridge_AchievementId",
+                table: "UserAchievementBridge",
+                column: "AchievementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAchievementBridge_UserId",
+                table: "UserAchievementBridge",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -301,19 +412,31 @@ namespace ZenDev.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ActivityRecords");
+
+            migrationBuilder.DropTable(
                 name: "Examples");
 
             migrationBuilder.DropTable(
                 name: "GroupInvitations");
 
             migrationBuilder.DropTable(
+                name: "Mindfulness");
+
+            migrationBuilder.DropTable(
                 name: "PersonalGoals");
+
+            migrationBuilder.DropTable(
+                name: "UserAchievementBridge");
 
             migrationBuilder.DropTable(
                 name: "UserChallengeBridge");
 
             migrationBuilder.DropTable(
                 name: "UserGroupBridge");
+
+            migrationBuilder.DropTable(
+                name: "Achievements");
 
             migrationBuilder.DropTable(
                 name: "Challenges");

@@ -14,6 +14,8 @@ namespace ZenDev.Persistence.Entities
         public long ChallengeId{get;set;}
         [ForeignKey(nameof(ChallengeId))]
         public ChallengeEntity ChallengeEntity {get;set;}
+        public DateTimeOffset DateCompleted {get;set;}
+        public long AmountCompleted {get;set;}
 
     }
 }

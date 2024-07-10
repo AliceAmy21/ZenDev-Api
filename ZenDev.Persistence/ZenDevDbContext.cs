@@ -35,12 +35,16 @@ namespace ZenDev.Persistence
         public virtual DbSet<ExerciseEntity> Exercises { get; set; }
         public virtual DbSet<ExerciseTypeEntity> ExerciseTypes { get; set; }
         public virtual DbSet<GroupEntity> Groups { get; set; }
-         public virtual DbSet<GroupInvitationEntity> GroupInvitations { get; set; }
+        public virtual DbSet<GroupInvitationEntity> GroupInvitations { get; set; }
         public virtual DbSet<UserGroupBridgeEntity> UserGroupBridge { get; set; }
         public virtual DbSet<PersonalGoalEntity> PersonalGoals { get; set; }
         public virtual DbSet<ChallengeEntity> Challenges {get; set;}
         public virtual DbSet<UserChallengeBridgeEntity> UserChallengeBridge {get; set;}
+        public virtual DbSet<ActivityRecordEntity> ActivityRecords {get;set;}
 
+        public virtual DbSet<AchievementEntity> Achievements {get; set;}
+        public virtual DbSet<UserAchievementBridgeEntity> UserAchievementBridge {get; set;}
+        public virtual DbSet<MindfulnessEntity> Mindfulness { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

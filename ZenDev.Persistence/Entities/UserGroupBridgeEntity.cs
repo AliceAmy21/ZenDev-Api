@@ -14,6 +14,8 @@ namespace ZenDev.Persistence.Entities
 
         public long GroupId { get; set; }
 
+        public long Points{ get; set; }
+
         [ForeignKey(nameof(UserId))]
         public UserEntity UserEntity { get; set; }
 

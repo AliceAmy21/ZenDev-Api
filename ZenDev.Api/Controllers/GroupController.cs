@@ -53,6 +53,34 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<UserGroupBridgeEntity>(result));
         }
 
+        [HttpDelete(nameof(DeleteGroup))]
+        public async Task<ActionResult<long>> DeleteGroup(long groupId)
+        {
+            var result = await _groupService.DeleteGroupAsync(groupId);
+
+            return Ok(_mapper.Map<long>(result));
+        }
+
+        [HttpPut(nameof(UpdateGroup))]
+        public async Task<ActionResult<GroupApiModel>> UpdateGroup(GroupApiModel group)
+        {
+            var groupEntity = _mapper.Map<GroupEntity>(group);
+
+            var result = await _groupService.UpdateGroupAsync(groupEntity);
+
+            return Ok(_mapper.Map<GroupApiModel>(result));
+        }
+
+        [HttpDelete(nameof(LeaveGroup))]
+        public async Task<ActionResult<UserGroupResultApiModel>> LeaveGroup(UserGroupResultApiModel userGroup)
+        {
+            var userGroupModel = _mapper.Map<UserGroupResultModel>(userGroup);
+
+            var result = await _groupService.LeaveGroupAsync(userGroupModel);
+
+            return Ok(_mapper.Map<UserGroupResultApiModel>(result));
+        }
+
         [HttpGet(nameof(GetAllGroupExercises))]
         public async Task<ActionResult<List<ExerciseTypeApiModel>>> GetAllGroupExercises()
         {
@@ -73,5 +101,14 @@ namespace ZenDev.Api.Controllers
             return Ok(_mapper.Map<List<UserInviteApiModel>>(result));
         }
 
+        [HttpGet(nameof(GetUserGroupBridgeByUserAndGroupId))]
+        public async Task<ActionResult<UserGroupBridgeApiModel>> GetUserGroupBridgeByUserAndGroupId(long userId, long groupId)
+        {
+            var result = await _groupService.GetUserGroupBridgeByUserAndGroupIdAsync(userId, groupId);
+
+            if (result == null) return NotFound();
+
+            return Ok(_mapper.Map<UserGroupBridgeApiModel>(result));
+        }
     }
 }
