@@ -1,0 +1,52 @@
+[
+    {
+        "AchievementName": "7 Day Streak",
+        "AchievementDescription": "Login consecutively for 1 week",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\001-rosette.png"
+    },
+    {
+        "AchievementName": "30 Day Streak",
+        "AchievementDescription": "Login consecutively for 1 month",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\003-badge.png"
+    },
+    {
+        "AchievementName": "50 Day Streak",
+        "AchievementDescription": "Login consecutively for 50 days",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\006-success-1.png"
+    },
+    {
+        "AchievementName": "90 Day Streak",
+        "AchievementDescription": "Login consecutively for 3 months",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\002-trophy.png"
+    },
+    {
+        "AchievementName": "5 Hours",
+        "AchievementDescription": "Spent a total of 5 hours exercising",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\009-workout.png"
+    },
+    {
+        "AchievementName": "10 Hours",
+        "AchievementDescription": "Spent a total of 10 hours exercising",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\010-bench-press.png"
+    },
+    {
+        "AchievementName": "10km",
+        "AchievementDescription": "Travelled a total distance of 5km",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\008-shoes.png"
+    },
+    {
+        "AchievementName": "20km",
+        "AchievementDescription": "Travelled a total distance of 10km",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\007-treadmill.png"
+    },
+    {
+        "AchievementName": "50km",
+        "AchievementDescription": "Travelled a total distance of 20km",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\004-achieving-goals.png"
+    },
+    {
+        "AchievementName": "500km",
+        "AchievementDescription": "Travelled a total distance of 500km",
+        "AchievementIcon": "..\\ZenDev.Migrations\\seeding-data\\AchievementIcons\\005-success.png"
+    }
+]

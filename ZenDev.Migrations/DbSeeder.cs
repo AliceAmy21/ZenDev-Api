@@ -10,6 +10,7 @@ namespace ZenDev.Migrations
         public ZenDevDbContext _dbContext;
         public ExerciseEntity[] _exercises;
         public ExerciseTypeEntity[] _exerciseTypes;
+        public AchievementEntity[] _achievements;
 
 
         public DbSeeder(ZenDevDbContext dbContext)
@@ -17,12 +18,14 @@ namespace ZenDev.Migrations
             _dbContext = dbContext;
             _exercises = [];
             _exerciseTypes = [];
+            _achievements = [];
         }
 
         public void SeedData()
         {
             AddExercises();
             AddExerciseTypes();
+            AddAchievements();
         }
 
         public TEntity[] ReadJSON<TEntity>(string fileName) 
@@ -81,6 +84,30 @@ namespace ZenDev.Migrations
             if (!_dbContext.ExerciseTypes.Any())
             {
                 _dbContext.ExerciseTypes.AddRange(_exerciseTypes);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        private void AddAchievements()
+        {
+            var jsonData = ReadJSON<AchievementConfig>(Constants.ACHIEVEMENTS_FILE_NAME);
+            
+            var achievementsLength = jsonData.Length;
+            _achievements = new AchievementEntity[achievementsLength];
+
+            for (int i = 0; i < achievementsLength; i++)
+            {
+                _achievements[i] = new AchievementEntity
+                {
+                    AchievementName = jsonData[i].AchievementName,
+                    AchievementDescription = jsonData[i].AchievementDescription,
+                    AchievementIcon = jsonData[i].AchievementIcon,
+                };
+            }
+
+            if (!_dbContext.Achievements.Any())
+            {
+                _dbContext.Achievements.AddRange(_achievements);
                 _dbContext.SaveChanges();
             }
         }
