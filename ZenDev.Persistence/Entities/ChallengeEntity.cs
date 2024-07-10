@@ -9,9 +9,9 @@ namespace ZenDev.Persistence.Entities
         [Key]
         public long ChallengeId {get;set;}
         [MaxLength(100)]
-        public string ChallengeName {get;set;}
+        public string ChallengeName {get;set;} = string.Empty;
         [MaxLength(500)]
-        public string ChallengeDescription {get;set;}
+        public string ChallengeDescription {get;set;} = string.Empty;
         public DateTimeOffset ChallengeStartDate {get;set;}   
         public DateTimeOffset ChallengeEndDate {get;set;}
         public Measurement Measurement {get;set;}
