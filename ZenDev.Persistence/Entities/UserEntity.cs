@@ -28,5 +28,7 @@ namespace ZenDev.Persistence.Entities
         public List<UserGroupBridgeEntity> UserGroupBridgeEntities { get; set; } = [];
 
         public List<UserChallengeBridgeEntity> UserChallengeBridgeEntities {get;set;} = [];
+
+        public List<ReactionMessageBridgeEntity> ReactionMessageBridgeEntities {get;set;} = [];
     }
 }

@@ -68,6 +68,19 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReactionIcons",
+                columns: table => new
+                {
+                    ReactionIconId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReactionIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReactionIcons", x => x.ReactionIconId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -127,6 +140,28 @@ namespace ZenDev.Persistence.Migrations
                     table.PrimaryKey("PK_ActivityRecords", x => x.ActivityRecordId);
                     table.ForeignKey(
                         name: "FK_ActivityRecords_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    MessageId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    MessageContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateSent = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Shareable = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.MessageId);
+                    table.ForeignKey(
+                        name: "FK_Messages_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -250,6 +285,25 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Chatrooms",
+                columns: table => new
+                {
+                    ChatId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chatrooms", x => x.ChatId);
+                    table.ForeignKey(
+                        name: "FK_Chatrooms_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GroupInvitations",
                 columns: table => new
                 {
@@ -305,6 +359,38 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReactionMessageBridge",
+                columns: table => new
+                {
+                    ReactionMessageBridgeId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    MessageId = table.Column<long>(type: "bigint", nullable: false),
+                    ReactionIconId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReactionMessageBridge", x => x.ReactionMessageBridgeId);
+                    table.ForeignKey(
+                        name: "FK_ReactionMessageBridge_Messages_MessageId",
+                        column: x => x.MessageId,
+                        principalTable: "Messages",
+                        principalColumn: "MessageId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReactionMessageBridge_ReactionIcons_ReactionIconId",
+                        column: x => x.ReactionIconId,
+                        principalTable: "ReactionIcons",
+                        principalColumn: "ReactionIconId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReactionMessageBridge_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserChallengeBridge",
                 columns: table => new
                 {
@@ -332,6 +418,32 @@ namespace ZenDev.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ChatMessageBridge",
+                columns: table => new
+                {
+                    ChatMessageId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatId = table.Column<long>(type: "bigint", nullable: false),
+                    MessageId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatMessageBridge", x => x.ChatMessageId);
+                    table.ForeignKey(
+                        name: "FK_ChatMessageBridge_Chatrooms_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chatrooms",
+                        principalColumn: "ChatId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatMessageBridge_Messages_MessageId",
+                        column: x => x.MessageId,
+                        principalTable: "Messages",
+                        principalColumn: "MessageId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ActivityRecords_UserId",
                 table: "ActivityRecords",
@@ -345,6 +457,21 @@ namespace ZenDev.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Challenges_GroupId",
                 table: "Challenges",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessageBridge_ChatId",
+                table: "ChatMessageBridge",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessageBridge_MessageId",
+                table: "ChatMessageBridge",
+                column: "MessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chatrooms_GroupId",
+                table: "Chatrooms",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
@@ -363,6 +490,11 @@ namespace ZenDev.Persistence.Migrations
                 column: "ExerciseTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Messages_UserId",
+                table: "Messages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Mindfulness_UserId",
                 table: "Mindfulness",
                 column: "UserId");
@@ -375,6 +507,21 @@ namespace ZenDev.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalGoals_UserId",
                 table: "PersonalGoals",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReactionMessageBridge_MessageId",
+                table: "ReactionMessageBridge",
+                column: "MessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReactionMessageBridge_ReactionIconId",
+                table: "ReactionMessageBridge",
+                column: "ReactionIconId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReactionMessageBridge_UserId",
+                table: "ReactionMessageBridge",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -415,6 +562,9 @@ namespace ZenDev.Persistence.Migrations
                 name: "ActivityRecords");
 
             migrationBuilder.DropTable(
+                name: "ChatMessageBridge");
+
+            migrationBuilder.DropTable(
                 name: "Examples");
 
             migrationBuilder.DropTable(
@@ -427,6 +577,9 @@ namespace ZenDev.Persistence.Migrations
                 name: "PersonalGoals");
 
             migrationBuilder.DropTable(
+                name: "ReactionMessageBridge");
+
+            migrationBuilder.DropTable(
                 name: "UserAchievementBridge");
 
             migrationBuilder.DropTable(
@@ -434,6 +587,15 @@ namespace ZenDev.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserGroupBridge");
+
+            migrationBuilder.DropTable(
+                name: "Chatrooms");
+
+            migrationBuilder.DropTable(
+                name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "ReactionIcons");
 
             migrationBuilder.DropTable(
                 name: "Achievements");
