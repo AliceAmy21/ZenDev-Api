@@ -6,6 +6,8 @@
 
         public string GroupName { get; set; } = string.Empty;
 
+        public string GroupDescription { get; set; } = string.Empty;
+
         public string GroupIconUrl { get; set; } = string.Empty;
 
         public long MemberCount { get; set; }

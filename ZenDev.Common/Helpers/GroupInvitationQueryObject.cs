@@ -3,7 +3,10 @@
     public class GroupInvitationQueryObject
     {
         public string? SearchQuery { get; set; } = null;
+
         public long? UserToExclude { get; set; } = -1;
+
+        public long? GroupId { get; set; } = -1;
 
         public int PageNumber { get; set; } = 1;
 

@@ -130,26 +130,74 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<List<UserInviteModel>> GetAllUsersAsync(GroupInvitationQueryObject query)
         {
-            var usersQuery = _dbContext.Users.Where(user => user.UserId != query.UserToExclude).AsQueryable();
-
-            if (!string.IsNullOrEmpty(query.SearchQuery)) //search query
+            if (query.UserToExclude > 0 && query.GroupId < 0)
             {
-                usersQuery = usersQuery.Where(user => user.UserName.Contains(query.SearchQuery));
+                //Creating a group
+                var usersQuery = _dbContext.Users
+               .Where(user => user.UserId != query.UserToExclude)
+               .AsQueryable();
+
+                if (!string.IsNullOrEmpty(query.SearchQuery)) //search query
+                {
+                    usersQuery = usersQuery.Where(user => user.UserName.Contains(query.SearchQuery));
+                }
+
+                var usersToInvite = usersQuery.Select(user => new UserInviteModel
+                {
+                    UserId = user.UserId,
+                    UserName = user.UserName,
+                    AvatarIconUrl = user.AvatarIconUrl,
+                });
+
+                var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+                return await usersToInvite
+                    .Skip(skipNumber)
+                    .Take(query.PageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                //Inviting more members to a group
+                var groupMembers = await _groupService.GetGroupMembers(query.GroupId);
+                var alreadyInvited = GetAlreadyInvitedMembersByGroupId(query.GroupId);
+
+                var usersToExclude = groupMembers.Select(user => user.UserId)
+                                                 .Concat(alreadyInvited.Select(user => user.InvitedUserId));
+
+                var usersQuery = _dbContext.Users
+                    .Where(user => !usersToExclude.Contains(user.UserId))
+                    .AsQueryable();
+
+                if (!string.IsNullOrEmpty(query.SearchQuery)) //search query
+                {
+                    usersQuery = usersQuery.Where(user => user.UserName.Contains(query.SearchQuery));
+                }
+
+                var usersToInvite = usersQuery.Select(user => new UserInviteModel
+                {
+                    UserId = user.UserId,
+                    UserName = user.UserName,
+                    AvatarIconUrl = user.AvatarIconUrl,
+                });
+
+                var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+                return await usersToInvite
+                    .Skip(skipNumber)
+                    .Take(query.PageSize)
+                    .ToListAsync();
             }
 
-            var usersToInvite = usersQuery.Select(user => new UserInviteModel
-            {
-                UserId = user.UserId,
-                UserName = user.UserName,
-                AvatarIconUrl = user.AvatarIconUrl,
-            });
+        }
 
-            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+        private List<GroupInvitationEntity> GetAlreadyInvitedMembersByGroupId(long? groupId)
+        {
+            var inivtations = _dbContext.GroupInvitations
+               .Where(invitation => invitation.GroupId == groupId)
+               .ToList();
 
-            return await usersToInvite
-                .Skip(skipNumber)
-                .Take(query.PageSize)
-                .ToListAsync();
+            return inivtations;
         }
 
         public async Task<ResultModel> DeleteGroupInvitationAsync(GroupInvitationEntity groupInvitationEntity)
@@ -209,7 +257,7 @@ namespace ZenDev.BusinessLogic.Services
                 var deleteGroupInvitation = await DeleteGroupInvitationAsync(groupInvitationEntity);
 
                 //Update member count in Groups table
-                var group = await _dbContext.Groups.FirstOrDefaultAsync(group => group.GroupId == groupInvitationEntity.GroupId);
+                var group = _dbContext.Groups.FirstOrDefault(group => group.GroupId == groupInvitationEntity.GroupId);
 
                 if (group != null)
                 {
