@@ -60,8 +60,8 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetUsersToInviteChallenge))]
-        public ActionResult<List<UserInviteApiModel>> GetUsersToInviteChallenge(long challengeId, long groupId){
-            var listUsers = _challengeService.GetUsersToInviteChallengeAsync(challengeId,groupId);
+        public ActionResult<List<UserInviteApiModel>> GetUsersToInviteChallenge(long challengeId){
+            var listUsers = _challengeService.GetUsersToInviteChallengeAsync(challengeId);
             return Ok(_mapper.Map<List<UserInviteApiModel>>(listUsers));
         }
 

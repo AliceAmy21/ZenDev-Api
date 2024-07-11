@@ -16,7 +16,7 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public List<UserInviteModel> GetUsersForChallengeAsync(long challengeId);
 
-        public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId, long groupId);
+        public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId);
 
         public Task<ChallengeEntity> GetChallengeByIdAsync(long ChallengeId);
 
