@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ZenDev.Persistence.Entities;
-using System.Xml.Linq;
 
 namespace ZenDev.Persistence
 {
