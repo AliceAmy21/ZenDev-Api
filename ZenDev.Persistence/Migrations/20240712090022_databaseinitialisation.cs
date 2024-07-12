@@ -68,19 +68,6 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReactionIcons",
-                columns: table => new
-                {
-                    ReactionIconId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReactionIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReactionIcons", x => x.ReactionIconId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -226,6 +213,26 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reactions",
+                columns: table => new
+                {
+                    ReactionId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Reaction = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reactions", x => x.ReactionId);
+                    table.ForeignKey(
+                        name: "FK_Reactions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserAchievementBridge",
                 columns: table => new
                 {
@@ -359,35 +366,28 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReactionMessageBridge",
+                name: "MessageReactionBridge",
                 columns: table => new
                 {
-                    ReactionMessageBridgeId = table.Column<long>(type: "bigint", nullable: false)
+                    MessageReactionId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    MessageId = table.Column<long>(type: "bigint", nullable: false),
-                    ReactionIconId = table.Column<long>(type: "bigint", nullable: false)
+                    ReactionId = table.Column<long>(type: "bigint", nullable: false),
+                    MessageId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReactionMessageBridge", x => x.ReactionMessageBridgeId);
+                    table.PrimaryKey("PK_MessageReactionBridge", x => x.MessageReactionId);
                     table.ForeignKey(
-                        name: "FK_ReactionMessageBridge_Messages_MessageId",
+                        name: "FK_MessageReactionBridge_Messages_MessageId",
                         column: x => x.MessageId,
                         principalTable: "Messages",
                         principalColumn: "MessageId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReactionMessageBridge_ReactionIcons_ReactionIconId",
-                        column: x => x.ReactionIconId,
-                        principalTable: "ReactionIcons",
-                        principalColumn: "ReactionIconId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ReactionMessageBridge_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        name: "FK_MessageReactionBridge_Reactions_ReactionId",
+                        column: x => x.ReactionId,
+                        principalTable: "Reactions",
+                        principalColumn: "ReactionId");
                 });
 
             migrationBuilder.CreateTable(
@@ -490,6 +490,17 @@ namespace ZenDev.Persistence.Migrations
                 column: "ExerciseTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MessageReactionBridge_MessageId",
+                table: "MessageReactionBridge",
+                column: "MessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MessageReactionBridge_ReactionId",
+                table: "MessageReactionBridge",
+                column: "ReactionId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_UserId",
                 table: "Messages",
                 column: "UserId");
@@ -510,18 +521,8 @@ namespace ZenDev.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReactionMessageBridge_MessageId",
-                table: "ReactionMessageBridge",
-                column: "MessageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReactionMessageBridge_ReactionIconId",
-                table: "ReactionMessageBridge",
-                column: "ReactionIconId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReactionMessageBridge_UserId",
-                table: "ReactionMessageBridge",
+                name: "IX_Reactions_UserId",
+                table: "Reactions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -571,13 +572,13 @@ namespace ZenDev.Persistence.Migrations
                 name: "GroupInvitations");
 
             migrationBuilder.DropTable(
+                name: "MessageReactionBridge");
+
+            migrationBuilder.DropTable(
                 name: "Mindfulness");
 
             migrationBuilder.DropTable(
                 name: "PersonalGoals");
-
-            migrationBuilder.DropTable(
-                name: "ReactionMessageBridge");
 
             migrationBuilder.DropTable(
                 name: "UserAchievementBridge");
@@ -595,7 +596,7 @@ namespace ZenDev.Persistence.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "ReactionIcons");
+                name: "Reactions");
 
             migrationBuilder.DropTable(
                 name: "Achievements");

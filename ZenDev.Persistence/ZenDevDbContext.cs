@@ -45,10 +45,10 @@ namespace ZenDev.Persistence
         public virtual DbSet<UserAchievementBridgeEntity> UserAchievementBridge {get; set;}
         public virtual DbSet<MindfulnessEntity> Mindfulness { get; set; }
         public virtual DbSet<ChatroomEntity> Chatrooms {get;set;}
-        public virtual DbSet<ChatMessageBridge> ChatMessageBridge {get;set;}
+        public virtual DbSet<ChatMessageBridgeEntity> ChatMessageBridge {get;set;}
         public virtual DbSet<MessageEntity> Messages {get;set;}
-        public virtual DbSet<ReactionMessageBridgeEntity>ReactionMessageBridge {get;set;}
-        public virtual DbSet<ReactionIconEntity> ReactionIcons {get;set;}
+        public virtual DbSet<MessageReactionBridgeEntity> MessageReactionBridge {get;set;}
+        public virtual DbSet<ReactionEntity> Reactions {get;set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -85,37 +85,32 @@ namespace ZenDev.Persistence
                 .WithMany(g => g.UserChallengeBridgeEntities)
                 .HasForeignKey(ug => ug.ChallengeId);   
 
-            modelBuilder.Entity<ChatMessageBridge>()
+            modelBuilder.Entity<ChatMessageBridgeEntity>()
                 .HasKey(ug => ug.ChatMessageId);
 
-            modelBuilder.Entity<ChatMessageBridge>()
+            modelBuilder.Entity<ChatMessageBridgeEntity>()
                 .HasOne(cm => cm.ChatroomEntity)
                 .WithMany(c => c.ChatMessageBridges)
                 .HasForeignKey(cm => cm.ChatId);
 
-            modelBuilder.Entity<ChatMessageBridge>()
+            modelBuilder.Entity<ChatMessageBridgeEntity>()
                 .HasOne(cm => cm.MessageEntity)
                 .WithMany(m => m.ChatMessageBridges)
                 .HasForeignKey(cm => cm.MessageId);
 
-            modelBuilder.Entity<ReactionMessageBridgeEntity>()
-                .HasKey(rm => rm.ReactionMessageBridgeId);
+            modelBuilder.Entity<MessageReactionBridgeEntity>()
+                .HasKey(rm => rm.MessageReactionId);
 
-            modelBuilder.Entity<ReactionMessageBridgeEntity>()
-                .HasOne(rm => rm.ReactionIconEntity)
-                .WithMany(r => r.ReactionMessageBridgeEntities)
-                .HasForeignKey(rm => rm.ReactionIconId);
-
-            modelBuilder.Entity<ReactionMessageBridgeEntity>()
+            modelBuilder.Entity<MessageReactionBridgeEntity>()
                 .HasOne(rm => rm.MessageEntity)
-                .WithMany(m => m.ReactionMessageBridgeEntities)
+                .WithMany(m => m.messageReactionBridges)
                 .HasForeignKey(rm => rm.MessageId);
 
-            modelBuilder.Entity<ReactionMessageBridgeEntity>()
-                .HasOne(rm => rm.UserEntity)
-                .WithMany(u => u.ReactionMessageBridgeEntities)
-                .HasForeignKey(rm => rm.UserId)
+            modelBuilder.Entity<MessageReactionBridgeEntity>()
+                .HasOne(rm => rm.ReactionEntity)
+                .WithOne(m => m.MessageReactionBridgeEntity)
                 .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }
