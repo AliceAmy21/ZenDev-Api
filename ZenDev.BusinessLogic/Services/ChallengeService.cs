@@ -162,35 +162,62 @@ namespace ZenDev.BusinessLogic.Services
             return ListOfChallenges;
         }
 
-        public List<ChallengeListModel> GetChallengesForUserAsync(long userId)
+        public List<List<ChallengeListModel>> GetChallengesForUserAsync(long userId)
         {
-            var userGroupBridge = _dbContext.UserChallengeBridge
+            var userChallengeBridge = _dbContext.UserChallengeBridge
                 .Include(user => user.UserEntity)
                 .Include(challenge => challenge.ChallengeEntity)
                 .Include(exercise => exercise.ChallengeEntity.ExerciseEntity)
                 .Include(group=>group.ChallengeEntity.GroupEntity)
                 .Include(exercise1=>exercise1.ChallengeEntity.GroupEntity.ExerciseTypeEntity)
                 .AsQueryable();
-            List<ChallengeListModel> ListOfChallenges = new List<ChallengeListModel>();
+            var userGroupBridge = _dbContext.UserGroupBridge.AsQueryable();
+            List<ChallengeListModel> ListOfChallengesMine = new List<ChallengeListModel>();
+            List<ChallengeListModel> ListOfChallengesAvailable = new List<ChallengeListModel>();
+            List<List<ChallengeListModel>> ListOfChallenges = new List<List<ChallengeListModel>>();
             var ListOfBridges = userGroupBridge.Where(group=>group.UserEntity.UserId == userId).ToList();
+            var ListOfBridges2 = userChallengeBridge.Where(user => user.UserId == userId).ToList();
             foreach(var Bridge in ListOfBridges){
-                ChallengeListModel challengeListModel = new ChallengeListModel()
-                {
-                ChallengeId = Bridge.ChallengeId,
-                ChallengeName = Bridge.ChallengeEntity.ChallengeName,
-                AmountCompleted = Bridge.AmountCompleted,
-                Measurement = Bridge.ChallengeEntity.Measurement,
-                Admin = Bridge.ChallengeEntity.Admin,
-                ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
-                ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
-                AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
-                ExerciseId = Bridge.ChallengeEntity.ExerciseId,
-                ExerciseEntity = Bridge.ChallengeEntity.ExerciseEntity,
-                GroupId = Bridge.ChallengeEntity.GroupId,
-                GroupEntity = Bridge.ChallengeEntity.GroupEntity
-                };
-                ListOfChallenges.Add(challengeListModel);
+                var ListofBridges3 = userChallengeBridge.Where(user=> user.ChallengeEntity.GroupId == Bridge.GroupId && user.UserId != userId).ToList();
+                    foreach(var Bridge3 in ListofBridges3){
+                        ChallengeListModel challengeListModel = new ChallengeListModel()
+                        {
+                            ChallengeId = Bridge3.ChallengeId,
+                            ChallengeName = Bridge3.ChallengeEntity.ChallengeName,
+                            AmountCompleted = Bridge3.AmountCompleted,
+                            Measurement = Bridge3.ChallengeEntity.Measurement,
+                            Admin = Bridge3.ChallengeEntity.Admin,
+                            ChallengeEndDate = Bridge3.ChallengeEntity.ChallengeEndDate,
+                            ChallengeStartDate = Bridge3.ChallengeEntity.ChallengeStartDate,
+                            AmountToComplete = Bridge3.ChallengeEntity.AmountToComplete,
+                            ExerciseId = Bridge3.ChallengeEntity.ExerciseId,
+                            ExerciseEntity = Bridge3.ChallengeEntity.ExerciseEntity,
+                            GroupId = Bridge3.ChallengeEntity.GroupId,
+                            GroupEntity = Bridge3.ChallengeEntity.GroupEntity
+                        };
+                        ListOfChallengesAvailable.Add(challengeListModel);
+                    }
             }
+            foreach(var Bridge in ListOfBridges2){
+                    ChallengeListModel challengeListModel = new ChallengeListModel()
+                    {
+                        ChallengeId = Bridge.ChallengeId,
+                        ChallengeName = Bridge.ChallengeEntity.ChallengeName,
+                        AmountCompleted = Bridge.AmountCompleted,
+                        Measurement = Bridge.ChallengeEntity.Measurement,
+                        Admin = Bridge.ChallengeEntity.Admin,
+                        ChallengeEndDate = Bridge.ChallengeEntity.ChallengeEndDate,
+                        ChallengeStartDate = Bridge.ChallengeEntity.ChallengeStartDate,
+                        AmountToComplete = Bridge.ChallengeEntity.AmountToComplete,
+                        ExerciseId = Bridge.ChallengeEntity.ExerciseId,
+                        ExerciseEntity = Bridge.ChallengeEntity.ExerciseEntity,
+                        GroupId = Bridge.ChallengeEntity.GroupId,
+                        GroupEntity = Bridge.ChallengeEntity.GroupEntity
+                    };
+                    ListOfChallengesMine.Add(challengeListModel);
+            }
+            ListOfChallenges.Add(ListOfChallengesMine);
+            ListOfChallenges.Add(ListOfChallengesAvailable);
             return ListOfChallenges;
         }
 
@@ -216,7 +243,7 @@ namespace ZenDev.BusinessLogic.Services
             return new List<UserInviteModel>();
         }
 
-        public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId, long groupId)
+        public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId)
         {
             var userGroupBridge = _dbContext.UserGroupBridge
             .Include(user=>user.UserEntity)
@@ -225,6 +252,8 @@ namespace ZenDev.BusinessLogic.Services
             var challengeBridge = _dbContext.UserChallengeBridge
             .Include(user=>user.UserEntity)
             .AsQueryable();
+
+            long groupId = _dbContext.Challenges.Find(challengeId).GroupId;
 
             if(challengeId > 0){ 
                 var ListofBridges = userGroupBridge.Where(group => group.GroupId == groupId).ToList();

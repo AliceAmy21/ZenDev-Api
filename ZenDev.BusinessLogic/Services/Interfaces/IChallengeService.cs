@@ -10,13 +10,13 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 
         public List<List<ChallengeListModel>> GetChallengesForGroupAsync(long groupId, long userId);
 
-        public List<ChallengeListModel> GetChallengesForUserAsync(long userId);
+        public List<List<ChallengeListModel>> GetChallengesForUserAsync(long userId);
 
         public Task<ChallengeEntity> UpdateChallengeAsync(ChallengeUpdateModel challenge);
 
         public List<UserInviteModel> GetUsersForChallengeAsync(long challengeId);
 
-        public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId, long groupId);
+        public List<UserInviteModel> GetUsersToInviteChallengeAsync(long challengeId);
 
         public Task<ChallengeEntity> GetChallengeByIdAsync(long ChallengeId);
 
