@@ -19,9 +19,24 @@ namespace ZenDev.BusinessLogic.Services
             _logger = logger;
         }
 
-        public async Task<List<AchievementEntity>> GetAllAchievements()
+        public async Task<List<List<AchievementEntity>>> GetAchievements(long userId)
         {
-            var result = await _dbContext.Achievements.ToListAsync();
+            var myAchievements = _dbContext.UserAchievementBridge
+            .Where(userAchievementBridge => userAchievementBridge.UserId == userId)
+            .Select(userAchievementBridge => userAchievementBridge.AchievementId)
+            .ToList();
+
+            var myAchievementResult = _dbContext.Achievements
+                .Where(achievement => myAchievements.Contains(achievement.AchievementId))
+                .ToList();
+                
+             var otherAchievementResult = _dbContext.Achievements
+                .Where(achievement => !myAchievements.Contains(achievement.AchievementId))
+                .ToList();
+
+            List<List<AchievementEntity>> result = [];
+            result.Add(myAchievementResult);
+            result.Add(otherAchievementResult);
 
             return result;
         }

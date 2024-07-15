@@ -5,6 +5,6 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
 {
     public interface IAchievementService
     {
-        public Task<List<AchievementEntity>> GetAllAchievements();
+        public Task<List<List<AchievementEntity>>> GetAchievements(long userId);
     }
 }

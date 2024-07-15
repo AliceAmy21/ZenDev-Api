@@ -23,14 +23,14 @@ namespace ZenDev.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(nameof(GetAllAchievements))]
-        public async Task<ActionResult<List<AchievementApiModel>>> GetAllAchievements() 
+        [HttpGet(nameof(GetAchievements))]
+        public async Task<ActionResult<List<List<AchievementApiModel>>>> GetAchievements(long userId) 
         {
-            var result = await _achievementService.GetAllAchievements();
+            var result = await _achievementService.GetAchievements(userId);
 
             if (result == null) return NotFound();
             
-            return Ok(_mapper.Map<List<AchievementApiModel>>(result));
+            return Ok(_mapper.Map<List<List<AchievementApiModel>>>(result));
         }
     }
 }
