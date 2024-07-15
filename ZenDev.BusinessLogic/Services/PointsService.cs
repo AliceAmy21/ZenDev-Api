@@ -9,6 +9,7 @@ using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Enums;
 using ZenDev.Common.Models;
 using ZenDev.Persistence;
+using ZenDev.Persistence.Entities;
 
 namespace ZenDev.BusinessLogic.Services
 {
@@ -119,6 +120,26 @@ namespace ZenDev.BusinessLogic.Services
                     bridge.Points += CalculatePointsGroups(activity);
                 }
             }
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateTournamentPoints(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var group = _dbContext.TournamentGroupBridge
+            .Include(groups=>groups.TournamentGroupEntity)
+            .Include(tournament=>tournament.TournamentEntity)
+            .AsQueryable();
+            var users = _dbContext.TournamentGroupUserBridge
+            .Include(users=>users.UserEntity)
+            .AsQueryable();
+            var userGroups = users.Where(user=>user.UserId == userId).Select(groups=>groups.TournamentGroupEntity.TGroupId);
+                foreach(var activity in activities){
+                    var bridges = group.Where(e=>e.TournamentEntity.ExerciseEntity.ExerciseName == activity.Exercise &&
+                    userGroups.Contains(e.TournamentGroupEntity.TGroupId));
+                    foreach(var bridge in bridges){
+                        bridge.Points += CalculatePointsGroups(activity);
+                    }
+                }
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -95,6 +95,21 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserEntity))
                 .ReverseMap();
             CreateMap<ReactionModel,ReactionApiModel>().ReverseMap();
+            CreateMap<TournamentEntity,TournamentApiModel>()
+                .ForMember(dest => dest.ExerciseName, opt =>opt.MapFrom(src=>src.ExerciseEntity.ExerciseName))
+                .ReverseMap();
+            CreateMap<TournamentEntity,TournamentListApiModel>()
+                .ForMember(dest => dest.ExerciseName, opt =>opt.MapFrom(src=>src.ExerciseEntity.ExerciseName))
+                .ReverseMap();
+            CreateMap<TournamentGroupEntity,GroupResultApiModel>()
+                .ReverseMap();
+            CreateMap<TournamentCreationModel,TournamentCreationApiModel>()
+                .ForMember(dest=>dest.exerciseApiModel,opt=>opt.MapFrom(src=>src.ExerciseEntity))
+                .ForMember(dest=>dest.tournamentGroupApiModels,opt=>opt.MapFrom(src=>src.TournamentGroupModels))
+                .ReverseMap();
+            CreateMap<TournamentGroupModel,TournamentGroupApiModel>()
+                .ForMember(dest=>dest.userInviteApiModels,opt=>opt.MapFrom(src=>src.UserEntities))
+                .ReverseMap();
         }
     }
 }

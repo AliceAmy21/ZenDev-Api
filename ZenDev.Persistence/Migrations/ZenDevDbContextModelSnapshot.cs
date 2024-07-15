@@ -444,6 +444,121 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("Reactions");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentEntity", b =>
+                {
+                    b.Property<long>("TournamentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TournamentId"));
+
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long>("ExerciseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("TournamentDescription")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("TournamentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("TournamentId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("Tournaments");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupBridgeEntity", b =>
+                {
+                    b.Property<long>("TournamentGroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TournamentGroupId"));
+
+                    b.Property<long>("Points")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TournamentId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("TournamentGroupId");
+
+                    b.HasIndex("TGroupId");
+
+                    b.HasIndex("TournamentId");
+
+                    b.ToTable("TournamentGroupBridge");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupEntity", b =>
+                {
+                    b.Property<long>("TGroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TGroupId"));
+
+                    b.Property<string>("ExerciseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("MemberCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TGroupDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TGroupIconUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TGroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TGroupId");
+
+                    b.ToTable("TournamentGroups");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupUserBridgeEntity", b =>
+                {
+                    b.Property<long>("TournamentGroupUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TournamentGroupUserId"));
+
+                    b.Property<long>("TGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("TournamentGroupUserId");
+
+                    b.HasIndex("TGroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TournamentGroupUserBridge");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.UserAchievementBridgeEntity", b =>
                 {
                     b.Property<long>("UserAchievementId")
@@ -729,6 +844,55 @@ namespace ZenDev.Persistence.Migrations
                     b.Navigation("UserEntity");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.ExerciseEntity", "ExerciseEntity")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExerciseEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupBridgeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.TournamentGroupEntity", "TournamentGroupEntity")
+                        .WithMany("TournamentGroupBridgeEntities")
+                        .HasForeignKey("TGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.TournamentEntity", "TournamentEntity")
+                        .WithMany("TournamentGroupBridgeEntities")
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TournamentEntity");
+
+                    b.Navigation("TournamentGroupEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupUserBridgeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.TournamentGroupEntity", "TournamentGroupEntity")
+                        .WithMany("TournamentGroupUserBridgeEntities")
+                        .HasForeignKey("TGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
+                        .WithMany("TournamentGroupUserBridgeEntities")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TournamentGroupEntity");
+
+                    b.Navigation("UserEntity");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.UserAchievementBridgeEntity", b =>
                 {
                     b.HasOne("ZenDev.Persistence.Entities.AchievementEntity", "AchievementEntity")
@@ -814,8 +978,22 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentEntity", b =>
+                {
+                    b.Navigation("TournamentGroupBridgeEntities");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupEntity", b =>
+                {
+                    b.Navigation("TournamentGroupBridgeEntities");
+
+                    b.Navigation("TournamentGroupUserBridgeEntities");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.UserEntity", b =>
                 {
+                    b.Navigation("TournamentGroupUserBridgeEntities");
+
                     b.Navigation("UserChallengeBridgeEntities");
 
                     b.Navigation("UserGroupBridgeEntities");

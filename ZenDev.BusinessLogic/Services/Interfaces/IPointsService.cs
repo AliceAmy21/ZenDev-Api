@@ -17,5 +17,6 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
         public int CalculatePointsGroups(ActivityPointsApiModel activity);
         public Task UpdateAmountCompleteChallenges(long userId, List<ActivityPointsApiModel> activities);
         public Task UpdatePointsGroups(long userId, List<ActivityPointsApiModel> activities);
+        public Task UpdateTournamentPoints(long userId, List<ActivityPointsApiModel> activities);
     }
 }

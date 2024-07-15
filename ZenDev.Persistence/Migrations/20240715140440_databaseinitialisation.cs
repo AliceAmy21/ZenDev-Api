@@ -68,6 +68,23 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TournamentGroups",
+                columns: table => new
+                {
+                    TGroupId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TGroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TGroupDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TGroupIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MemberCount = table.Column<long>(type: "bigint", nullable: false),
+                    ExerciseName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TournamentGroups", x => x.TGroupId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -85,6 +102,29 @@ namespace ZenDev.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tournaments",
+                columns: table => new
+                {
+                    TournamentId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TournamentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    TournamentDescription = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    ExerciseId = table.Column<long>(type: "bigint", nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    EndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tournaments", x => x.TournamentId);
+                    table.ForeignKey(
+                        name: "FK_Tournaments_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,6 +273,32 @@ namespace ZenDev.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TournamentGroupUserBridge",
+                columns: table => new
+                {
+                    TournamentGroupUserId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TGroupId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TournamentGroupUserBridge", x => x.TournamentGroupUserId);
+                    table.ForeignKey(
+                        name: "FK_TournamentGroupUserBridge_TournamentGroups_TGroupId",
+                        column: x => x.TGroupId,
+                        principalTable: "TournamentGroups",
+                        principalColumn: "TGroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TournamentGroupUserBridge_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserAchievementBridge",
                 columns: table => new
                 {
@@ -255,6 +321,33 @@ namespace ZenDev.Persistence.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TournamentGroupBridge",
+                columns: table => new
+                {
+                    TournamentGroupId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TournamentId = table.Column<long>(type: "bigint", nullable: false),
+                    TGroupId = table.Column<long>(type: "bigint", nullable: false),
+                    Points = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TournamentGroupBridge", x => x.TournamentGroupId);
+                    table.ForeignKey(
+                        name: "FK_TournamentGroupBridge_TournamentGroups_TGroupId",
+                        column: x => x.TGroupId,
+                        principalTable: "TournamentGroups",
+                        principalColumn: "TGroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TournamentGroupBridge_Tournaments_TournamentId",
+                        column: x => x.TournamentId,
+                        principalTable: "Tournaments",
+                        principalColumn: "TournamentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -526,6 +619,31 @@ namespace ZenDev.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TournamentGroupBridge_TGroupId",
+                table: "TournamentGroupBridge",
+                column: "TGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TournamentGroupBridge_TournamentId",
+                table: "TournamentGroupBridge",
+                column: "TournamentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TournamentGroupUserBridge_TGroupId",
+                table: "TournamentGroupUserBridge",
+                column: "TGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TournamentGroupUserBridge_UserId",
+                table: "TournamentGroupUserBridge",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tournaments_ExerciseId",
+                table: "Tournaments",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserAchievementBridge_AchievementId",
                 table: "UserAchievementBridge",
                 column: "AchievementId");
@@ -581,6 +699,12 @@ namespace ZenDev.Persistence.Migrations
                 name: "PersonalGoals");
 
             migrationBuilder.DropTable(
+                name: "TournamentGroupBridge");
+
+            migrationBuilder.DropTable(
+                name: "TournamentGroupUserBridge");
+
+            migrationBuilder.DropTable(
                 name: "UserAchievementBridge");
 
             migrationBuilder.DropTable(
@@ -597,6 +721,12 @@ namespace ZenDev.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Reactions");
+
+            migrationBuilder.DropTable(
+                name: "Tournaments");
+
+            migrationBuilder.DropTable(
+                name: "TournamentGroups");
 
             migrationBuilder.DropTable(
                 name: "Achievements");
