@@ -1,4 +1,5 @@
 using ZenDev.SignalRHost.Hubs;
+using ZenDev.SignalRHost.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,10 @@ var CORS_POLICY_NAME = "CorsPolicy";
 ///////////////////////////////////////////////////////
 // Services
 ///////////////////////////////////////////////////////
+
+
+SignalRConfiguration signalRConfig = new SignalRConfiguration();
+builder.Configuration.Bind(signalRConfig);
 
 var allowedOriginsString = builder.Configuration.GetValue<string>("AllowedOrigins");
 var allowedOrigins = !string.IsNullOrEmpty(allowedOriginsString) ? allowedOriginsString.Split([' ', ',', ';']) : [];
@@ -21,7 +26,8 @@ builder.Services.AddCors(options =>
                       });
 });
 
-builder.Services.AddRazorPages();
+var runEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+var connectionString = "";
 
 builder.Services.AddSignalR(); // Required for SignalR
 
@@ -38,6 +44,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (signalRConfig.EnableSSL)
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -49,6 +60,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-app.MapHub<ExampleHub>(ExampleHub.HUB_IDENTIFIER); // Required for SignalR
+app.MapHub<ChatroomHub>(ChatroomHub.HUB_IDENTIFIER); 
 
 app.Run();
