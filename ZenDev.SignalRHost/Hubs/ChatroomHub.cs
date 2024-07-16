@@ -3,7 +3,7 @@ using Microsoft.VisualBasic;
 
 namespace ZenDev.SignalRHost.Hubs
 {
-    public class ChatroomHub : Hub<I>
+    public class ChatroomHub : Hub<IChatroomClient>
     {
         public const string HUB_IDENTIFIER = "chatroom-hub";
 
