@@ -6,6 +6,12 @@ namespace ZenDev.SignalRHost.Hubs
     public class ChatroomHub : Hub<IChatroomClient>
     {
         public const string HUB_IDENTIFIER = "chatroom-hub";
+        
+        public class GroupConnection
+        {
+            public long ConnectionId {  get; set; }
+            public long GroupId {  get; set; }
+        }
 
         public async Task AddToGroup(long groupId)
         {
@@ -22,14 +28,14 @@ namespace ZenDev.SignalRHost.Hubs
             await Clients.Group(groupId.ToString()).SendAsync("ReceiveMessage", userId, messageContent,);
         }
 
-        public async Task AddReaction(long userId, long messageId, long reactionId, long groupId)
-        {
-            await Clients.Group(groupId.ToString()).SendAsync("ReceiveReaction", userId, messageId, reactionId);
-        }
+        //public async Task AddReaction(long userId, long messageId, long reactionId, long groupId)
+        //{
+        //    await Clients.Group(groupId.ToString()).SendAsync("ReceiveReaction", userId, messageId, reactionId);
+        //}
 
-        public async Task RemoveReaction(long userId, long messageId, long reactionId, long groupId)
-        { 
-            await Clients.Group(groupId.ToString()).SendAsync("RemoveReaction", userId, messageId, reactionId);
-        }
+        //public async Task RemoveReaction(long userId, long messageId, long reactionId, long groupId)
+        //{ 
+        //    await Clients.Group(groupId.ToString()).SendAsync("RemoveReaction", userId, messageId, reactionId);
+        //}
     }
 }
