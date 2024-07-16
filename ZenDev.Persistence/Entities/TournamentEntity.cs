@@ -14,7 +14,7 @@ namespace ZenDev.Persistence.Entities
         public string TournamentDescription {get;set;} = string.Empty;
         public long ExerciseId {get;set;}
         [ForeignKey(nameof(ExerciseId))]
-        public ExerciseEntity ExerciseEntity {get;set;}
+        public ExerciseEntity? ExerciseEntity {get;set;}
         public DateTimeOffset StartDate {get;set;}
         public DateTimeOffset EndDate {get;set;}
         public List<TournamentGroupBridgeEntity> TournamentGroupBridgeEntities {get;set;} = [];

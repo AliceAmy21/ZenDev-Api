@@ -11,8 +11,8 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
     {
         public Task<List<UserEntity>> GetUsersForTournamentGroup(long TGroupId);
         public Task<TournamentEntity> CreateTournament(TournamentCreationModel tournamentCreation);
-        public Task<List<TournamentGroupEntity>> GetAllGroupsForTournaments(long TournamentId);
-        public Task<TournamentEntity> GetTournament(long TournamentId);
+        public Task<List<TournamentLeaderBoardModel>> GetAllGroupsForTournaments(long TournamentId);
+        public Task<TournamentModel> GetTournament(long TournamentId);
         public Task<List<TournamentEntity>> GetAllTournaments();
         public Task<List<TournamentGroupModel>> GetAllGroups();
     }

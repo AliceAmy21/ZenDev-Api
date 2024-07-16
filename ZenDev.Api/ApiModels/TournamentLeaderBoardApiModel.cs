@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ZenDev.Persistence.Entities;
 
-namespace ZenDev.BusinessLogic.Models
+namespace ZenDev.Api.ApiModels
 {
-    public class TournamentGroupModel
+    public class TournamentLeaderBoardApiModel
     {
         public long TGroupId {get;set;}
         public string TGroupName {get;set;} = string.Empty;
@@ -14,6 +13,6 @@ namespace ZenDev.BusinessLogic.Models
         public string TGroupIconUrl {get;set;} = string.Empty;
         public long MemberCount {get;set;}
         public string ExerciseName {get;set;} = string.Empty; 
-        public List<UserEntity> UserEntities {get;set;} = [];
+        public long Points {get;set;}
     }
 }

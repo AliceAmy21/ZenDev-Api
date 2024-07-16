@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-
-namespace ZenDev.Api.ApiModels
+namespace ZenDev.BusinessLogic.Models
 {
-    public class TournamentApiModel
+    public class TournamentModel
     {
         public long TournamentId {get;set;}
         public string TournamentName {get;set;} = string.Empty;
@@ -10,6 +13,6 @@ namespace ZenDev.Api.ApiModels
         public string ExerciseName {get;set;} = string.Empty;
         public DateTimeOffset StartDate {get;set;}
         public DateTimeOffset EndDate {get;set;}
-        public List<TournamentGroupApiModel> Participants {get;set;} = [];
+        public List<TournamentGroupModel> tournamentGroupModels {get;set;} = [];
     }
 }

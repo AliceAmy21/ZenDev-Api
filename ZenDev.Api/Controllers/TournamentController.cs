@@ -28,8 +28,8 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetAllGroupsForTournaments))]
-        public async Task<ActionResult<List<TournamentGroupApiModel>>> GetAllGroupsForTournaments(long TournamentId){
-            return Ok(_mapper.Map<List<GroupApiModel>>(_tournamentService.GetAllGroupsForTournaments(TournamentId)));
+        public async Task<ActionResult<List<TournamentLeaderBoardApiModel>>> GetAllGroupsForTournaments(long TournamentId){
+            return Ok(_mapper.Map<List<TournamentLeaderBoardApiModel>>(_tournamentService.GetAllGroupsForTournaments(TournamentId)));
         }
 
         [HttpGet(nameof(GetTournament))]

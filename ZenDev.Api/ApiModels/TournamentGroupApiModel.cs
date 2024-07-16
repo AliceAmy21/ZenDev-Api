@@ -7,6 +7,7 @@ namespace ZenDev.Api.ApiModels
 {
     public class TournamentGroupApiModel
     {
+        public long TGroupId {get;set;}
         public string TGroupName {get;set;} = string.Empty;
         public string TGroupDescription {get;set;} =string.Empty;
         public string TGroupIconUrl {get;set;} = string.Empty;

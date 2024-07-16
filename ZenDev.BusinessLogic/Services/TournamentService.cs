@@ -64,6 +64,7 @@ namespace ZenDev.BusinessLogic.Services
             List<TournamentGroupModel> groupModels = [];
             foreach(var group in groups){
                 TournamentGroupModel tournamentGroupModel = new TournamentGroupModel{
+                    TGroupId = group.GroupId,
                     TGroupName = group.GroupName,
                     TGroupDescription= group.GroupDescription,
                     TGroupIconUrl= group.GroupIconUrl,
@@ -77,12 +78,37 @@ namespace ZenDev.BusinessLogic.Services
             return groupModels;
         }
 
-        public async Task<List<TournamentGroupEntity>> GetAllGroupsForTournaments(long TournamentId)
+        public async Task<List<TournamentLeaderBoardModel>> GetAllGroupsForTournaments(long TournamentId)
         {
             var bridge = _dbContext.TournamentGroupBridge
             .Include(groups=>groups.TournamentGroupEntity)
             .AsQueryable();
-            return await bridge.Where(t=>t.TournamentId == TournamentId).Select(g=>g.TournamentGroupEntity).ToListAsync();
+            List<TournamentLeaderBoardModel> tournamentLeaderBoardModels = [];
+            var groups = await bridge.Where(t=>t.TournamentId == TournamentId).ToListAsync();
+            foreach(var group in groups){
+                var leaderboardgroup = new TournamentLeaderBoardModel{
+                    TGroupId = group.TGroupId,
+                    TGroupDescription = group.TournamentGroupEntity.TGroupDescription,
+                    TGroupIconUrl = group.TournamentGroupEntity.TGroupIconUrl,
+                    TGroupName = group.TournamentGroupEntity.TGroupName,
+                    MemberCount = group.TournamentGroupEntity.MemberCount,
+                    Points = group.Points,
+                    ExerciseName = group.TournamentGroupEntity.ExerciseName
+                };
+                tournamentLeaderBoardModels.Add(leaderboardgroup);
+            }
+            return tournamentLeaderBoardModels.OrderByDescending(p=>p.Points).ToList();
+        }
+
+
+        
+
+        public async Task<List<TournamentGroupEntity>> GetAllGroupsForTournaments1(long TournamentId)
+        {
+            var bridge = _dbContext.TournamentGroupBridge
+            .Include(groups=>groups.TournamentGroupEntity)
+            .AsQueryable();
+            return await bridge.Where(t=>t.TournamentId == TournamentId).OrderByDescending(points=>points.Points).Select(g=>g.TournamentGroupEntity).ToListAsync();
         }
 
         public async Task<List<TournamentEntity>> GetAllTournaments()
@@ -90,9 +116,33 @@ namespace ZenDev.BusinessLogic.Services
             return await _dbContext.Tournaments.ToListAsync();
         }
 
-        public async Task<TournamentEntity> GetTournament(long TournamentId)
+        public async Task<TournamentModel> GetTournament(long TournamentId)
         {
-            return await _dbContext.Tournaments.FindAsync(TournamentId);
+            TournamentEntity tournamentEntity =  await _dbContext.Tournaments.FindAsync(TournamentId);
+            List<TournamentGroupEntity> tournamentGroupEntities = await GetAllGroupsForTournaments1(tournamentEntity.TournamentId);
+            List<TournamentGroupModel> tournamentGroupModels = [];
+            foreach(TournamentGroupEntity groupEntity in tournamentGroupEntities){
+                TournamentGroupModel tournamentGroupModel = new TournamentGroupModel{
+                    TGroupId = groupEntity.TGroupId,
+                    TGroupName= groupEntity.TGroupName,
+                    TGroupDescription= groupEntity.TGroupDescription,
+                    TGroupIconUrl= groupEntity.TGroupIconUrl,
+                    MemberCount= groupEntity.MemberCount,
+                    ExerciseName = groupEntity.ExerciseName,
+                    UserEntities = await GetUsersForTournamentGroup(groupEntity.TGroupId)
+                }; 
+                tournamentGroupModels.Add(tournamentGroupModel);
+            }
+            TournamentModel tournamentModel = new TournamentModel{
+                TournamentId = tournamentEntity.TournamentId,
+                TournamentName = tournamentEntity.TournamentName,
+                TournamentDescription = tournamentEntity.TournamentDescription,
+                ExerciseName = tournamentEntity.ExerciseEntity.ExerciseName,
+                StartDate = tournamentEntity.StartDate,
+                EndDate = tournamentEntity.StartDate,
+                tournamentGroupModels = tournamentGroupModels
+            };
+            return tournamentModel;
         }
 
         public async Task<List<UserEntity>> GetUsersForTournamentGroup(long TGroupId)
