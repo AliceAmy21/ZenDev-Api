@@ -52,13 +52,17 @@ namespace ZenDev.BusinessLogic.Services
             return tournamentEntity;
         }
 
+        public async Task<List<UserEntity>> GetAllUserForGroup(long groupId){
+            var bridge = _dbContext.UserGroupBridge
+            .Include(users=>users.UserEntity)
+            .AsQueryable();
+            return await bridge.Where(g => g.GroupId == groupId).Select(u=>u.UserEntity).ToListAsync();
+        }
+
         public async Task<List<TournamentGroupModel>> GetAllGroups()
         {
             var groups = _dbContext.Groups
             .Include(exercise=>exercise.ExerciseTypeEntity)
-            .AsQueryable();
-            var bridge = _dbContext.UserGroupBridge
-            .Include(users=>users.UserEntity)
             .AsQueryable();
 
             List<TournamentGroupModel> groupModels = [];
@@ -70,9 +74,11 @@ namespace ZenDev.BusinessLogic.Services
                     TGroupIconUrl= group.GroupIconUrl,
                     ExerciseName= group.ExerciseTypeEntity.ExerciseType,
                     MemberCount= group.MemberCount,
-                    UserEntities= bridge.Where(g => g.GroupId == group.GroupId).Select(u=>u.UserEntity).ToList()
                 };
                 groupModels.Add(tournamentGroupModel);
+            }
+            foreach(var group in groupModels){
+                group.UserEntities = await GetAllUserForGroup(group.TGroupId);
             }
 
             return groupModels;

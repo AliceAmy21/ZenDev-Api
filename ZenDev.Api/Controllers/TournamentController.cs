@@ -18,33 +18,39 @@ namespace ZenDev.Api.Controllers
 
         [HttpGet(nameof(GetUsersForTournamentGroup))]
         public async Task<ActionResult<List<UserInviteApiModel>>> GetUsersForTournamentGroup(long TGroupId){
-            return Ok(_mapper.Map<List<UserInviteApiModel>>(_tournamentService.GetUsersForTournamentGroup(TGroupId)));
+            var tournament = await _tournamentService.GetUsersForTournamentGroup(TGroupId);
+            return Ok(_mapper.Map<List<UserInviteApiModel>>(tournament));
         }
 
         [HttpPost(nameof(CreateTournament))]
         public async Task<ActionResult<TournamentApiModel>> CreateTournament(TournamentCreationApiModel tournamentCreation){
             var tournamentCreationModel = _mapper.Map<TournamentCreationModel>(tournamentCreation);
-            return Ok(_mapper.Map<TournamentApiModel>(_tournamentService.CreateTournament(tournamentCreationModel)));
+            var tournament = await _tournamentService.CreateTournament(tournamentCreationModel);
+            return Ok(_mapper.Map<TournamentApiModel>(tournament));
         }
 
         [HttpGet(nameof(GetAllGroupsForTournaments))]
         public async Task<ActionResult<List<TournamentLeaderBoardApiModel>>> GetAllGroupsForTournaments(long TournamentId){
-            return Ok(_mapper.Map<List<TournamentLeaderBoardApiModel>>(_tournamentService.GetAllGroupsForTournaments(TournamentId)));
+            var tournament = await _tournamentService.GetAllGroupsForTournaments(TournamentId);
+            return Ok(_mapper.Map<List<TournamentLeaderBoardApiModel>>(tournament));
         }
 
         [HttpGet(nameof(GetTournament))]
         public async Task<ActionResult<TournamentApiModel>> GetTournament(long TournamentId){
-            return Ok(_mapper.Map<TournamentApiModel>(_tournamentService.GetTournament(TournamentId)));
+            var tournaments =await _tournamentService.GetTournament(TournamentId);
+            return Ok(_mapper.Map<TournamentApiModel>(tournaments));
         }
 
         [HttpGet(nameof(GetAllTournaments))]
         public async Task<ActionResult<List<TournamentListApiModel>>> GetAllTournaments(){
-            return Ok(_mapper.Map<List<TournamentListApiModel>>(_tournamentService.GetAllTournaments()));
+            var tournaments = await _tournamentService.GetAllTournaments();
+            return Ok(_mapper.Map<List<TournamentListApiModel>>(tournaments));
         }
 
         [HttpGet(nameof(GetAllGroups))]
         public async Task<ActionResult<List<TournamentGroupApiModel>>> GetAllGroups(){
-            return Ok(_mapper.Map<List<TournamentGroupApiModel>>(_tournamentService.GetAllGroups()));
+            var tournament = await _tournamentService.GetAllGroups();
+            return Ok(_mapper.Map<List<TournamentGroupApiModel>>(tournament));
         }
     }
 }
