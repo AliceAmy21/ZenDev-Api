@@ -48,9 +48,9 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetChallengesForUser))]
-        public ActionResult<List<ChallengeListApiModel>> GetChallengesForUser(long userId){
+        public ActionResult<List<List<ChallengeListApiModel>>> GetChallengesForUser(long userId){
             var listChallenges = _challengeService.GetChallengesForUserAsync(userId);
-            return Ok(_mapper.Map<List<ChallengeListApiModel>>(listChallenges));
+            return Ok(_mapper.Map<List<List<ChallengeListApiModel>>>(listChallenges));
         }
 
         [HttpGet(nameof(GetUsersForChallenge))]
@@ -60,8 +60,8 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetUsersToInviteChallenge))]
-        public ActionResult<List<UserInviteApiModel>> GetUsersToInviteChallenge(long challengeId, long groupId){
-            var listUsers = _challengeService.GetUsersToInviteChallengeAsync(challengeId,groupId);
+        public ActionResult<List<UserInviteApiModel>> GetUsersToInviteChallenge(long challengeId){
+            var listUsers = _challengeService.GetUsersToInviteChallengeAsync(challengeId);
             return Ok(_mapper.Map<List<UserInviteApiModel>>(listUsers));
         }
 
