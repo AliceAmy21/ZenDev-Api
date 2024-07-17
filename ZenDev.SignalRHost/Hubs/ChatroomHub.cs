@@ -1,41 +1,82 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.VisualBasic;
+using System;
+using System.Threading.Tasks;
+using ZenDev.SignalRHost.Models;
+
 
 namespace ZenDev.SignalRHost.Hubs
 {
-    public class ChatroomHub : Hub<IChatroomClient>
+    public class ChatroomHub : Hub<IExampleClient>
     {
         public const string HUB_IDENTIFIER = "chatroom-hub";
-        
-        public class GroupConnection
+
+        public static readonly Dictionary<string, long> _chatConnections = new Dictionary<string, long>();
+        public static readonly Dictionary<long, string> _chatUsers = new Dictionary<long, string>();
+        public async Task JoinChat(long userId, string userName)
         {
-            public long ConnectionId {  get; set; }
-            public long GroupId {  get; set; }
+            if (string.IsNullOrEmpty(userName))
+            { 
+                await Clients.Caller.JoinChatUnsuccessful("Invalid username");
+                return;
+            }
+
+            var connectionExists = _chatConnections.ContainsValue(userId);
+            var test = Context.UserIdentifier;
+            if (!connectionExists)
+            {
+                _chatConnections.Add(Context.ConnectionId, userId);
+                _chatUsers.Add(userId, userName);
+            }
+
+            await Clients.Caller.JoinChatSuccessful(Context.ConnectionId);
+           
         }
 
-        public async Task AddToGroup(long groupId)
+        public async Task SendMessage(string message)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupId.ToString());
+            var connectionExists = _chatConnections.ContainsKey(Context.ConnectionId);
+            if (!connectionExists)
+            {
+                await Clients.Caller.SendMessageUnsuccessful("You have not joined the chat");
+                return;
+            }
+
+            await Clients.Caller.SendMessageSuccessful(Context.ConnectionId);
+
+            var userId = _chatConnections.GetValueOrDefault(Context.ConnectionId);
+            var userName = _chatUsers.GetValueOrDefault(userId);
+
+            var broadcastResponse = BuildResponse(userName ?? string.Empty, message);
+            await Clients.All.NewMessage(broadcastResponse);
+
+        }
+        private string BuildResponse(params string[] parameters)
+        {
+            if (parameters.Count() == 0) return string.Empty;
+
+            var response = parameters.First();
+
+            for (var i = 1; i < parameters.Count(); i++)
+            {
+                response = $"{response}:{parameters[i]}";
+            }
+
+            return response;
         }
 
-        public async Task RemoveFromGroup(long groupId)
+        public override Task OnConnectedAsync()
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId.ToString());
+            Clients.Caller.ConnectionSuccessful(Context.ConnectionId);
+            return base.OnConnectedAsync();
         }
 
-        public async Task SendMessage(long userId, string messageContent, long groupId, DateTime timeSent)
+        public override Task OnDisconnectedAsync(Exception? exception)
         {
-            await Clients.Group(groupId.ToString()).SendAsync("ReceiveMessage", userId, messageContent,);
+            return base.OnDisconnectedAsync(exception);
         }
 
-        //public async Task AddReaction(long userId, long messageId, long reactionId, long groupId)
-        //{
-        //    await Clients.Group(groupId.ToString()).SendAsync("ReceiveReaction", userId, messageId, reactionId);
-        //}
 
-        //public async Task RemoveReaction(long userId, long messageId, long reactionId, long groupId)
-        //{ 
-        //    await Clients.Group(groupId.ToString()).SendAsync("RemoveReaction", userId, messageId, reactionId);
-        //}
     }
+
+
 }

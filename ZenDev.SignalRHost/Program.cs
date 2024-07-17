@@ -58,8 +58,6 @@ app.UseCors(CORS_POLICY_NAME);
 
 app.UseAuthorization();
 
-app.MapRazorPages();
-
 app.MapHub<ChatroomHub>(ChatroomHub.HUB_IDENTIFIER); 
 
 app.Run();

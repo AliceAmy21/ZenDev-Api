@@ -1,12 +1,14 @@
-﻿namespace ZenDev.SignalRHost.Hubs
-{
-    public interface IChatroomClient
-    { 
-        public Task AddToGroup(long groupId);
-        public Task RemoveFromGroup(long groupId);
-        public Task SendMessage(long userId, string messageContent, long groupId);
-        public Task AddReaction(long userId, long messageId, long reactionId, long groupId);
-        public Task RemoveReaction(long userId, long messageId, long reactionId, long groupId);
+﻿using System.Threading.Tasks;
 
+namespace ZenDev.SignalRHost.HubConfig
+{
+    public interface IChatroomHub
+    {
+        Task AddToGroup(long groupId);
+        Task RemoveFromGroup(long groupId);
+        Task SendMessage(long userId, string messageContent, long groupId, DateTime timeSent);
+        Task AddReaction(long userId, long messageId, long reactionId, long groupId);
+        Task RemoveReaction(long userId, long messageId, long reactionId, long groupId);
+        Task AskServer(string someTextFromClient);
     }
 }

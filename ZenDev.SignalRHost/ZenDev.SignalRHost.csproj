@@ -15,4 +15,8 @@
                 <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
         </ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\ZenDev.BusinessLogic\ZenDev.BusinessLogic.csproj" />
+	</ItemGroup>
+
 </Project>
