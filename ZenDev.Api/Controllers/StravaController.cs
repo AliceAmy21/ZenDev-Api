@@ -64,7 +64,7 @@ namespace ZenDev.Api.Controllers
                 var activitiesApiModel = _mapper.Map<List<ActivitySummaryApiModel>>(activities);
 
                 var pointsModels = _mapper.Map<List<ActivityPointsApiModel>>(activitiesApiModel);
-                _pointsService.CalculatePoints(pointsModels);
+                await _pointsService.UpdateTotalPoints(userId,pointsModels);
 
                 await _pointsService.UpdatePointsGroups(userId,pointsModels);
                 await _pointsService.UpdateAmountCompleteChallenges(userId,pointsModels);
