@@ -46,8 +46,7 @@ namespace ZenDev.BusinessLogic.Services
             var achievements = _dbContext.Achievements.ToArray();
 
             List<AchievementEntity> streakAchievements = [];
-            List<AchievementEntity> distanceAchievements = [];
-            List<AchievementEntity> timeAchievements = [];
+            List<AchievementEntity> pointAchievements = [];
 
             foreach (var achievement in achievements)
             {
@@ -55,20 +54,15 @@ namespace ZenDev.BusinessLogic.Services
                 {
                     streakAchievements.Add(achievement);
                 }
-                else if (achievement.AchievementName.Contains("km"))
+                else if (achievement.AchievementName.Contains("pts"))
                 {
-                    distanceAchievements.Add(achievement);
-                }
-                else if (achievement.AchievementName.Contains("Hours"))
-                {
-                    timeAchievements.Add(achievement);
+                    pointAchievements.Add(achievement);
                 }
             }
 
             List<List<AchievementEntity>> result = [];
             result.Add(streakAchievements);
-            result.Add(distanceAchievements);
-            result.Add(timeAchievements);
+            result.Add(pointAchievements);
 
             return Task.FromResult(result);
         }

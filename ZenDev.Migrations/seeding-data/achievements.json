@@ -20,33 +20,33 @@
         "AchievementIcon": "..\\assets\\AchievementIcons\\002-trophy.png"
     },
     {
-        "AchievementName": "5 Hours",
-        "AchievementDescription": "Spent a total of 5 hours exercising",
-        "AchievementIcon": "..\\assets\\AchievementIcons\\009-workout.png"
+        "AchievementName": "180 Day Streak",
+        "AchievementDescription": "Login consecutively for 6 months",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\005-success.png"
     },
     {
-        "AchievementName": "10 Hours",
-        "AchievementDescription": "Spent a total of 10 hours exercising",
-        "AchievementIcon": "..\\assets\\AchievementIcons\\010-bench-press.png"
-    },
-    {
-        "AchievementName": "10km",
-        "AchievementDescription": "Travelled a total distance of 5km",
+        "AchievementName": "1000 pts",
+        "AchievementDescription": "Accumulated a total of 1000 points",
         "AchievementIcon": "..\\assets\\AchievementIcons\\008-shoes.png"
     },
     {
-        "AchievementName": "20km",
-        "AchievementDescription": "Travelled a total distance of 10km",
+        "AchievementName": "2500 pts",
+        "AchievementDescription": "Accumulated a total of 2500 points",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\010-bench-press.png"
+    },
+    {
+        "AchievementName": "5000 pts",
+        "AchievementDescription": "Accumulated a total of 5000 points",
         "AchievementIcon": "..\\assets\\AchievementIcons\\007-treadmill.png"
     },
     {
-        "AchievementName": "50km",
-        "AchievementDescription": "Travelled a total distance of 20km",
+        "AchievementName": "7500 pts",
+        "AchievementDescription": "Accumulated a total of 7500 points",
         "AchievementIcon": "..\\assets\\AchievementIcons\\004-achieving-goals.png"
     },
     {
-        "AchievementName": "500km",
-        "AchievementDescription": "Travelled a total distance of 500km",
+        "AchievementName": "10000 pts",
+        "AchievementDescription": "Accumulated a total of 10000 points",
         "AchievementIcon": "..\\assets\\AchievementIcons\\005-success.png"
     }
 ]

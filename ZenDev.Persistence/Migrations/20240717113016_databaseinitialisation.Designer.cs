@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240709114243_databaseinitialisation")]
+    [Migration("20240717113016_databaseinitialisation")]
     partial class databaseinitialisation
     {
         /// <inheritdoc />
