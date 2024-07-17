@@ -32,7 +32,7 @@
     {
         "AchievementName": "2500 pts",
         "AchievementDescription": "Accumulated a total of 2500 points",
-        "AchievementIcon": "..\\assets\\AchievementIcons\\010-bench-press.png"
+        "AchievementIcon": "..\\assets\\AchievementIcons\\009-workout.png"
     },
     {
         "AchievementName": "5000 pts",
@@ -42,11 +42,11 @@
     {
         "AchievementName": "7500 pts",
         "AchievementDescription": "Accumulated a total of 7500 points",
-        "AchievementIcon": "..\\assets\\AchievementIcons\\004-achieving-goals.png"
+        "AchievementIcon": "..\\assets\\AchievementIcons\\010-bench-press.png"
     },
     {
         "AchievementName": "10000 pts",
         "AchievementDescription": "Accumulated a total of 10000 points",
-        "AchievementIcon": "..\\assets\\AchievementIcons\\005-success.png"
+        "AchievementIcon": "..\\assets\\AchievementIcons\\004-achieving-goals.png"
     }
 ]
