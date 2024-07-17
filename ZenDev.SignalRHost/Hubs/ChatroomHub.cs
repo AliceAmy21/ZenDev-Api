@@ -22,11 +22,11 @@ namespace ZenDev.SignalRHost.Hubs
 
             var connectionExists = _chatConnections.ContainsValue(userId);
             var test = Context.UserIdentifier;
-            if (!connectionExists)
-            {
-                _chatConnections.Add(Context.ConnectionId, userId);
-                _chatUsers.Add(userId, userName);
-            }
+           
+            _chatConnections.Add(Context.ConnectionId, userId);
+            _chatUsers.Add(userId, userName);
+            
+            
 
             await Clients.Caller.JoinChatSuccessful(Context.ConnectionId);
            
@@ -34,17 +34,21 @@ namespace ZenDev.SignalRHost.Hubs
 
         public async Task SendMessage(string message)
         {
+            var userId = _chatConnections.GetValueOrDefault(Context.ConnectionId);
+            var userName = _chatUsers.GetValueOrDefault(userId);
             var connectionExists = _chatConnections.ContainsKey(Context.ConnectionId);
             if (!connectionExists)
             {
-                await Clients.Caller.SendMessageUnsuccessful("You have not joined the chat");
-                return;
+              
+                _chatConnections.Add(Context.ConnectionId, userId);
+                _chatUsers.Add(userId, userName);
+                await Clients.Caller.SendMessageSuccessful("Added Connection");
+               
             }
 
             await Clients.Caller.SendMessageSuccessful(Context.ConnectionId);
 
-            var userId = _chatConnections.GetValueOrDefault(Context.ConnectionId);
-            var userName = _chatUsers.GetValueOrDefault(userId);
+            
 
             var broadcastResponse = BuildResponse(userName ?? string.Empty, message);
             await Clients.All.NewMessage(broadcastResponse);
@@ -52,7 +56,7 @@ namespace ZenDev.SignalRHost.Hubs
         }
         private string BuildResponse(params string[] parameters)
         {
-            if (parameters.Count() == 0) return string.Empty;
+            if (parameters.Count() == 0) return string.Empty; 
 
             var response = parameters.First();
 
