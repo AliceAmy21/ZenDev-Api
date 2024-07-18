@@ -123,7 +123,7 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<List<TournamentEntity>> GetAllTournaments()
         {
-            return await _dbContext.Tournaments.ToListAsync();
+            return await _dbContext.Tournaments.Include(ex => ex.ExerciseEntity).ToListAsync();
         }
 
         public async Task<TournamentModel> GetTournament(long TournamentId)
@@ -143,13 +143,14 @@ namespace ZenDev.BusinessLogic.Services
                 }; 
                 tournamentGroupModels.Add(tournamentGroupModel);
             }
+            var ExerciseName = await _dbContext.Exercises.FindAsync(tournamentEntity.ExerciseId);
             TournamentModel tournamentModel = new TournamentModel{
                 TournamentId = tournamentEntity.TournamentId,
                 TournamentName = tournamentEntity.TournamentName,
                 TournamentDescription = tournamentEntity.TournamentDescription,
-                ExerciseName = tournamentEntity.ExerciseEntity.ExerciseName,
+                ExerciseName = ExerciseName.ExerciseName,
                 StartDate = tournamentEntity.StartDate,
-                EndDate = tournamentEntity.StartDate,
+                EndDate = tournamentEntity.EndDate,
                 tournamentGroupModels = tournamentGroupModels
             };
             return tournamentModel;
