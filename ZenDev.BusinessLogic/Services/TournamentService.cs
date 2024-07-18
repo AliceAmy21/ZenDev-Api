@@ -23,6 +23,7 @@ namespace ZenDev.BusinessLogic.Services
                 ExerciseId=tournamentCreation.ExerciseEntity.ExerciseId
             };
             await _dbContext.AddAsync(tournamentEntity);
+            await _dbContext.SaveChangesAsync();
             var groups = tournamentCreation.TournamentGroupModels;
             foreach(var group in groups){
                 TournamentGroupEntity tournamentGroupEntity = new TournamentGroupEntity{
@@ -33,12 +34,14 @@ namespace ZenDev.BusinessLogic.Services
                     ExerciseName = tournamentCreation.ExerciseEntity.ExerciseName,
                 };
                 await _dbContext.AddAsync(tournamentGroupEntity);
+                await _dbContext.SaveChangesAsync();
                 TournamentGroupBridgeEntity tournamentGroupBridgeEntity = new TournamentGroupBridgeEntity{
                     TGroupId = tournamentGroupEntity.TGroupId,
                     TournamentId = tournamentEntity.TournamentId,
                     Points = 0
                 };
                 await _dbContext.AddAsync(tournamentGroupBridgeEntity);
+                await _dbContext.SaveChangesAsync();
                 var users = group.UserEntities;
                 foreach(var user in users){
                     TournamentGroupUserBridgeEntity tournamentGroupUserBridgeEntity = new TournamentGroupUserBridgeEntity{
@@ -46,6 +49,7 @@ namespace ZenDev.BusinessLogic.Services
                         TGroupId = tournamentGroupEntity.TGroupId
                     };
                     await _dbContext.AddAsync(tournamentGroupUserBridgeEntity);
+                    await _dbContext.SaveChangesAsync();
                 }
             }
             await _dbContext.SaveChangesAsync();
