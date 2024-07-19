@@ -62,7 +62,8 @@ namespace ZenDev.BusinessLogic.Services
         
                     return result;
                 }
-        
+
+                user.ActiveWeek = GetStartOfWeek(DayOfWeek.Monday);
                 var newUser = await _dbContext.AddAsync(user);
                 await _dbContext.SaveChangesAsync();
                 result.UserId = newUser.Entity.UserId;
@@ -114,6 +115,13 @@ namespace ZenDev.BusinessLogic.Services
             user.LastActive = DateTime.Now;
             _dbContext.Update(user);
             _dbContext.SaveChanges();
+        }
+
+        public static DateTime GetStartOfWeek(DayOfWeek startOfWeek)
+        {
+            var currentDate = DateTime.Now;
+            int diff = (7 + (currentDate.DayOfWeek - startOfWeek)) % 7; //Gets the number of days to subtract to get to the start of the week
+            return currentDate.AddDays(-diff).Date; // .Date is used to set the time to midnight
         }
 
         public long UpdateStreak(DateTimeOffset lastActive, UserEntity user){
