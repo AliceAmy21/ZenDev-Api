@@ -11,5 +11,7 @@ namespace ZenDev.Api.ApiModels
         public DateTimeOffset LastActive { get; set; }
         public DateTimeOffset? LastSynced { get; set; }
         public long TotalPoints { get; set; }
+        public DateTimeOffset ActiveWeek { get; set; }
+        public long WeekPoints { get; set; }
     }
 }

@@ -25,6 +25,10 @@ namespace ZenDev.Persistence.Entities
 
         public long TotalPoints { get; set; }
 
+        public DateTimeOffset ActiveWeek { get; set; }
+
+        public long WeekPoints { get; set; }
+
         public List<UserGroupBridgeEntity> UserGroupBridgeEntities { get; set; } = [];
 
         public List<UserChallengeBridgeEntity> UserChallengeBridgeEntities {get;set;} = [];
