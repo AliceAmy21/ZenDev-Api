@@ -166,7 +166,13 @@ namespace ZenDev.BusinessLogic.Services
                     break;
                 }
             }
+        }
 
+        public static DateTime GetStartOfWeek(DayOfWeek startOfWeek)
+        {
+            var currentDate = DateTime.Now;
+            int diff = (7 + (currentDate.DayOfWeek - startOfWeek)) % 7; //Gets the number of days to subtract to get to the start of the week
+            return currentDate.AddDays(-diff).Date; // .Date is used to set the time to midnight
         }
     }
 }

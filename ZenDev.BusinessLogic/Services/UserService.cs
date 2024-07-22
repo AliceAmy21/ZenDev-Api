@@ -56,9 +56,9 @@ namespace ZenDev.BusinessLogic.Services
                     var lastActive = matchingUserEntries.LastActive;
                     UpdateLastActive(matchingUserEntries);
 
-                    long streak = UpdateStreak(lastActive, matchingUserEntries);
+                    // long streak = UpdateStreak(lastActive, matchingUserEntries);
 
-                    UnlockStreakAchievement(streak, matchingUserEntries);
+                    // UnlockStreakAchievement(streak, matchingUserEntries);
         
                     return result;
                 }

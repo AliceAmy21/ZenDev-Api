@@ -503,6 +503,9 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserId"));
 
+                    b.Property<DateTimeOffset>("ActiveWeek")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("AvatarIconUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -532,6 +535,9 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("WeekPoints")
+                        .HasColumnType("bigint");
 
                     b.HasKey("UserId");
 

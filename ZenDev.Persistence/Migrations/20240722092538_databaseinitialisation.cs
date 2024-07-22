@@ -93,7 +93,9 @@ namespace ZenDev.Persistence.Migrations
                     AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    TotalPoints = table.Column<long>(type: "bigint", nullable: false)
+                    TotalPoints = table.Column<long>(type: "bigint", nullable: false),
+                    ActiveWeek = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    WeekPoints = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {

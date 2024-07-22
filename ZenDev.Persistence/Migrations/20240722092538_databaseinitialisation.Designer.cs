@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240717124755_databaseinitialisation")]
+    [Migration("20240722092538_databaseinitialisation")]
     partial class databaseinitialisation
     {
         /// <inheritdoc />
@@ -506,6 +506,9 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserId"));
 
+                    b.Property<DateTimeOffset>("ActiveWeek")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("AvatarIconUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -535,6 +538,9 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("WeekPoints")
+                        .HasColumnType("bigint");
 
                     b.HasKey("UserId");
 
