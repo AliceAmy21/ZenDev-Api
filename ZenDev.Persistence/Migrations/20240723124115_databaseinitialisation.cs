@@ -131,9 +131,12 @@ namespace ZenDev.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     Points = table.Column<long>(type: "bigint", nullable: false),
-                    Distance = table.Column<long>(type: "bigint", nullable: false),
-                    Duration = table.Column<long>(type: "bigint", nullable: false),
-                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    Distance = table.Column<double>(type: "float", nullable: true),
+                    Duration = table.Column<long>(type: "bigint", nullable: true),
+                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    SummaryPolyline = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Calories = table.Column<double>(type: "float", nullable: false),
+                    AverageSpeed = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {

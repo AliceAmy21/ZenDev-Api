@@ -12,5 +12,8 @@
         public int? Duration { get; set; }
         public double? Distance { get; set; }
         public DateTime StartDateLocal { get; set; }
+        public string SummaryPolyline { get; set; } = string.Empty;
+        public double Kilojoules { get; set; }
+        public double AverageSpeed { get; set; }
     }
 }

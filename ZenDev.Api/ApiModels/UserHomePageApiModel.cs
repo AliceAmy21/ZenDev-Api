@@ -1,15 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ZenDev.Persistence.Entities
+namespace ZenDev.Api.ApiModels
 {
-    public class ActivityRecordEntity
+    public class UserHomePageApiModel
     {
-        [Key]
         public long ActivityRecordId {get;set;}
         public long UserId {get;set;}
-        [ForeignKey(nameof(UserId))]
-        public UserEntity UserEntities {get;set;}
         public long Points {get;set;}
         public double? Distance {get;set;}
         public long? Duration {get;set;}

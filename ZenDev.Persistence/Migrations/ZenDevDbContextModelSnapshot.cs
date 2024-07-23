@@ -57,17 +57,27 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ActivityRecordId"));
 
+                    b.Property<double>("AverageSpeed")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Calories")
+                        .HasColumnType("float");
+
                     b.Property<DateTimeOffset>("DateTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long>("Distance")
-                        .HasColumnType("bigint");
+                    b.Property<double?>("Distance")
+                        .HasColumnType("float");
 
-                    b.Property<long>("Duration")
+                    b.Property<long?>("Duration")
                         .HasColumnType("bigint");
 
                     b.Property<long>("Points")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("SummaryPolyline")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");

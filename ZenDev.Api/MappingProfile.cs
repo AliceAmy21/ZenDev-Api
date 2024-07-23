@@ -72,8 +72,8 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.AverageHeartrate, opt => opt.MapFrom(src => src.average_heartrate))
                 .ForMember(dest => dest.MaxHeartrate, opt => opt.MapFrom(src => src.max_heartrate));
             CreateMap<AthleteResponse, AthleteApiModel>()
-              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
-              .ForMember(dest => dest.ResourceState, opt => opt.MapFrom(src => src.resource_state));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
+                .ForMember(dest => dest.ResourceState, opt => opt.MapFrom(src => src.resource_state));
             CreateMap<MapResponse, MapApiModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
                 .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.summary_polyline));
@@ -81,11 +81,13 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.Exercise, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.ElapsedTime))
                 .ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
+                .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.Map.SummaryPolyline))
                 .ReverseMap();
             CreateMap<LeaderBoardListModel,LeaderBoardListApiModel>()
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserInviteModel))
                 .ReverseMap();
             CreateMap<MindfulnessEntity, MindfulnessApiModel>().ReverseMap();
+            CreateMap<ActivityRecordEntity, UserHomePageApiModel>().ReverseMap();
         }
     }
 }

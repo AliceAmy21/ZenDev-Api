@@ -174,5 +174,11 @@ namespace ZenDev.BusinessLogic.Services
                 }
             }
         }
+
+        public async Task<ActivityRecordEntity> GetLatestActivityRecord(long userId)
+        {
+            var records = await _dbContext.ActivityRecords.Where(u=>u.UserId == userId).OrderByDescending(d=>d.DateTime).ToListAsync();
+            return records.ElementAt(0);
+        }
     }
 }

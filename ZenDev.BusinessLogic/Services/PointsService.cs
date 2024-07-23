@@ -168,5 +168,25 @@ namespace ZenDev.BusinessLogic.Services
             }
 
         }
+
+        public async Task UpdateActivitiesForUser(long userId, List<ActivityPointsApiModel> activities)
+        {
+            foreach(var activity in activities){
+                int movingTimeInMinutes = GetMinutes(activity.MovingTime);
+                int totalPoints = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
+                ActivityRecordEntity activityRecord = new ActivityRecordEntity{
+                    UserId = userId,
+                    Points = totalPoints,
+                    Distance = activity.Distance,
+                    Duration = activity.Duration,
+                    DateTime = activity.StartDateLocal,
+                    SummaryPolyline = activity.SummaryPolyline,
+                    Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
+                    AverageSpeed = activity.AverageSpeed 
+                };
+                await _dbContext.ActivityRecords.AddAsync(activityRecord);
+            }
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
