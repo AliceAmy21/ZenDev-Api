@@ -127,7 +127,7 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("Challenges");
                 });
 
-            modelBuilder.Entity("ZenDev.Persistence.Entities.ChatMessageBridge", b =>
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ChatMessageBridgeEntity", b =>
                 {
                     b.Property<long>("ChatMessageId")
                         .ValueGeneratedOnAdd()
@@ -318,6 +318,30 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.MessageReactionBridgeEntity", b =>
+                {
+                    b.Property<long>("MessageReactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("MessageReactionId"));
+
+                    b.Property<long>("MessageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ReactionId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("MessageReactionId");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("ReactionId")
+                        .IsUnique();
+
+                    b.ToTable("MessageReactionBridge");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.MindfulnessEntity", b =>
                 {
                     b.Property<long>("MindfulnessId")
@@ -398,49 +422,141 @@ namespace ZenDev.Persistence.Migrations
                     b.ToTable("PersonalGoals");
                 });
 
-            modelBuilder.Entity("ZenDev.Persistence.Entities.ReactionIconEntity", b =>
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ReactionEntity", b =>
                 {
-                    b.Property<long>("ReactionIconId")
+                    b.Property<long>("ReactionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ReactionIconId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ReactionId"));
 
-                    b.Property<string>("ReactionIconUrl")
+                    b.Property<string>("Reaction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ReactionIconId");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
-                    b.ToTable("ReactionIcons");
+                    b.HasKey("ReactionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reactions");
                 });
 
-            modelBuilder.Entity("ZenDev.Persistence.Entities.ReactionMessageBridgeEntity", b =>
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentEntity", b =>
                 {
-                    b.Property<long>("ReactionMessageBridgeId")
+                    b.Property<long>("TournamentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ReactionMessageBridgeId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TournamentId"));
 
-                    b.Property<long>("MessageId")
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long>("ExerciseId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ReactionIconId")
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("TournamentDescription")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("TournamentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("TournamentId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("Tournaments");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupBridgeEntity", b =>
+                {
+                    b.Property<long>("TournamentGroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TournamentGroupId"));
+
+                    b.Property<long>("Points")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TournamentId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("TournamentGroupId");
+
+                    b.HasIndex("TGroupId");
+
+                    b.HasIndex("TournamentId");
+
+                    b.ToTable("TournamentGroupBridge");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupEntity", b =>
+                {
+                    b.Property<long>("TGroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TGroupId"));
+
+                    b.Property<string>("ExerciseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("MemberCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TGroupDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TGroupIconUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TGroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TGroupId");
+
+                    b.ToTable("TournamentGroups");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupUserBridgeEntity", b =>
+                {
+                    b.Property<long>("TournamentGroupUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TournamentGroupUserId"));
+
+                    b.Property<long>("TGroupId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ReactionMessageBridgeId");
+                    b.HasKey("TournamentGroupUserId");
 
-                    b.HasIndex("MessageId");
-
-                    b.HasIndex("ReactionIconId");
+                    b.HasIndex("TGroupId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ReactionMessageBridge");
+                    b.ToTable("TournamentGroupUserBridge");
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.UserAchievementBridgeEntity", b =>
@@ -597,7 +713,7 @@ namespace ZenDev.Persistence.Migrations
                     b.Navigation("GroupEntity");
                 });
 
-            modelBuilder.Entity("ZenDev.Persistence.Entities.ChatMessageBridge", b =>
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ChatMessageBridgeEntity", b =>
                 {
                     b.HasOne("ZenDev.Persistence.Entities.ChatroomEntity", "ChatroomEntity")
                         .WithMany("ChatMessageBridges")
@@ -668,6 +784,25 @@ namespace ZenDev.Persistence.Migrations
                     b.Navigation("UserEntity");
                 });
 
+            modelBuilder.Entity("ZenDev.Persistence.Entities.MessageReactionBridgeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.MessageEntity", "MessageEntity")
+                        .WithMany("messageReactionBridges")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.ReactionEntity", "ReactionEntity")
+                        .WithOne("MessageReactionBridgeEntity")
+                        .HasForeignKey("ZenDev.Persistence.Entities.MessageReactionBridgeEntity", "ReactionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("MessageEntity");
+
+                    b.Navigation("ReactionEntity");
+                });
+
             modelBuilder.Entity("ZenDev.Persistence.Entities.MindfulnessEntity", b =>
                 {
                     b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
@@ -698,29 +833,62 @@ namespace ZenDev.Persistence.Migrations
                     b.Navigation("UserEntity");
                 });
 
-            modelBuilder.Entity("ZenDev.Persistence.Entities.ReactionMessageBridgeEntity", b =>
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ReactionEntity", b =>
                 {
-                    b.HasOne("ZenDev.Persistence.Entities.MessageEntity", "MessageEntity")
-                        .WithMany("ReactionMessageBridgeEntities")
-                        .HasForeignKey("MessageId")
+                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ZenDev.Persistence.Entities.ReactionIconEntity", "ReactionIconEntity")
-                        .WithMany("ReactionMessageBridgeEntities")
-                        .HasForeignKey("ReactionIconId")
+                    b.Navigation("UserEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.ExerciseEntity", "ExerciseEntity")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExerciseEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupBridgeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.TournamentGroupEntity", "TournamentGroupEntity")
+                        .WithMany("TournamentGroupBridgeEntities")
+                        .HasForeignKey("TGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.TournamentEntity", "TournamentEntity")
+                        .WithMany("TournamentGroupBridgeEntities")
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TournamentEntity");
+
+                    b.Navigation("TournamentGroupEntity");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupUserBridgeEntity", b =>
+                {
+                    b.HasOne("ZenDev.Persistence.Entities.TournamentGroupEntity", "TournamentGroupEntity")
+                        .WithMany("TournamentGroupUserBridgeEntities")
+                        .HasForeignKey("TGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
-                        .WithMany("ReactionMessageBridgeEntities")
+                        .WithMany("TournamentGroupUserBridgeEntities")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MessageEntity");
-
-                    b.Navigation("ReactionIconEntity");
+                    b.Navigation("TournamentGroupEntity");
 
                     b.Navigation("UserEntity");
                 });
@@ -801,17 +969,30 @@ namespace ZenDev.Persistence.Migrations
                 {
                     b.Navigation("ChatMessageBridges");
 
-                    b.Navigation("ReactionMessageBridgeEntities");
+                    b.Navigation("messageReactionBridges");
                 });
 
-            modelBuilder.Entity("ZenDev.Persistence.Entities.ReactionIconEntity", b =>
+            modelBuilder.Entity("ZenDev.Persistence.Entities.ReactionEntity", b =>
                 {
-                    b.Navigation("ReactionMessageBridgeEntities");
+                    b.Navigation("MessageReactionBridgeEntity")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentEntity", b =>
+                {
+                    b.Navigation("TournamentGroupBridgeEntities");
+                });
+
+            modelBuilder.Entity("ZenDev.Persistence.Entities.TournamentGroupEntity", b =>
+                {
+                    b.Navigation("TournamentGroupBridgeEntities");
+
+                    b.Navigation("TournamentGroupUserBridgeEntities");
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.UserEntity", b =>
                 {
-                    b.Navigation("ReactionMessageBridgeEntities");
+                    b.Navigation("TournamentGroupUserBridgeEntities");
 
                     b.Navigation("UserChallengeBridgeEntities");
 
