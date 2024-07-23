@@ -168,5 +168,25 @@ namespace ZenDev.BusinessLogic.Services
             }
 
         }
+
+        public async Task UpdateTournamentPoints(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var group = _dbContext.TournamentGroupBridge
+            .Include(groups=>groups.TournamentGroupEntity)
+            .Include(tournament=>tournament.TournamentEntity)
+            .AsQueryable();
+            var users = _dbContext.TournamentGroupUserBridge
+            .Include(users=>users.UserEntity)
+            .AsQueryable();
+            var userGroups = users.Where(user=>user.UserId == userId).Select(groups=>groups.TournamentGroupEntity.TGroupId);
+                foreach(var activity in activities){
+                    var bridges = group.Where(e=>e.TournamentEntity.ExerciseEntity.ExerciseName == activity.Exercise &&
+                    userGroups.Contains(e.TournamentGroupEntity.TGroupId));
+                    foreach(var bridge in bridges){
+                        bridge.Points += CalculatePointsGroups(activity);
+                    }
+                }
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
