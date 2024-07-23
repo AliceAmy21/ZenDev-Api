@@ -1,34 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
 using ZenDev.Common.Enums;
 using ZenDev.Common.Models;
 using ZenDev.Persistence;
 using ZenDev.Persistence.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace ZenDev.BusinessLogic.Services
 {
     public class PointsService: IPointsService
     {
         private readonly ZenDevDbContext _dbContext;
-        public PointsService(ZenDevDbContext dbContext) {
+        private readonly ILogger<PointsService> _logger;
+
+        public PointsService(
+            ZenDevDbContext dbContext,
+            ILogger<PointsService> logger) 
+        {
             _dbContext = dbContext;
+            _logger = logger;
         }
-        public void CalculatePoints(List<ActivityPointsApiModel> activities)
+        public async Task UpdateTotalPoints(long userId, List<ActivityPointsApiModel> activities)
         {
             int totalPoints = 0;
-
-
             foreach (var activity in activities)
             {
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
                 totalPoints += GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
             }
+
+            var user = _dbContext.Users.FirstOrDefault(user => user.UserId == userId);
+            user.TotalPoints += totalPoints;
+
+            UnlockPointsAchievement(user);
+
+            await _dbContext.SaveChangesAsync();
         }
 
         public int CalculatePointsGroups(ActivityPointsApiModel activity)
@@ -123,24 +129,44 @@ namespace ZenDev.BusinessLogic.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateTournamentPoints(long userId, List<ActivityPointsApiModel> activities)
-        {
-            var group = _dbContext.TournamentGroupBridge
-            .Include(groups=>groups.TournamentGroupEntity)
-            .Include(tournament=>tournament.TournamentEntity)
-            .AsQueryable();
-            var users = _dbContext.TournamentGroupUserBridge
-            .Include(users=>users.UserEntity)
-            .AsQueryable();
-            var userGroups = users.Where(user=>user.UserId == userId).Select(groups=>groups.TournamentGroupEntity.TGroupId);
-                foreach(var activity in activities){
-                    var bridges = group.Where(e=>e.TournamentEntity.ExerciseEntity.ExerciseName == activity.Exercise &&
-                    userGroups.Contains(e.TournamentGroupEntity.TGroupId));
-                    foreach(var bridge in bridges){
-                        bridge.Points += CalculatePointsGroups(activity);
+        public void UnlockPointsAchievement(UserEntity user){
+            var pointAchievements = _dbContext.Achievements
+                .Where(achievement => achievement.AchievementName.Contains("pts"))
+                .ToArray();
+            
+            var myAchievements = _dbContext.UserAchievementBridge
+                .Where(userAchievementBridge => userAchievementBridge.UserId == user.UserId)
+                .Select(userAchievementBridge => userAchievementBridge.AchievementId)                               
+                .ToArray();
+
+            for (int i = 0; i < pointAchievements.Length; i++)
+            {
+                String[] achievementName = pointAchievements[i].AchievementName.Split(' ');
+                long points = int.Parse(achievementName[0]);
+
+                if (user.TotalPoints >= points)
+                {
+                    if (myAchievements.Contains(pointAchievements[i].AchievementId))
+                    {
+                        continue;
+                    }
+                    else{
+                        UserAchievementBridgeEntity newPointsAchievement = new()
+                        {
+                            AchievementId = pointAchievements[i].AchievementId,
+                            UserId = user.UserId
+                        };
+                        _dbContext.Add(newPointsAchievement);
+                        _dbContext.SaveChanges();
+                        _logger.LogInformation("New Achievement Unlocked with name " + pointAchievements[i].AchievementName);
                     }
                 }
-            await _dbContext.SaveChangesAsync();
+                else
+                {
+                    break;
+                }
+            }
+
         }
     }
 }
