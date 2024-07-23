@@ -177,9 +177,17 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<UserHomePageModel> GetLatestActivityRecord(long userId)
         {
-            var records = _dbContext.ActivityRecords.Where(u=>u.UserId == userId).OrderByDescending(d=>d.DateTime).ToListAsync().Result.ElementAt(0);
-            List<int> activeDays = [];
-            var day = DateTime.Now.DayOfWeek;
+            var userActivities = _dbContext.ActivityRecords.Where(u=>u.UserId == userId).OrderByDescending(d=>d.DateTime);
+            var records = userActivities.ToListAsync().Result.ElementAt(0);
+            List<int> activeDays = [0,0,0,0,0,0,0];
+            var day = Convert.ToInt32(DateTime.Now.DayOfWeek);
+            for(int i = 0 ; i<=day;i++){
+                int j = day - i;
+                var date = DateTime.Now.AddDays(-j);
+                if(await userActivities.AnyAsync(d=>d.DateTime == date)){
+                    activeDays[i] = 1;
+                }
+            }
             UserHomePageModel userHomePageModel = new UserHomePageModel{
                 ActivityRecordId = records.ActivityRecordId,
                 UserId = records.UserId,
