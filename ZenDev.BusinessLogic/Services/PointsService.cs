@@ -22,16 +22,26 @@ namespace ZenDev.BusinessLogic.Services
         }
         public async Task UpdateTotalPoints(long userId, List<ActivityPointsApiModel> activities)
         {
-            int totalPoints = 0;
+            var user = _dbContext.Users.FirstOrDefault(user => user.UserId == userId);
             foreach (var activity in activities)
             {
+                var startOfWeek = GetStartOfWeek(activity.StartDateLocal.DayOfWeek);
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
-                totalPoints += GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
+                int points = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
+
+                if (startOfWeek == user.ActiveWeek)
+                {
+                    user.WeekPoints += points;
+                }
+                else
+                {
+                    UpdateStreak(user, startOfWeek);
+                }
+
+                user.TotalPoints += points;
             }
 
-            var user = _dbContext.Users.FirstOrDefault(user => user.UserId == userId);
-            user.TotalPoints += totalPoints;
-
+            UnlockStreakAchievement(user);
             UnlockPointsAchievement(user);
 
             await _dbContext.SaveChangesAsync();
@@ -168,11 +178,70 @@ namespace ZenDev.BusinessLogic.Services
             }
         }
 
-        public static DateTime GetStartOfWeek(DayOfWeek startOfWeek)
+        public DateTime GetStartOfWeek(DayOfWeek startOfWeek)
         {
             var currentDate = DateTime.Now;
             int diff = (7 + (currentDate.DayOfWeek - startOfWeek)) % 7; //Gets the number of days to subtract to get to the start of the week
             return currentDate.AddDays(-diff).Date; // .Date is used to set the time to midnight
+        }
+
+        public long UpdateStreak(UserEntity user, DateTimeOffset activeWeek){
+           if (user.WeekPoints >= 500)
+           {
+                user.Streak += 1;
+           }
+           else
+           {
+                user.Streak = 0;
+           }
+           user.WeekPoints = 0;
+           user.ActiveWeek = activeWeek;
+
+            _dbContext.Update(user);
+            _dbContext.SaveChanges();
+
+            _logger.LogInformation(user.Streak.ToString() + " week streak");
+            return user.Streak;
+        }
+
+        public void UnlockStreakAchievement(UserEntity user){
+            var streakAchievements = _dbContext.Achievements
+                .Where(achievement => achievement.AchievementName.Contains("Streak"))
+                .ToArray();
+            
+            var myAchievements = _dbContext.UserAchievementBridge
+                .Where(userAchievementBridge => userAchievementBridge.UserId == user.UserId)
+                .Select(userAchievementBridge => userAchievementBridge.AchievementId)                               
+                .ToArray();
+
+            for (int i = 0; i < streakAchievements.Length; i++)
+            {
+                String[] achievementName = streakAchievements[i].AchievementName.Split(' ');
+                long streak = int.Parse(achievementName[0]);
+
+                if (user.Streak >= streak)
+                {
+                    if (myAchievements.Contains(streakAchievements[i].AchievementId))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        UserAchievementBridgeEntity newStreakAchievement = new()
+                        {
+                            AchievementId = streakAchievements[i].AchievementId,
+                            UserId = user.UserId
+                        };
+                        _dbContext.Add(newStreakAchievement);
+                        _dbContext.SaveChanges();
+                         _logger.LogInformation("New Achievement Unlocked with name " + streakAchievements[i].AchievementName);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 }
