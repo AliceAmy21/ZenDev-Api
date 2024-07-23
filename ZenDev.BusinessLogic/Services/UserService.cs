@@ -175,10 +175,25 @@ namespace ZenDev.BusinessLogic.Services
             }
         }
 
-        public async Task<ActivityRecordEntity> GetLatestActivityRecord(long userId)
+        public async Task<UserHomePageModel> GetLatestActivityRecord(long userId)
         {
-            var records = await _dbContext.ActivityRecords.Where(u=>u.UserId == userId).OrderByDescending(d=>d.DateTime).ToListAsync();
-            return records.ElementAt(0);
+            var records = _dbContext.ActivityRecords.Where(u=>u.UserId == userId).OrderByDescending(d=>d.DateTime).ToListAsync().Result.ElementAt(0);
+            List<int> activeDays = [];
+            var day = DateTime.Now.DayOfWeek;
+            UserHomePageModel userHomePageModel = new UserHomePageModel{
+                ActivityRecordId = records.ActivityRecordId,
+                UserId = records.UserId,
+                Points = records.Points,
+                Distance = records.Distance,
+                Duration = records.Duration,
+                DateTime = records.DateTime,
+                SummaryPolyline = records.SummaryPolyline,
+                Calories = records.Calories,
+                AverageSpeed = records.AverageSpeed,
+                ActiveDays = activeDays,
+            };
+            
+            return userHomePageModel;
         }
     }
 }

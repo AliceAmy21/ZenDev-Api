@@ -115,7 +115,7 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.tournamentGroupModels))
                 .ReverseMap();
             CreateMap<TournamentLeaderBoardModel, TournamentLeaderBoardApiModel>().ReverseMap();
-            CreateMap<ActivityRecordEntity, UserHomePageApiModel>().ReverseMap();
+            CreateMap<UserHomePageModel, UserHomePageApiModel>().ReverseMap();
         }
     }
 }

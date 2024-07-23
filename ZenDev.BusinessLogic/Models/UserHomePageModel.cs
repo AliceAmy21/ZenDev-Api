@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ZenDev.Api.ApiModels
+namespace ZenDev.BusinessLogic.Models
 {
-    public class UserHomePageApiModel
+    public class UserHomePageModel
     {
         public long ActivityRecordId {get;set;}
         public long UserId {get;set;}
