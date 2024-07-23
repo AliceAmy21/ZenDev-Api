@@ -1,0 +1,353 @@
+[
+    {
+        "UserChallengeId": 1,
+        "UserId": 1,
+        "ChallengeId": 1,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 50
+    },
+    {
+        "UserChallengeId": 2,
+        "UserId": 2,
+        "ChallengeId": 2,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 100
+    },
+    {
+        "UserChallengeId": 3,
+        "UserId": 3,
+        "ChallengeId": 3,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 200
+    },
+    {
+        "UserChallengeId": 4,
+        "UserId": 4,
+        "ChallengeId": 4,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 150
+    },
+    {
+        "UserChallengeId": 5,
+        "UserId": 5,
+        "ChallengeId": 5,
+        "DateCompleted": "2024-08-11T00:00:00Z",
+        "AmountCompleted": 300
+    },
+    {
+        "UserChallengeId": 6,
+        "UserId": 6,
+        "ChallengeId": 6,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 70
+    },
+    {
+        "UserChallengeId": 7,
+        "UserId": 7,
+        "ChallengeId": 7,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 120
+    },
+    {
+        "UserChallengeId": 8,
+        "UserId": 8,
+        "ChallengeId": 8,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 180
+    },
+    {
+        "UserChallengeId": 9,
+        "UserId": 9,
+        "ChallengeId": 9,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 90
+    },
+    {
+        "UserChallengeId": 10,
+        "UserId": 10,
+        "ChallengeId": 10,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 250
+    },
+    {
+        "UserChallengeId": 11,
+        "UserId": 11,
+        "ChallengeId": 11,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 110
+    },
+    {
+        "UserChallengeId": 12,
+        "UserId": 12,
+        "ChallengeId": 12,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 140
+    },
+    {
+        "UserChallengeId": 13,
+        "UserId": 13,
+        "ChallengeId": 13,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 160
+    },
+    {
+        "UserChallengeId": 14,
+        "UserId": 14,
+        "ChallengeId": 14,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 350
+    },
+    {
+        "UserChallengeId": 15,
+        "UserId": 15,
+        "ChallengeId": 15,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 130
+    },
+    {
+        "UserChallengeId": 16,
+        "UserId": 16,
+        "ChallengeId": 16,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 190
+    },
+    {
+        "UserChallengeId": 17,
+        "UserId": 17,
+        "ChallengeId": 17,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 80
+    },
+    {
+        "UserChallengeId": 18,
+        "UserId": 18,
+        "ChallengeId": 18,
+        "DateCompleted": "2024-07-18T00:00:00Z",
+        "AmountCompleted": 60
+    },
+    {
+        "UserChallengeId": 20,
+        "UserId": 1,
+        "ChallengeId": 20,
+        "DateCompleted": "2024-06-30T23:59:59Z",
+        "AmountCompleted": 100
+    },
+    {
+        "UserChallengeId": 21,
+        "UserId": 2,
+        "ChallengeId": 21,
+        "DateCompleted": "2024-06-30T23:59:59Z",
+        "AmountCompleted": 10
+    },
+    {
+        "UserChallengeId": 22,
+        "UserId": 3,
+        "ChallengeId": 22,
+        "DateCompleted": "2024-07-31T23:59:59Z",
+        "AmountCompleted": 2000
+    },
+    {
+        "UserChallengeId": 23,
+        "UserId": 4,
+        "ChallengeId": 23,
+        "DateCompleted": "2024-07-31T23:59:59Z",
+        "AmountCompleted": 5
+    },
+    {
+        "UserChallengeId": 24,
+        "UserId": 5,
+        "ChallengeId": 24,
+        "DateCompleted": "2024-08-31T23:59:59Z",
+        "AmountCompleted": 50
+    },
+    {
+        "UserChallengeId": 25,
+        "UserId": 6,
+        "ChallengeId": 25,
+        "DateCompleted": "2024-08-31T23:59:59Z",
+        "AmountCompleted": 30
+    },
+    {
+        "UserChallengeId": 26,
+        "UserId": 7,
+        "ChallengeId": 26,
+        "DateCompleted": "2024-09-30T23:59:59Z",
+        "AmountCompleted": 4
+    },
+    {
+        "UserChallengeId": 27,
+        "UserId": 8,
+        "ChallengeId": 27,
+        "DateCompleted": "2024-09-30T23:59:59Z",
+        "AmountCompleted": 10
+    },
+    {
+        "UserChallengeId": 28,
+        "UserId": 9,
+        "ChallengeId": 28,
+        "DateCompleted": "2024-10-31T23:59:59Z",
+        "AmountCompleted": 18
+    },
+    {
+        "UserChallengeId": 29,
+        "UserId": 10,
+        "ChallengeId": 29,
+        "DateCompleted": "2024-10-31T23:59:59Z",
+        "AmountCompleted": 4
+    },
+    {
+        "UserChallengeId": 30,
+        "UserId": 11,
+        "ChallengeId": 30,
+        "DateCompleted": "2024-11-30T23:59:59Z",
+        "AmountCompleted": 30
+    },
+    {
+        "UserChallengeId": 31,
+        "UserId": 12,
+        "ChallengeId": 31,
+        "DateCompleted": "2024-11-30T23:59:59Z",
+        "AmountCompleted": 3
+    },
+    {
+        "UserChallengeId": 32,
+        "UserId": 13,
+        "ChallengeId": 32,
+        "DateCompleted": "2024-12-31T23:59:59Z",
+        "AmountCompleted": 10
+    },
+    {
+        "UserChallengeId": 33,
+        "UserId": 14,
+        "ChallengeId": 33,
+        "DateCompleted": "2025-01-31T23:59:59Z",
+        "AmountCompleted": 5
+    },
+    {
+        "UserChallengeId": 34,
+        "UserId": 15,
+        "ChallengeId": 34,
+        "DateCompleted": "2025-01-31T23:59:59Z",
+        "AmountCompleted": 100
+    },
+        {
+            "UserId": 12,
+            "ChallengeId": 1,
+            "DateCompleted": "2024-07-12T00:00:00Z",
+            "AmountCompleted": 45
+        },
+        {
+            "UserId": 3,
+            "ChallengeId": 1,
+            "DateCompleted": "2024-07-14T00:00:00Z",
+            "AmountCompleted": 50
+        },
+        {
+            "UserId": 8,
+            "ChallengeId": 2,
+            "DateCompleted": "2024-07-15T00:00:00Z",
+            "AmountCompleted": 90
+        },
+        {
+            "UserId": 15,
+            "ChallengeId": 2,
+            "DateCompleted": "2024-07-16T00:00:00Z",
+            "AmountCompleted": 100
+        },
+        {
+            "UserId": 6,
+            "ChallengeId": 3,
+            "DateCompleted": "2024-07-17T00:00:00Z",
+            "AmountCompleted": 180
+        },
+        {
+            "UserId": 14,
+            "ChallengeId": 3,
+            "DateCompleted": "2024-07-18T00:00:00Z",
+            "AmountCompleted": 200
+        },
+        {
+            "UserId": 1,
+            "ChallengeId": 4,
+            "DateCompleted": "2024-07-12T00:00:00Z",
+            "AmountCompleted": 140
+        },
+        {
+            "UserId": 7,
+            "ChallengeId": 4,
+            "DateCompleted": "2024-07-13T00:00:00Z",
+            "AmountCompleted": 150
+        },
+        {
+            "UserId": 11,
+            "ChallengeId": 5,
+            "DateCompleted": "2024-07-14T00:00:00Z",
+            "AmountCompleted": 250
+        },
+        {
+            "UserId": 4,
+            "ChallengeId": 5,
+            "DateCompleted": "2024-07-15T00:00:00Z",
+            "AmountCompleted": 300
+        },
+        {
+            "UserId": 10,
+            "ChallengeId": 6,
+            "DateCompleted": "2024-07-16T00:00:00Z",
+            "AmountCompleted": 60
+        },
+        {
+            "UserId": 2,
+            "ChallengeId": 6,
+            "DateCompleted": "2024-07-17T00:00:00Z",
+            "AmountCompleted": 70
+        },
+        {
+            "UserId": 5,
+            "ChallengeId": 7,
+            "DateCompleted": "2024-07-18T00:00:00Z",
+            "AmountCompleted": 100
+        },
+        {
+            "UserId": 9,
+            "ChallengeId": 7,
+            "DateCompleted": "2024-07-19T00:00:00Z",
+            "AmountCompleted": 120
+        },
+        {
+            "UserId": 17,
+            "ChallengeId": 8,
+            "DateCompleted": "2024-07-12T00:00:00Z",
+            "AmountCompleted": 150
+        },
+        {
+            "UserId": 13,
+            "ChallengeId": 8,
+            "DateCompleted": "2024-07-13T00:00:00Z",
+            "AmountCompleted": 180
+        },
+        {
+            "UserId": 16,
+            "ChallengeId": 9,
+            "DateCompleted": "2024-07-14T00:00:00Z",
+            "AmountCompleted": 80
+        },
+        {
+            "UserId": 18,
+            "ChallengeId": 9,
+            "DateCompleted": "2024-07-15T00:00:00Z",
+            "AmountCompleted": 90
+        },
+        {
+            "UserId": 12,
+            "ChallengeId": 10,
+            "DateCompleted": "2024-07-16T00:00:00Z",
+            "AmountCompleted": 200
+        },
+        {
+            "UserId": 3,
+            "ChallengeId": 10,
+            "DateCompleted": "2024-07-17T00:00:00Z",
+            "AmountCompleted": 250
+        }
+    ]

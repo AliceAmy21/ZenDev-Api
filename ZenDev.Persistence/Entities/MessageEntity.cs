@@ -13,7 +13,7 @@ namespace ZenDev.Persistence.Entities
         public string MessageContent {get;set;} = string.Empty;
         public DateTimeOffset DateSent {get;set;}
         public bool Shareable {get;set;} = false;
-        public List<ChatMessageBridge> ChatMessageBridges {get;set;} = [];
-        public List<ReactionMessageBridgeEntity> ReactionMessageBridgeEntities {get;set;} = [];
+        public List<ChatMessageBridgeEntity> ChatMessageBridges {get;set;} = [];
+        public List<MessageReactionBridgeEntity> messageReactionBridges {get;set;} = [];
     }
 }

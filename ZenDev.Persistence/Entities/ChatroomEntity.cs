@@ -10,6 +10,6 @@ namespace ZenDev.Persistence.Entities
         public long GroupId {get;set;}
         [ForeignKey(nameof(GroupId))]
         public GroupEntity GroupEntity {get;set;}
-        public List<ChatMessageBridge> ChatMessageBridges {get;set;} =[];
+        public List<ChatMessageBridgeEntity> ChatMessageBridges {get;set;} =[];
     }
 }
