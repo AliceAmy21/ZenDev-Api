@@ -243,5 +243,45 @@ namespace ZenDev.BusinessLogic.Services
                 }
             }
         }
+
+        public async Task UpdateTournamentPoints(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var group = _dbContext.TournamentGroupBridge
+            .Include(groups=>groups.TournamentGroupEntity)
+            .Include(tournament=>tournament.TournamentEntity)
+            .AsQueryable();
+            var users = _dbContext.TournamentGroupUserBridge
+            .Include(users=>users.UserEntity)
+            .AsQueryable();
+            var userGroups = users.Where(user=>user.UserId == userId).Select(groups=>groups.TournamentGroupEntity.TGroupId);
+                foreach(var activity in activities){
+                    var bridges = group.Where(e=>e.TournamentEntity.ExerciseEntity.ExerciseName == activity.Exercise &&
+                    userGroups.Contains(e.TournamentGroupEntity.TGroupId));
+                    foreach(var bridge in bridges){
+                        bridge.Points += CalculatePointsGroups(activity);
+                    }
+                }
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateActivitiesForUser(long userId, List<ActivityPointsApiModel> activities)
+        {
+            foreach(var activity in activities){
+                int movingTimeInMinutes = GetMinutes(activity.MovingTime);
+                int totalPoints = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
+                ActivityRecordEntity activityRecord = new ActivityRecordEntity{
+                    UserId = userId,
+                    Points = totalPoints,
+                    Distance = activity.Distance,
+                    Duration = activity.Duration,
+                    DateTime = activity.StartDateLocal,
+                    SummaryPolyline = activity.SummaryPolyline,
+                    Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
+                    AverageSpeed = activity.AverageSpeed 
+                };
+                await _dbContext.ActivityRecords.AddAsync(activityRecord);
+            }
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

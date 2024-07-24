@@ -1,0 +1,326 @@
+[
+    {
+        "UserEmail": "alice.govender@dariel.co.za",
+        "UserName": "Alice Govender",
+        "StravaRefreshToken": "token1",
+        "Streak": 5,
+        "AvatarIconUrl": "https://picsum.photos/200?random=1",
+        "LastActive": "2023-06-01",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "ilhaan.fortuin@dariel.co.za",
+        "UserName": "Ilhaan Fortuin",
+        "StravaRefreshToken": "token2",
+        "Streak": 10,
+        "AvatarIconUrl": "https://picsum.photos/200?random=2",
+        "LastActive": "2023-06-02",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "trevarn.govender@dariel.co.za",
+        "UserName": "Trevarn Govender",
+        "StravaRefreshToken": "token3",
+        "Streak": 15,
+        "AvatarIconUrl": "https://picsum.photos/200?random=3",
+        "LastActive": "2023-06-03",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "andile.thabethe@dariel.co.za",
+        "UserName": "Andile Thabethe",
+        "StravaRefreshToken": "token4",
+        "Streak": 20,
+        "AvatarIconUrl": "",
+        "LastActive": "2023-06-04",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "peter.petersen@example.com",
+        "UserName": "Peter Petersen",
+        "StravaRefreshToken": "token5",
+        "Streak": 25,
+        "AvatarIconUrl": "https://picsum.photos/200?random=4",
+        "LastActive": "2023-06-05",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "zanele.ndlovu@example.com",
+        "UserName": "Zanele Ndlovu",
+        "StravaRefreshToken": "token6",
+        "Streak": 30,
+        "AvatarIconUrl": "https://picsum.photos/200?random=5",
+        "LastActive": "2023-06-06",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "michael.jones@example.com",
+        "UserName": "Michael Jones",
+        "StravaRefreshToken": "token7",
+        "Streak": 35,
+        "AvatarIconUrl": "https://picsum.photos/200?random=6",
+        "LastActive": "2023-06-07",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "nthabiseng.mokgoro@example.com",
+        "UserName": "Nthabiseng Mokgoro",
+        "StravaRefreshToken": "token8",
+        "Streak": 40,
+        "AvatarIconUrl": "",
+        "LastActive": "2023-06-08",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "brandon.vilakazi@example.com",
+        "UserName": "Brandon Vilakazi",
+        "StravaRefreshToken": "token9",
+        "Streak": 45,
+        "AvatarIconUrl": "https://picsum.photos/200?random=7",
+        "LastActive": "2023-06-09",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "ashley.brown@example.com",
+        "UserName": "Ashley Brown",
+        "StravaRefreshToken": "token10",
+        "Streak": 50,
+        "AvatarIconUrl": "https://picsum.photos/200?random=8",
+        "LastActive": "2023-06-10",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "thabo.masondo@example.com",
+        "UserName": "Thabo Masondo",
+        "StravaRefreshToken": "token11",
+        "Streak": 55,
+        "AvatarIconUrl": "https://picsum.photos/200?random=9",
+        "LastActive": "2023-06-11",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "lisa.williams@example.com",
+        "UserName": "Lisa Williams",
+        "StravaRefreshToken": "token12",
+        "Streak": 60,
+        "AvatarIconUrl": "",
+        "LastActive": "2023-06-12",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "kevin.jacobs@example.com",
+        "UserName": "Kevin Jacobs",
+        "StravaRefreshToken": "token13",
+        "Streak": 65,
+        "AvatarIconUrl": "https://picsum.photos/200?random=10",
+        "LastActive": "2023-06-13",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "phumzile.gumede@example.com",
+        "UserName": "Phumzile Gumede",
+        "StravaRefreshToken": "token14",
+        "Streak": 70,
+        "AvatarIconUrl": "https://picsum.photos/200?random=11",
+        "LastActive": "2023-06-14",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "charlotte.smith@example.com",
+        "UserName": "Charlotte Ann Smith",
+        "StravaRefreshToken": "token15",
+        "Streak": 75,
+        "AvatarIconUrl": "https://picsum.photos/200?random=12",
+        "LastActive": "2023-06-15",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "andile.mgomezulu@example.com",
+        "UserName": "Andile Mgomezulu",
+        "StravaRefreshToken": "token16",
+        "Streak": 80,
+        "AvatarIconUrl": "",
+        "LastActive": "2023-06-16",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "james.steyn@example.com",
+        "UserName": "James Steyn",
+        "StravaRefreshToken": "token17",
+        "Streak": 85,
+        "AvatarIconUrl": "https://picsum.photos/200?random=13",
+        "LastActive": "2023-06-17",
+        "TotalPoints": 0
+    },
+    {
+        "UserEmail": "lungile.maluleka@example.com",
+        "UserName": "Lungile Maluleka",
+        "StravaRefreshToken": "token18",
+        "Streak": 90,
+        "AvatarIconUrl": "https://picsum.photos/200?random=14",
+        "LastActive": "2023-06-18",
+        "TotalPoints": 0
+    },
+    {
+    "UserEmail": "sipho.mthembu@example.com",
+    "UserName": "Sipho Mthembu",
+    "StravaRefreshToken": "token1",
+    "Streak": 5,
+    "AvatarIconUrl": "https://picsum.photos/200?random=1",
+    "LastActive": "2023-06-01",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "john.smith@example.com",
+    "UserName": "John David Smith",
+    "StravaRefreshToken": "token2",
+    "Streak": 10,
+    "AvatarIconUrl": "https://picsum.photos/200?random=2",
+    "LastActive": "2023-06-02",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "maria.van.der.merwe@example.com",
+    "UserName": "Maria Van der Merwe",
+    "StravaRefreshToken": "token3",
+    "Streak": 15,
+    "AvatarIconUrl": "https://picsum.photos/200?random=3",
+    "LastActive": "2023-06-03",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "lerato.khumalo@example.com",
+    "UserName": "Lerato Khumalo",
+    "StravaRefreshToken": "token4",
+    "Streak": 20,
+    "AvatarIconUrl": "",
+    "LastActive": "2023-06-04",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "peter.petersen@example.com",
+    "UserName": "Peter Petersen",
+    "StravaRefreshToken": "token5",
+    "Streak": 25,
+    "AvatarIconUrl": "https://picsum.photos/200?random=4",
+    "LastActive": "2023-06-05",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "zanele.ndlovu@example.com",
+    "UserName": "Zanele Ndlovu",
+    "StravaRefreshToken": "token6",
+    "Streak": 30,
+    "AvatarIconUrl": "https://picsum.photos/200?random=5",
+    "LastActive": "2023-06-06",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "michael.jones@example.com",
+    "UserName": "Michael Jones",
+    "StravaRefreshToken": "token7",
+    "Streak": 35,
+    "AvatarIconUrl": "https://picsum.photos/200?random=6",
+    "LastActive": "2023-06-07",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "nthabiseng.mokgoro@example.com",
+    "UserName": "Nthabiseng Mokgoro",
+    "StravaRefreshToken": "token8",
+    "Streak": 40,
+    "AvatarIconUrl": "",
+    "LastActive": "2023-06-08",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "brandon.vilakazi@example.com",
+    "UserName": "Brandon Vilakazi",
+    "StravaRefreshToken": "token9",
+    "Streak": 45,
+    "AvatarIconUrl": "https://picsum.photos/200?random=7",
+    "LastActive": "2023-06-09",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "ashley.brown@example.com",
+    "UserName": "Ashley Brown",
+    "StravaRefreshToken": "token10",
+    "Streak": 50,
+    "AvatarIconUrl": "https://picsum.photos/200?random=8",
+    "LastActive": "2023-06-10",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "thabo.masondo@example.com",
+    "UserName": "Thabo Masondo",
+    "StravaRefreshToken": "token11",
+    "Streak": 55,
+    "AvatarIconUrl": "https://picsum.photos/200?random=9",
+    "LastActive": "2023-06-11",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "lisa.williams@example.com",
+    "UserName": "Lisa Williams",
+    "StravaRefreshToken": "token12",
+    "Streak": 60,
+    "AvatarIconUrl": "",
+    "LastActive": "2023-06-12",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "kevin.jacobs@example.com",
+    "UserName": "Kevin Jacobs",
+    "StravaRefreshToken": "token13",
+    "Streak": 65,
+    "AvatarIconUrl": "https://picsum.photos/200?random=10",
+    "LastActive": "2023-06-13",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "phumzile.gumede@example.com",
+    "UserName": "Phumzile Gumede",
+    "StravaRefreshToken": "token14",
+    "Streak": 70,
+    "AvatarIconUrl": "https://picsum.photos/200?random=11",
+    "LastActive": "2023-06-14",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "charlotte.smith@example.com",
+    "UserName": "Charlotte Ann Smith",
+    "StravaRefreshToken": "token15",
+    "Streak": 75,
+    "AvatarIconUrl": "https://picsum.photos/200?random=12",
+    "LastActive": "2023-06-15",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "andile.mgomezulu@example.com",
+    "UserName": "Andile Mgomezulu",
+    "StravaRefreshToken": "token16",
+    "Streak": 80,
+    "AvatarIconUrl": "",
+    "LastActive": "2023-06-16",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "james.steyn@example.com",
+    "UserName": "James Steyn",
+    "StravaRefreshToken": "token17",
+    "Streak": 85,
+    "AvatarIconUrl": "https://picsum.photos/200?random=13",
+    "LastActive": "2023-06-17",
+    "TotalPoints": 0
+    },
+    {
+    "UserEmail": "lungile.maluleka@example.com",
+    "UserName": "Lungile Maluleka",
+    "StravaRefreshToken": "token18",
+    "Streak": 90,
+    "AvatarIconUrl": "https://picsum.photos/200?random=14",
+    "LastActive": "2023-06-18",
+    "TotalPoints": 0
+    }
+]

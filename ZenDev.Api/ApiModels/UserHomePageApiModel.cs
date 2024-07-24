@@ -1,15 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ZenDev.Persistence.Entities
+namespace ZenDev.Api.ApiModels
 {
-    public class ActivityRecordEntity
+    public class UserHomePageApiModel
     {
-        [Key]
         public long ActivityRecordId {get;set;}
         public long UserId {get;set;}
-        [ForeignKey(nameof(UserId))]
-        public UserEntity UserEntities {get;set;}
         public long Points {get;set;}
         public double? Distance {get;set;}
         public long? Duration {get;set;}
@@ -17,5 +16,6 @@ namespace ZenDev.Persistence.Entities
         public string SummaryPolyline { get; set; } = string.Empty;
         public double Calories { get; set; }
         public double AverageSpeed { get; set; }
+        public List<int> ActiveDays {get;set;} = [];
     }
 }

@@ -68,6 +68,10 @@ namespace ZenDev.Api.Controllers
 
                 await _pointsService.UpdatePointsGroups(userId,pointsModels);
                 await _pointsService.UpdateAmountCompleteChallenges(userId,pointsModels);
+                await _pointsService.UpdateTournamentPoints(userId,pointsModels);
+                
+
+                await _pointsService.UpdateActivitiesForUser(userId,pointsModels);
                 
                 // Only update the last synced date after the calculations have completed successfully
                 var newSyncDate = await _pointsService.SetLastSyncedDateAsync(userId);

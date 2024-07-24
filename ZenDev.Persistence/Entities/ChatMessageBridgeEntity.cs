@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZenDev.Persistence.Entities
 {
-    public class ChatMessageBridge
+    public class ChatMessageBridgeEntity
     {
         [Key]
         public long ChatMessageId {get;set;}

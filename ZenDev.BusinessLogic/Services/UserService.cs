@@ -119,5 +119,34 @@ namespace ZenDev.BusinessLogic.Services
             int diff = (7 + (currentDate.DayOfWeek - startOfWeek)) % 7; //Gets the number of days to subtract to get to the start of the week
             return currentDate.AddDays(-diff).Date; // .Date is used to set the time to midnight
         }
+
+        public async Task<UserHomePageModel> GetLatestActivityRecord(long userId)
+        {
+            var userActivities = _dbContext.ActivityRecords.Where(u=>u.UserId == userId).OrderByDescending(d=>d.DateTime);
+            var records = userActivities.ToListAsync().Result.ElementAt(0);
+            List<int> activeDays = [0,0,0,0,0,0,0];
+            var day = Convert.ToInt32(DateTime.Now.DayOfWeek);
+            for(int i = 0 ; i<=day;i++){
+                int j = day - i;
+                var date = DateTime.Now.AddDays(-j);
+                if(await userActivities.AnyAsync(d=>d.DateTime == date)){
+                    activeDays[i] = 1;
+                }
+            }
+            UserHomePageModel userHomePageModel = new UserHomePageModel{
+                ActivityRecordId = records.ActivityRecordId,
+                UserId = records.UserId,
+                Points = records.Points,
+                Distance = records.Distance,
+                Duration = records.Duration,
+                DateTime = records.DateTime,
+                SummaryPolyline = records.SummaryPolyline,
+                Calories = records.Calories,
+                AverageSpeed = records.AverageSpeed,
+                ActiveDays = activeDays,
+            };
+            
+            return userHomePageModel;
+        }
     }
 }
