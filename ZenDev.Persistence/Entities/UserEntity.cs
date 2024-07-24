@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ZenDev.Persistence.Entities
@@ -23,12 +24,11 @@ namespace ZenDev.Persistence.Entities
 
         public DateTimeOffset? LastSynced { get; set; }
 
+        [DefaultValue(0)]
         public long TotalPoints { get; set; }
 
         public List<UserGroupBridgeEntity> UserGroupBridgeEntities { get; set; } = [];
 
         public List<UserChallengeBridgeEntity> UserChallengeBridgeEntities {get;set;} = [];
-
-        public List<ReactionMessageBridgeEntity> ReactionMessageBridgeEntities {get;set;} = [];
     }
 }

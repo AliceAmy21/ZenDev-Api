@@ -86,6 +86,15 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserInviteModel))
                 .ReverseMap();
             CreateMap<MindfulnessEntity, MindfulnessApiModel>().ReverseMap();
+            CreateMap<UserEntity,UserInviteApiModel>().ReverseMap();
+            CreateMap<MessageModel,MessageApiModel>()
+                .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserEntity))
+                .ForMember(dest => dest.ReactionApiModels, opt => opt.MapFrom(src => src.ReactionEntities))
+                .ReverseMap();
+            CreateMap<ReactionEntity,ReactionApiModel>()
+                .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserEntity))
+                .ReverseMap();
+            CreateMap<ReactionModel,ReactionApiModel>().ReverseMap();
         }
     }
 }

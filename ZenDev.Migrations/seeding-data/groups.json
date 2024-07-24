@@ -1,0 +1,163 @@
+[
+    {
+      "GroupId": 1,
+      "GroupName": "Running Club",
+      "GroupDescription": "A club for running enthusiasts",
+      "GroupIconUrl": "https://example.com/icons/running.png",
+      "ExerciseTypeId": 1,
+      "MemberCount": 50
+    },
+    {
+      "GroupId": 2,
+      "GroupName": "Hiking Adventure",
+      "GroupDescription": "Explore nature through hiking trails",
+      "GroupIconUrl": "https://example.com/icons/hiking.png",
+      "ExerciseTypeId": 4,
+      "MemberCount": 30
+    },
+    {
+      "GroupId": 3,
+      "GroupName": "Cycling Team",
+      "GroupDescription": "Team for cyclists who love riding",
+      "GroupIconUrl": "https://example.com/icons/cycling.png",
+      "ExerciseTypeId": 6,
+      "MemberCount": 25
+    },
+    {
+      "GroupId": 4,
+      "GroupName": "Water Sports Group",
+      "GroupDescription": "Enjoy various water sports activities",
+      "GroupIconUrl": "https://example.com/icons/watersports.png",
+      "ExerciseTypeId": 15,
+      "MemberCount": 40
+    },
+    {
+      "GroupId": 5,
+      "GroupName": "Fitness Warriors",
+      "GroupDescription": "Group dedicated to fitness training",
+      "GroupIconUrl": "https://example.com/icons/fitness.png",
+      "ExerciseTypeId": 38,
+      "MemberCount": 60
+    },
+    {
+      "GroupId": 6,
+      "GroupName": "Yoga Enthusiasts",
+      "GroupDescription": "Practice yoga for health and relaxation",
+      "GroupIconUrl": "https://example.com/icons/yoga.png",
+      "ExerciseTypeId": 49,
+      "MemberCount": 20
+    },
+    {
+      "GroupId": 7,
+      "GroupName": "Team Sports Fans",
+      "GroupDescription": "Fans of various team sports",
+      "GroupIconUrl": "https://example.com/icons/teamsports.png",
+      "ExerciseTypeId": 35,
+      "MemberCount": 75
+    },
+    {
+      "GroupId": 8,
+      "GroupName": "Extreme Sports Club",
+      "GroupDescription": "Adrenaline junkies unite!",
+      "GroupIconUrl": "https://example.com/icons/extremesports.png",
+      "ExerciseTypeId": 30,
+      "MemberCount": 15
+    },
+    {
+      "GroupId": 9,
+      "GroupName": "Golfers Club",
+      "GroupDescription": "Golf enthusiasts and players",
+      "GroupIconUrl": "https://example.com/icons/golf.png",
+      "ExerciseTypeId": 31,
+      "MemberCount": 45
+    },
+    {
+      "GroupId": 10,
+      "GroupName": "Indoor Sports Fans",
+      "GroupDescription": "Love playing indoor sports",
+      "GroupIconUrl": "https://example.com/icons/indoorsports.png",
+      "ExerciseTypeId": 41,
+      "MemberCount": 55
+    },
+    {
+      "GroupId": 11,
+      "GroupName": "Fitness Bootcamp",
+      "GroupDescription": "Intense fitness training sessions",
+      "GroupIconUrl": "https://example.com/icons/bootcamp.png",
+      "ExerciseTypeId": 21,
+      "MemberCount": 35
+    },
+    {
+      "GroupId": 12,
+      "GroupName": "Adventure Seekers",
+      "GroupDescription": "Seeking adventures and challenges",
+      "GroupIconUrl": "https://example.com/icons/adventure.png",
+      "ExerciseTypeId": 2,
+      "MemberCount": 28
+    },
+    {
+      "GroupId": 13,
+      "GroupName": "Martial Arts Group",
+      "GroupDescription": "Training in various martial arts disciplines",
+      "GroupIconUrl": "https://example.com/icons/martialarts.png",
+      "ExerciseTypeId": 34,
+      "MemberCount": 42
+    },
+    {
+      "GroupId": 14,
+      "GroupName": "Summer Sports Camp",
+      "GroupDescription": "Camp for summer sports activities",
+      "GroupIconUrl": "https://example.com/icons/summercamp.png",
+      "ExerciseTypeId": 18,
+      "MemberCount": 65
+    },
+    {
+      "GroupId": 15,
+      "GroupName": "Winter Sports Club",
+      "GroupDescription": "Winter sports enthusiasts",
+      "GroupIconUrl": "https://example.com/icons/wintersports.png",
+      "ExerciseTypeId": 23,
+      "MemberCount": 32
+    },
+    {
+      "GroupId": 16,
+      "GroupName": "Fitness Dance Group",
+      "GroupDescription": "Dance for fitness and fun",
+      "GroupIconUrl": "https://example.com/icons/dance.png",
+      "ExerciseTypeId": 22,
+      "MemberCount": 48
+    },
+    {
+      "GroupId": 17,
+      "GroupName": "Tennis Team",
+      "GroupDescription": "Team for tennis players",
+      "GroupIconUrl": "https://example.com/icons/tennis.png",
+      "ExerciseTypeId": 33,
+      "MemberCount": 22
+    },
+    {
+      "GroupId": 18,
+      "GroupName": "Squash Club",
+      "GroupDescription": "Club for squash players",
+      "GroupIconUrl": "https://example.com/icons/squash.png",
+      "ExerciseTypeId": 47,
+      "MemberCount": 27
+    },
+    {
+      "GroupId": 19,
+      "GroupName": "Pickleball Group",
+      "GroupDescription": "Play pickleball and have fun",
+      "GroupIconUrl": "https://example.com/icons/pickleball.png",
+      "ExerciseTypeId": 44,
+      "MemberCount": 38
+    },
+    {
+      "GroupId": 20,
+      "GroupName": "Community Workout",
+      "GroupDescription": "Community workouts for everyone",
+      "GroupIconUrl": "https://example.com/icons/communityworkout.png",
+      "ExerciseTypeId": 39,
+      "MemberCount": 50
+    }
+  ]
+  
