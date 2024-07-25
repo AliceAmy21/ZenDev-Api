@@ -11,31 +11,31 @@ namespace ZenDev.Migrations
         public ZenDevDbContext _dbContext;
         public ExerciseEntity[] _exercises;
         public ExerciseTypeEntity[] _exerciseTypes;
+        public AchievementEntity[] _achievements;
         public UserEntity[] _users;
         public GroupEntity[] _groups;
         public UserGroupBridgeEntity[] _ugBridge;
         public ChallengeEntity[] _challenges;
         public UserChallengeBridgeEntity[] _ucBridge;
 
-
-
         public DbSeeder(ZenDevDbContext dbContext)
         {
             _dbContext = dbContext;
             _exercises = [];
             _exerciseTypes = [];
+            _achievements = [];
             _users =[];
             _ugBridge = [];
             _ucBridge = [];
             _challenges = [];
             _groups = [];
-
         }
 
         public void SeedData()
         {
             AddExercises();
             AddExerciseTypes();
+            AddAchievements();
             AddUsers();
             AddGroups();
             AddBridgeUG();
@@ -99,6 +99,30 @@ namespace ZenDev.Migrations
             if (!_dbContext.ExerciseTypes.Any())
             {
                 _dbContext.ExerciseTypes.AddRange(_exerciseTypes);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        private void AddAchievements()
+        {
+            var jsonData = ReadJSON<AchievementConfig>(Constants.ACHIEVEMENTS_FILE_NAME);
+            
+            var achievementsLength = jsonData.Length;
+            _achievements = new AchievementEntity[achievementsLength];
+
+            for (int i = 0; i < achievementsLength; i++)
+            {
+                _achievements[i] = new AchievementEntity
+                {
+                    AchievementName = jsonData[i].AchievementName,
+                    AchievementDescription = jsonData[i].AchievementDescription,
+                    AchievementIcon = jsonData[i].AchievementIcon,
+                };
+            }
+
+            if (!_dbContext.Achievements.Any())
+            {
+                _dbContext.Achievements.AddRange(_achievements);
                 _dbContext.SaveChanges();
             }
         }

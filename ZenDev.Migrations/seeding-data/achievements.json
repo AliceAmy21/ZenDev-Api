@@ -1,0 +1,52 @@
+[
+    {
+        "AchievementName": "7 Day Streak",
+        "AchievementDescription": "Login consecutively for 1 week",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\001-rosette.png"
+    },
+    {
+        "AchievementName": "30 Day Streak",
+        "AchievementDescription": "Login consecutively for 1 month",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\003-badge.png"
+    },
+    {
+        "AchievementName": "50 Day Streak",
+        "AchievementDescription": "Login consecutively for 50 days",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\006-success-1.png"
+    },
+    {
+        "AchievementName": "90 Day Streak",
+        "AchievementDescription": "Login consecutively for 3 months",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\002-trophy.png"
+    },
+    {
+        "AchievementName": "180 Day Streak",
+        "AchievementDescription": "Login consecutively for 6 months",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\005-success.png"
+    },
+    {
+        "AchievementName": "1000 pts",
+        "AchievementDescription": "Accumulated a total of 1000 points",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\008-shoes.png"
+    },
+    {
+        "AchievementName": "2500 pts",
+        "AchievementDescription": "Accumulated a total of 2500 points",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\009-workout.png"
+    },
+    {
+        "AchievementName": "5000 pts",
+        "AchievementDescription": "Accumulated a total of 5000 points",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\007-treadmill.png"
+    },
+    {
+        "AchievementName": "7500 pts",
+        "AchievementDescription": "Accumulated a total of 7500 points",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\010-bench-press.png"
+    },
+    {
+        "AchievementName": "10000 pts",
+        "AchievementDescription": "Accumulated a total of 10000 points",
+        "AchievementIcon": "..\\assets\\AchievementIcons\\004-achieving-goals.png"
+    }
+]
