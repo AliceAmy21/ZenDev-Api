@@ -73,5 +73,16 @@ namespace ZenDev.BusinessLogic.Services
             if(reactionEntity!=null)
                 _dbContext.Reactions.Remove(reactionEntity);
         }
+
+        public async Task<ChatroomEntity> GetChatroom(long groupId)
+        {
+            return await _dbContext.Chatrooms.FirstOrDefaultAsync(c => c.GroupId == groupId);
+        }
+
+        //public async Task<ChatroomModel> GetGroupInfo(long groupId)
+        //{
+        //    var group = _dbContext.Groups
+        //        .Include(group )
+        //}
     }
 }

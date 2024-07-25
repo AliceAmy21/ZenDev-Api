@@ -95,6 +95,7 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserEntity))
                 .ReverseMap();
             CreateMap<ReactionModel,ReactionApiModel>().ReverseMap();
+            CreateMap<ChatroomEntity, ChatroomApiModel>().ReverseMap();
         }
     }
 }

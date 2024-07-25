@@ -9,9 +9,11 @@ namespace ZenDev.SignalRHost.Hubs
     public class ChatroomHub : Hub<IExampleClient>
     {
         public const string HUB_IDENTIFIER = "chatroom-hub";
+        
 
         public static readonly Dictionary<string, long> _chatConnections = new Dictionary<string, long>();
         public static readonly Dictionary<long, string> _chatUsers = new Dictionary<long, string>();
+        
         public async Task JoinChat(long userId, string userName)
         {
             if (string.IsNullOrEmpty(userName))
@@ -26,10 +28,13 @@ namespace ZenDev.SignalRHost.Hubs
             _chatConnections.Add(Context.ConnectionId, userId);
             _chatUsers.Add(userId, userName);
             
-            
-
             await Clients.Caller.JoinChatSuccessful(Context.ConnectionId);
            
+        }
+
+        public async Task JoinGroup(long groupId, long chatId)
+        {
+            var chatRoom = 
         }
 
         public async Task SendMessage(string message)

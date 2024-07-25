@@ -100,10 +100,13 @@ namespace ZenDev.BusinessLogic.Services
                 Points = 0,
             };
 
+            
+
             try
             {
                 await _dbContext.AddAsync(group);
                 await _dbContext.SaveChangesAsync();
+                
                 userGroupBridge.GroupId = group.GroupId;
                 UserGroupBridgeEntity newUserGroupBridge = CreateUserGroupBridge(userGroupBridge);
             }
@@ -112,6 +115,14 @@ namespace ZenDev.BusinessLogic.Services
                 _logger.LogError(ex, "Failed to create group");
                 return new GroupResultModel();
             }
+
+            ChatroomEntity chatroom = new()
+            {
+                GroupId = group.GroupId,
+
+            };
+            await _dbContext.AddAsync(chatroom);
+            await _dbContext.SaveChangesAsync();
 
             groupResult.GroupId = group.GroupId;
             return groupResult;
