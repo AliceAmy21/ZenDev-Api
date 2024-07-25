@@ -301,8 +301,10 @@ namespace ZenDev.BusinessLogic.Services
                     SummaryPolyline = activity.SummaryPolyline,
                     Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
                     AverageSpeed = activity.AverageSpeed,
-                    StartLatlng = activity.StartLatlng,
-                    EndLatlng = activity.EndLatlng
+                    StartLatitiude = activity.StartLatitiude,
+                    StartLongitude = activity.StartLongitude,
+                    EndLatitude = activity.EndLatitude,
+                    EndLongitude = activity.EndLongitude
                 };
                 await _dbContext.ActivityRecords.AddAsync(activityRecord);
                 await _dbContext.SaveChangesAsync();

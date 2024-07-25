@@ -167,8 +167,10 @@ namespace ZenDev.Persistence.Migrations
                     SummaryPolyline = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Calories = table.Column<double>(type: "float", nullable: false),
                     AverageSpeed = table.Column<double>(type: "float", nullable: false),
-                    StartLatlng = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EndLatlng = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StartLatitiude = table.Column<double>(type: "float", nullable: false),
+                    StartLongitude = table.Column<double>(type: "float", nullable: false),
+                    EndLatitude = table.Column<double>(type: "float", nullable: false),
+                    EndLongitude = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {

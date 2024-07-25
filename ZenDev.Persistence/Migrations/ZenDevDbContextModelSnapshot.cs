@@ -72,9 +72,11 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long?>("Duration")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("EndLatlng")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("EndLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("EndLongitude")
+                        .HasColumnType("float");
 
                     b.Property<long>("ExerciseId")
                         .HasColumnType("bigint");
@@ -82,9 +84,11 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long>("Points")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("StartLatlng")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("StartLatitiude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("StartLongitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("SummaryPolyline")
                         .IsRequired()
