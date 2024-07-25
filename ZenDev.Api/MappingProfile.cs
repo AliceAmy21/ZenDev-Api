@@ -82,10 +82,6 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.ElapsedTime))
                 .ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
                 .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.Map.SummaryPolyline))
-                .ForMember(dest => dest.StartLatitiude, opt => opt.MapFrom(src => src.StartLatlng[0]))
-                .ForMember(dest => dest.StartLongitude, opt => opt.MapFrom(src => src.StartLatlng[1]))
-                .ForMember(dest => dest.EndLatitude, opt => opt.MapFrom(src => src.EndLatlng[0]))
-                .ForMember(dest => dest.EndLongitude, opt => opt.MapFrom(src => src.EndLatlng[1]))
                 .ReverseMap();
             CreateMap<LeaderBoardListModel,LeaderBoardListApiModel>()
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserInviteModel))

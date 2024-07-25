@@ -291,23 +291,47 @@ namespace ZenDev.BusinessLogic.Services
             foreach(var activity in activities){
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
                 int totalPoints = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
-                ActivityRecordEntity activityRecord = new ActivityRecordEntity{
-                    UserId = userId,
-                    ExerciseId = _dbContext.Exercises.FirstOrDefault(e=> e.ExerciseName == activity.Exercise).ExerciseId,
-                    Points = totalPoints,
-                    Distance = activity.Distance,
-                    Duration = activity.Duration,
-                    DateTime = activity.StartDateLocal,
-                    SummaryPolyline = activity.SummaryPolyline,
-                    Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
-                    AverageSpeed = activity.AverageSpeed,
-                    StartLatitiude = activity.StartLatitiude,
-                    StartLongitude = activity.StartLongitude,
-                    EndLatitude = activity.EndLatitude,
-                    EndLongitude = activity.EndLongitude
-                };
-                await _dbContext.ActivityRecords.AddAsync(activityRecord);
-                await _dbContext.SaveChangesAsync();
+                var ex = _dbContext.Exercises.FirstOrDefault(e=> e.ExerciseName == activity.Exercise);
+                if(ex != null){
+                    if(activity.EndLatlng.Count() > 0 && activity.StartLatlng.Count() > 0){
+                        ActivityRecordEntity activityRecord = new ActivityRecordEntity{
+                            UserId = userId,
+                            ExerciseId = ex.ExerciseId,
+                            Points = totalPoints,
+                            Distance = activity.Distance,
+                            Duration = activity.Duration,
+                            DateTime = activity.StartDateLocal,
+                            SummaryPolyline = activity.SummaryPolyline,
+                            Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
+                            AverageSpeed = activity.AverageSpeed,
+                            StartLatitiude = activity.StartLatlng[0],
+                            StartLongitude = activity.StartLatlng[1],
+                            EndLatitude = activity.EndLatlng[0],
+                            EndLongitude = activity.EndLatlng[1]
+                        };
+                        await _dbContext.ActivityRecords.AddAsync(activityRecord);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    else{
+                        ActivityRecordEntity activityRecord = new ActivityRecordEntity{
+                            UserId = userId,
+                            ExerciseId = ex.ExerciseId,
+                            Points = totalPoints,
+                            Distance = activity.Distance,
+                            Duration = activity.Duration,
+                            DateTime = activity.StartDateLocal,
+                            SummaryPolyline = activity.SummaryPolyline,
+                            Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
+                            AverageSpeed = activity.AverageSpeed,
+                            StartLatitiude = 0,
+                            StartLongitude = 0,
+                            EndLatitude = 0,
+                            EndLongitude = 0
+                        };
+                        await _dbContext.ActivityRecords.AddAsync(activityRecord);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
             }
         }
     }
