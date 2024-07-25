@@ -15,5 +15,8 @@
         public string SummaryPolyline { get; set; } = string.Empty;
         public double Kilojoules { get; set; }
         public double AverageSpeed { get; set; }
+        public List<double> StartLatlng { get; set; }
+        public List<double> EndLatlng { get; set; }
+
     }
 }

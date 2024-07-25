@@ -159,17 +159,26 @@ namespace ZenDev.Persistence.Migrations
                     ActivityRecordId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ExerciseId = table.Column<long>(type: "bigint", nullable: false),
                     Points = table.Column<long>(type: "bigint", nullable: false),
                     Distance = table.Column<double>(type: "float", nullable: true),
                     Duration = table.Column<long>(type: "bigint", nullable: true),
                     DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     SummaryPolyline = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Calories = table.Column<double>(type: "float", nullable: false),
-                    AverageSpeed = table.Column<double>(type: "float", nullable: false)
+                    AverageSpeed = table.Column<double>(type: "float", nullable: false),
+                    StartLatlng = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EndLatlng = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ActivityRecords", x => x.ActivityRecordId);
+                    table.ForeignKey(
+                        name: "FK_ActivityRecords_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ActivityRecords_Users_UserId",
                         column: x => x.UserId,
@@ -541,6 +550,11 @@ namespace ZenDev.Persistence.Migrations
                         principalColumn: "MessageId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityRecords_ExerciseId",
+                table: "ActivityRecords",
+                column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ActivityRecords_UserId",

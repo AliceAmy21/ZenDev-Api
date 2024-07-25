@@ -17,5 +17,7 @@ namespace ZenDev.BusinessLogic.Models
         public double Calories { get; set; }
         public double AverageSpeed { get; set; }
         public List<int> ActiveDays {get;set;} = [];
+        public List<double> StartLatlng { get; set; }
+        public List<double> EndLatlng { get; set; }
     }
 }

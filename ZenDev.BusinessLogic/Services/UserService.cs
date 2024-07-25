@@ -144,6 +144,8 @@ namespace ZenDev.BusinessLogic.Services
                 Calories = records.Calories,
                 AverageSpeed = records.AverageSpeed,
                 ActiveDays = activeDays,
+                StartLatlng = records.StartLatlng,
+                EndLatlng = records.EndLatlng
             };
             
             return userHomePageModel;

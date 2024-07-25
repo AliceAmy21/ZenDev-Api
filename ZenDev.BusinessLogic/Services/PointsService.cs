@@ -102,6 +102,28 @@ namespace ZenDev.BusinessLogic.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task UpdateGoalCompletion(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var personalGoals = _dbContext.PersonalGoals
+            .Include(exercise => exercise.ExerciseEntity)
+            .AsQueryable();
+
+            foreach(var activity in activities){
+                var goals = personalGoals.Where(g => g.UserId == userId && 
+                g.ExerciseEntity.ExerciseName == activity.Exercise &&
+                g.GoalStartDate <= activity.StartDateLocal &&
+                g.GoalEndDate >= activity.StartDateLocal);
+
+                foreach(var goal in goals){
+                    if(goal.MeasurementUnit == "Distance")
+                        goal.AmountCompleted += Convert.ToInt64(activity.Distance);
+                    else
+                        goal.AmountCompleted += Convert.ToInt64(activity.Duration);
+                }
+            }
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task UpdateAmountCompleteChallenges(long userId, List<ActivityPointsApiModel> activities)
         {
             var challenge = _dbContext.UserChallengeBridge
@@ -271,17 +293,20 @@ namespace ZenDev.BusinessLogic.Services
                 int totalPoints = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
                 ActivityRecordEntity activityRecord = new ActivityRecordEntity{
                     UserId = userId,
+                    ExerciseId = _dbContext.Exercises.FirstOrDefault(e=> e.ExerciseName == activity.Exercise).ExerciseId,
                     Points = totalPoints,
                     Distance = activity.Distance,
                     Duration = activity.Duration,
                     DateTime = activity.StartDateLocal,
                     SummaryPolyline = activity.SummaryPolyline,
                     Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
-                    AverageSpeed = activity.AverageSpeed 
+                    AverageSpeed = activity.AverageSpeed,
+                    StartLatlng = activity.StartLatlng,
+                    EndLatlng = activity.EndLatlng
                 };
                 await _dbContext.ActivityRecords.AddAsync(activityRecord);
+                await _dbContext.SaveChangesAsync();
             }
-            await _dbContext.SaveChangesAsync();
         }
     }
 }
