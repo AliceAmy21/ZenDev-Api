@@ -5,6 +5,7 @@ using ZenDev.Common.Models;
 using ZenDev.Persistence;
 using ZenDev.Persistence.Entities;
 using Microsoft.Extensions.Logging;
+using System.Data.Common;
 
 namespace ZenDev.BusinessLogic.Services
 {
@@ -256,7 +257,7 @@ namespace ZenDev.BusinessLogic.Services
                         };
                         _dbContext.Add(newStreakAchievement);
                         _dbContext.SaveChanges();
-                         _logger.LogInformation("New Achievement Unlocked with name " + streakAchievements[i].AchievementName);
+                        _logger.LogInformation("New Achievement Unlocked with name " + streakAchievements[i].AchievementName);
                     }
                 }
                 else
@@ -288,15 +289,19 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task UpdateActivitiesForUser(long userId, List<ActivityPointsApiModel> activities)
         {
+            var exercies = _dbContext.Exercises.ToList();
+            List<(long id, string name)> exercises2 = [];
+            foreach(var exs in exercies){
+                exercises2.Add((exs.ExerciseId,String.Join("",exs.ExerciseName.Split(' '))));
+            }
             foreach(var activity in activities){
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
                 int totalPoints = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
                 var ex = _dbContext.Exercises.FirstOrDefault(e=> e.ExerciseName == activity.Exercise);
-                if(ex != null){
                     if(activity.EndLatlng.Count() > 0 && activity.StartLatlng.Count() > 0){
                         ActivityRecordEntity activityRecord = new ActivityRecordEntity{
                             UserId = userId,
-                            ExerciseId = ex.ExerciseId,
+                            ExerciseId = exercises2.FirstOrDefault(e => e.name == activity.Exercise).id,
                             Points = totalPoints,
                             Distance = activity.Distance,
                             Duration = activity.Duration,
@@ -315,7 +320,7 @@ namespace ZenDev.BusinessLogic.Services
                     else{
                         ActivityRecordEntity activityRecord = new ActivityRecordEntity{
                             UserId = userId,
-                            ExerciseId = ex.ExerciseId,
+                            ExerciseId = exercises2.FirstOrDefault(e => e.name == activity.Exercise).id,
                             Points = totalPoints,
                             Distance = activity.Distance,
                             Duration = activity.Duration,
@@ -331,7 +336,6 @@ namespace ZenDev.BusinessLogic.Services
                         await _dbContext.ActivityRecords.AddAsync(activityRecord);
                         await _dbContext.SaveChangesAsync();
                     }
-                }
             }
         }
     }
