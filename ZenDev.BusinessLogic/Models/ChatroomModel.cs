@@ -7,13 +7,14 @@ using ZenDev.Persistence.Entities;
 
 namespace ZenDev.BusinessLogic.Models
 {
-    internal class ChatroomModel
+    public class ChatroomModel
     {
         public long ChatId { get; set; }
-        public required GroupEntity GroupEntity { get; set; }
+        public GroupEntity GroupEntity { get; set; }
         public long GroupId { get; set; } 
         public string GroupName {  get; set; }
-        public string GroupIconUrl {  get; set; }
-        
+        public string GroupIconUrl { get; set; }
+        public string LastMessage { get; set; }
+
     }
 }

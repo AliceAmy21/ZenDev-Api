@@ -21,7 +21,8 @@ namespace ZenDev.Api.Controllers
 
         [HttpGet(nameof(GetAllMessagesForChat))]
         public async Task<ActionResult<List<MessageApiModel>>> GetAllMessagesForChat(long groupId){
-            return Ok(_mapper.Map<List<MessageApiModel>>(_messageService.GetAllMessagesForChat(groupId)));
+            var messages = await _messageService.GetAllMessagesForChat(groupId);
+            return Ok(_mapper.Map<List<MessageApiModel>>(messages));
         }
 
         [HttpGet(nameof(GetChatroom))]
@@ -33,7 +34,16 @@ namespace ZenDev.Api.Controllers
 
             return Ok(_mapper.Map<ChatroomApiModel>(result));
         }
-        
+
+        [HttpGet(nameof (GetAllChatsByUserId))]
+        public async Task<ActionResult<List<ChatroomModel>>> GetAllChatsByUserId(long userId)
+        {
+            var result = await _messageService.GetAllChatsByUserId(userId);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
+
 
         [HttpPost(nameof(AddReactionToMessage))]
         public async Task AddReactionToMessage(ReactionApiModel reactionApi){
