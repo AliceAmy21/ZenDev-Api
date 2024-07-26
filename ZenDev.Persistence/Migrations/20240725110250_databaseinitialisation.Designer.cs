@@ -12,7 +12,7 @@ using ZenDev.Persistence;
 namespace ZenDev.Persistence.Migrations
 {
     [DbContext(typeof(ZenDevDbContext))]
-    [Migration("20240723130530_databaseinitialisation")]
+    [Migration("20240725110250_databaseinitialisation")]
     partial class databaseinitialisation
     {
         /// <inheritdoc />
@@ -75,8 +75,23 @@ namespace ZenDev.Persistence.Migrations
                     b.Property<long?>("Duration")
                         .HasColumnType("bigint");
 
+                    b.Property<double>("EndLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("EndLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<long>("ExerciseId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("Points")
                         .HasColumnType("bigint");
+
+                    b.Property<double>("StartLatitiude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("StartLongitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("SummaryPolyline")
                         .IsRequired()
@@ -86,6 +101,8 @@ namespace ZenDev.Persistence.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("ActivityRecordId");
+
+                    b.HasIndex("ExerciseId");
 
                     b.HasIndex("UserId");
 
@@ -632,6 +649,9 @@ namespace ZenDev.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserId"));
 
+                    b.Property<DateTimeOffset>("ActiveWeek")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("AvatarIconUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -661,6 +681,9 @@ namespace ZenDev.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("WeekPoints")
+                        .HasColumnType("bigint");
 
                     b.HasKey("UserId");
 
@@ -698,13 +721,21 @@ namespace ZenDev.Persistence.Migrations
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.ActivityRecordEntity", b =>
                 {
-                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntities")
+                    b.HasOne("ZenDev.Persistence.Entities.ExerciseEntity", "ExerciseEntity")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZenDev.Persistence.Entities.UserEntity", "UserEntity")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserEntities");
+                    b.Navigation("ExerciseEntity");
+
+                    b.Navigation("UserEntity");
                 });
 
             modelBuilder.Entity("ZenDev.Persistence.Entities.ChallengeEntity", b =>

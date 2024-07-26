@@ -9,7 +9,10 @@ namespace ZenDev.Persistence.Entities
         public long ActivityRecordId {get;set;}
         public long UserId {get;set;}
         [ForeignKey(nameof(UserId))]
-        public UserEntity UserEntities {get;set;}
+        public UserEntity UserEntity {get;set;}
+        public long ExerciseId {get;set;}
+        [ForeignKey(nameof(ExerciseId))]
+        public ExerciseEntity ExerciseEntity {get;set;}
         public long Points {get;set;}
         public double? Distance {get;set;}
         public long? Duration {get;set;}
@@ -17,5 +20,9 @@ namespace ZenDev.Persistence.Entities
         public string SummaryPolyline { get; set; } = string.Empty;
         public double Calories { get; set; }
         public double AverageSpeed { get; set; }
+        public double StartLatitiude { get; set; }
+        public double StartLongitude { get; set; }
+        public double EndLatitude { get; set; }
+        public double EndLongitude { get; set; }
     }
 }
