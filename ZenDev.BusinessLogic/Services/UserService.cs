@@ -60,6 +60,7 @@ namespace ZenDev.BusinessLogic.Services
                 }
 
                 user.ActiveWeek = GetStartOfWeek(DayOfWeek.Monday);
+                _logger.LogInformation(user.ActiveWeek + " Start of the week");
                 var newUser = await _dbContext.AddAsync(user);
                 await _dbContext.SaveChangesAsync();
                 result.UserId = newUser.Entity.UserId;

@@ -26,7 +26,7 @@ namespace ZenDev.BusinessLogic.Services
             var user = _dbContext.Users.FirstOrDefault(user => user.UserId == userId);
             foreach (var activity in activities)
             {
-                var startOfWeek = GetStartOfWeek(activity.StartDateLocal.DayOfWeek);
+                var startOfWeek = GetStartOfWeek(activity.StartDateLocal, DayOfWeek.Monday);
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
                 int points = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
 
@@ -116,10 +116,17 @@ namespace ZenDev.BusinessLogic.Services
                 g.GoalEndDate >= activity.StartDateLocal);
 
                 foreach(var goal in goals){
-                    if(goal.MeasurementUnit == "Distance")
-                        goal.AmountCompleted += Convert.ToInt64(activity.Distance);
+                    if (goal.AmountCompleted >= goal.AmountToComplete)
+                    {
+                        goal.AmountCompleted = goal.AmountToComplete;
+                    }
                     else
-                        goal.AmountCompleted += Convert.ToInt64(activity.Duration);
+                    {
+                        if(goal.MeasurementUnit == "Distance")
+                            goal.AmountCompleted += Convert.ToInt64(activity.Distance)/1000;
+                        else
+                            goal.AmountCompleted += Convert.ToInt64(activity.Duration)/60;
+                    }
                 }
             }
             await _dbContext.SaveChangesAsync();
@@ -137,10 +144,18 @@ namespace ZenDev.BusinessLogic.Services
                 challenges.ChallengeEntity.ChallengeStartDate <= activity.StartDateLocal &&
                 challenges.ChallengeEntity.ChallengeEndDate >= activity.StartDateLocal);
                 foreach(var bridge in bridges){
-                    if(bridge.ChallengeEntity.Measurement == Persistence.Constants.Measurement.Distance)
-                        bridge.AmountCompleted += Convert.ToInt64(activity.Distance);
-                    else
-                        bridge.AmountCompleted += Convert.ToInt64(activity.Duration);
+                    if (bridge.AmountCompleted >= bridge.ChallengeEntity.AmountToComplete)
+                    {
+                        bridge.AmountCompleted = bridge.ChallengeEntity.AmountToComplete;
+                    }
+                    else 
+                    {
+                        if(bridge.ChallengeEntity.Measurement == Persistence.Constants.Measurement.Distance)
+                            bridge.AmountCompleted += Convert.ToInt64(activity.Distance)/1000;
+                        else
+                            bridge.AmountCompleted += Convert.ToInt64(activity.Duration)/60;
+                    }
+                    
                 }
             }
             await _dbContext.SaveChangesAsync();
@@ -152,9 +167,18 @@ namespace ZenDev.BusinessLogic.Services
             .Include(challenge=>challenge.GroupEntity)
             .Include(exercise => exercise.GroupEntity.ExerciseTypeEntity)
             .AsQueryable();
+
+            var exercies = _dbContext.Exercises.ToList();
+            List<(long id, string name)> exercises2 = [];
+            foreach(var exs in exercies){
+                exercises2.Add((exs.ExerciseId,String.Join("",exs.ExerciseName.Split(' '))));
+            }
+
             foreach(var activity in activities){
+                var exerciseName = exercises2.FirstOrDefault(e => e.name == activity.Exercise);
                 var bridges = group.Where(groups => groups.UserId == userId && 
-                groups.GroupEntity.ExerciseTypeEntity.ExerciseType == activity.Exercise);
+                exerciseName.name == activity.Exercise);
+                _logger.LogInformation("Bridge: " + bridges + "TTTTTTTTTT");
                 foreach(var bridge in bridges){
                     bridge.Points += CalculatePointsGroups(activity);
                 }
@@ -201,9 +225,9 @@ namespace ZenDev.BusinessLogic.Services
             }
         }
 
-        public DateTime GetStartOfWeek(DayOfWeek startOfWeek)
+        public DateTime GetStartOfWeek(DateTime date, DayOfWeek startOfWeek)
         {
-            var currentDate = DateTime.Now;
+            var currentDate = date;
             int diff = (7 + (currentDate.DayOfWeek - startOfWeek)) % 7; //Gets the number of days to subtract to get to the start of the week
             return currentDate.AddDays(-diff).Date; // .Date is used to set the time to midnight
         }
@@ -294,6 +318,7 @@ namespace ZenDev.BusinessLogic.Services
             foreach(var exs in exercies){
                 exercises2.Add((exs.ExerciseId,String.Join("",exs.ExerciseName.Split(' '))));
             }
+
             foreach(var activity in activities){
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
                 int totalPoints = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
