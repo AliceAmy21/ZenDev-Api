@@ -33,8 +33,8 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof(GetChallengeById))]
-        public async Task<ActionResult<ChallengeApiModel>> GetChallengeById(long ChallengeId){
-            var challenge = await _challengeService.GetChallengeByIdAsync(ChallengeId);
+        public async Task<ActionResult<ChallengeApiModel>> GetChallengeById(long challengeId, long userId){
+            var challenge = await _challengeService.GetChallengeByIdAsync(challengeId, userId);
             return Ok(_mapper.Map<ChallengeApiModel>(challenge));
         }
 

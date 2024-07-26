@@ -34,6 +34,10 @@ namespace ZenDev.Api
             .ForMember(dest=>dest.ExerciseApiModel, opt=>opt.MapFrom(src=>src.ExerciseEntity))
             .ForMember(dest=>dest.GroupApiModel, opt=>opt.MapFrom(src=>src.GroupEntity))
             .ReverseMap();
+            CreateMap<ChallengeViewModel, ChallengeApiModel>()
+            .ForMember(dest=>dest.ExerciseApiModel, opt=>opt.MapFrom(src=>src.ExerciseEntity))
+            .ForMember(dest=>dest.GroupApiModel, opt=>opt.MapFrom(src=>src.GroupEntity))
+            .ReverseMap();
             CreateMap<ChallengeCreationModel, ChallengeCreationApiModel>().ReverseMap();
             CreateMap<ChallengeUpdateModel, ChallengeUpdateApiModel>().ReverseMap();
             CreateMap<GroupEntity, GroupListApiModel>()
