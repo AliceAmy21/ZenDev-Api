@@ -5,6 +5,7 @@ namespace ZenDev.Api.ApiModels
     {
         public long ActivityRecordId {get;set;}
         public long UserId {get;set;}
+        public string ExerciseName {get;set;} = string.Empty;
         public long Points {get;set;}
         public double? Distance {get;set;}
         public long? Duration {get;set;}

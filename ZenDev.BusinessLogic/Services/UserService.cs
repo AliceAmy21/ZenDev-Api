@@ -123,8 +123,12 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<UserHomePageModel> GetLatestActivityRecord(long userId)
         {
-            var userActivities = _dbContext.ActivityRecords.Where(u=>u.UserId == userId).OrderByDescending(d=>d.DateTime);
-            var records = userActivities.ToListAsync().Result.ElementAt(0);
+            var userActivities = _dbContext.ActivityRecords
+                .Include(e => e.ExerciseEntity)
+                .Where(u=>u.UserId == userId)
+                .OrderByDescending(d=>d.DateTime);
+
+            var records = userActivities.ToList()[0];
             List<int> activeDays = [];
             var day = Convert.ToInt32(DateTime.Now.DayOfWeek);
             for(int i = 0 ; i<=day;i++){
@@ -137,6 +141,7 @@ namespace ZenDev.BusinessLogic.Services
             UserHomePageModel userHomePageModel = new UserHomePageModel{
                 ActivityRecordId = records.ActivityRecordId,
                 UserId = records.UserId,
+                ExerciseName = records.ExerciseEntity.ExerciseName,
                 Points = records.Points,
                 Distance = records.Distance,
                 Duration = records.Duration,
