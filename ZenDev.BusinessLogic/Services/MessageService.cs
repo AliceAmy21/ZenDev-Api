@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -85,41 +86,77 @@ namespace ZenDev.BusinessLogic.Services
 
         public async Task<List<ChatroomModel>> GetAllChatsByUserId(long userId)
         {
-            var groupIds = _dbContext.UserGroupBridge.Where(g => g.UserId == userId)
-                .Select(groupId => groupId.GroupId);
+            var groups = _dbContext.UserGroupBridge.Where(g => g.UserId == userId)
+                .Include(group => group.GroupEntity)
+                .Select(groups => groups.GroupEntity)
+                .ToList();
 
-            var groupInfo = _dbContext.Groups.Where(c => groupIds.Contains(c.GroupId)).AsQueryable();
+            var allChats = new List<ChatroomModel>();
 
-            var allChats = _dbContext.Chatrooms.Where(chats => groupIds.Contains(chats.GroupId));
-
-            var chatInfo = groupInfo.Select(chat => new ChatroomModel
+            foreach (var chat in groups)
             {
-                ChatId = allChats.FirstOrDefault(c => c.GroupId == chat.GroupId).ChatId,
-                GroupId = chat.GroupId,
-                GroupName = chat.GroupName,
-                GroupIconUrl = chat.GroupIconUrl,
-                LastMessage = GetLastGroupMessage(chat.GroupId).MessageContent,
-            });
+                var lastMessage = GetLastMessage(chat.GroupId);
+                var chatroom = await _dbContext.Chatrooms.SingleOrDefaultAsync(c => c.GroupId == chat.GroupId);
+                allChats.Add(new ChatroomModel
+                {
+                    ChatId = chatroom?.ChatId ?? 0,
+                    GroupId = chat.GroupId,
+                    GroupEntity = chat,
+                    LastMessage = lastMessage.MessageContent,
+                });
+            }
 
-            return await chatInfo.ToListAsync();
-            
-
+            return allChats;
         }
 
-        public MessageEntity GetLastGroupMessage(long groupId)
+        public LastMessageModel GetLastMessage(long groupId)
         {
             var chatMessageBridge = _dbContext.ChatMessageBridge
                 .Include(message => message.MessageEntity)
                 .Include(chat => chat.ChatroomEntity)
-                .Include(reaction => reaction.MessageEntity.messageReactionBridges)
-                .AsQueryable();
+                .Where(group => group.ChatroomEntity.GroupId == groupId)
+                .OrderByDescending(message => message.MessageEntity.DateSent).ToList();
 
-            var messages = chatMessageBridge.Where(group => group.ChatroomEntity.GroupId == groupId)
-                .Select(message => message.MessageEntity);
 
-            return messages.Last();
+            if (chatMessageBridge.Count() > 0)
+            {
+                var firstMessage = chatMessageBridge.First();
+                var lastMessage = new LastMessageModel()
+                {
+                    MessageId = firstMessage.MessageId,
+                    MessageContent = firstMessage.MessageEntity.MessageContent,
+                    DateSent = firstMessage.MessageEntity.DateSent,
+                    ChatId = firstMessage.ChatId,
+                    GroupId = firstMessage.ChatroomEntity.GroupId,
+                };
+
+                return lastMessage;
+            }
+            else
+            {
+                return new LastMessageModel();
+            }
+
         }
 
+        public async Task<List<ChatMessageBridgeEntity>> GetLastGroupMessage(long groupId)
+        {
+            var chatMessageBridge = _dbContext.ChatMessageBridge
+                 .Include(chat => chat.ChatroomEntity)
+                 .Where(group => group.ChatroomEntity.GroupId == groupId)
+                 .ToList();
+
+            var temp = new List<ChatMessageBridgeEntity>();
+
+            foreach(var c in chatMessageBridge)
+            {
+                var cbm = new ChatMessageBridgeEntity();
+                cbm.ChatId = c.ChatId;
+                cbm.MessageEntity = c.MessageEntity;
+                cbm.ChatroomEntity = c.ChatroomEntity;
+            }
+            return temp;
+        }
 
     }
 }

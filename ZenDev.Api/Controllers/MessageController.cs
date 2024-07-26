@@ -36,13 +36,22 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpGet(nameof (GetAllChatsByUserId))]
-        public async Task<ActionResult<List<ChatroomModel>>> GetAllChatsByUserId(long userId)
+        public async Task<ActionResult<List<ChatroomApiModel>>> GetAllChatsByUserId(long userId)
         {
-            var result = await _messageService.GetAllChatsByUserId(userId);
-            if (result == null) return NotFound();
+            var models = await _messageService.GetAllChatsByUserId(userId);
+            if (models == null) return Empty;
+            var result = _mapper.Map<List<ChatroomApiModel>>(models);
             return Ok(result);
         }
 
+        [HttpGet(nameof(GetLastMessageByGroupId))]
+        public async Task<List<ChatMessageBridgeApiModel>> GetLastMessageByGroupId(long groupId)
+        {
+            var model = await _messageService.GetLastGroupMessage(groupId);
+            var result = _mapper.Map<List<ChatMessageBridgeApiModel>>(model);
+
+            return result;
+        }
 
 
         [HttpPost(nameof(AddReactionToMessage))]

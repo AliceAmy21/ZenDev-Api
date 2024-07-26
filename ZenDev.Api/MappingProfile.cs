@@ -82,7 +82,7 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.ElapsedTime))
                 .ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
                 .ReverseMap();
-            CreateMap<LeaderBoardListModel,LeaderBoardListApiModel>()
+            CreateMap<LeaderBoardListModel, LeaderBoardListApiModel>()
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserInviteModel))
                 .ReverseMap();
             CreateMap<MindfulnessEntity, MindfulnessApiModel>().ReverseMap();
@@ -91,11 +91,21 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserEntity))
                 .ForMember(dest => dest.ReactionApiModels, opt => opt.MapFrom(src => src.ReactionEntities))
                 .ReverseMap();
-            CreateMap<ReactionEntity,ReactionApiModel>()
+            CreateMap<ReactionEntity, ReactionApiModel>()
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserEntity))
                 .ReverseMap();
-            CreateMap<ReactionModel,ReactionApiModel>().ReverseMap();
+            CreateMap<ReactionModel, ReactionApiModel>().ReverseMap();
             CreateMap<ChatroomEntity, ChatroomApiModel>().ReverseMap();
+
+            CreateMap<ChatMessageBridgeEntity, ChatMessageBridgeApiModel>()
+                .ForMember(dest => dest.ChatroomApiModel, opt => opt.MapFrom(src => src.ChatroomEntity))
+                .ForMember(dest => dest.MessageApiModel, opt => opt.MapFrom(src => src.MessageEntity))
+                .ReverseMap();
+
+            CreateMap<LastMessageModel, LastMessageApiModel>().ReverseMap();
+            CreateMap<ChatroomModel, ChatroomApiModel>()
+                .ForMember(dest => dest.GroupApiModel, opt => opt.MapFrom(src => src.GroupEntity))
+                .ReverseMap();
         }
     }
 }
