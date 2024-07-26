@@ -131,11 +131,19 @@ namespace ZenDev.BusinessLogic.Services
             var records = userActivities.ToList()[0];
             List<int> activeDays = [];
             var day = Convert.ToInt32(DateTime.Now.DayOfWeek);
-            for(int i = 0 ; i<=day;i++){
+            for(int i = day; i>0; i--){
                 int j = day - i;
-                var date = DateTime.Now.AddDays(-j);
-                if(await userActivities.AnyAsync(d=>d.DateTime == date)){
-                    activeDays.Add(i+1);
+                var date = DateTime.Now.AddDays(-j).Date;
+                if(await userActivities.AnyAsync(d=>d.DateTime.Date == date)){
+                    if (i-1 >= 0)
+                    {
+                        activeDays.Add(i-1);
+                    }
+                    else
+                    {
+                        activeDays.Add(6);
+                    }
+                    
                 }
             }
             UserHomePageModel userHomePageModel = new UserHomePageModel{
