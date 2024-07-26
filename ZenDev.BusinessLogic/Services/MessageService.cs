@@ -109,6 +109,46 @@ namespace ZenDev.BusinessLogic.Services
             return allChats;
         }
 
+        public async Task<ResultModel> SaveMessage(SaveMessageModel messageModel)
+        {
+            var result = new ResultModel()
+            {
+                Success = false,
+            };
+
+            try
+            {
+                var message = new MessageEntity()
+                {
+                    UserId = messageModel.UserId,
+                    MessageContent = messageModel.MessageContent,
+                    DateSent = messageModel.DateSent,
+                    Shareable = messageModel.Shareable,
+                };
+
+                var saveMessage = await _dbContext.AddAsync(message);
+                await _dbContext.SaveChangesAsync();
+
+                var chatMessageBridge = new ChatMessageBridgeEntity()
+                {
+                    MessageId = saveMessage.Entity.MessageId,
+                    ChatId = messageModel.ChatId,
+                };
+
+                await _dbContext.AddAsync(chatMessageBridge);
+                await _dbContext.SaveChangesAsync();
+                result.Success = true;
+                
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.ErrorMessages = new List<string> { ex.Message };
+            }
+
+            return result;
+        }
+
         public LastMessageModel GetLastMessage(long groupId)
         {
             var chatMessageBridge = _dbContext.ChatMessageBridge

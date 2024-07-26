@@ -53,6 +53,14 @@ namespace ZenDev.Api.Controllers
             return result;
         }
 
+        [HttpPost(nameof(SaveMessage))]
+        public async Task<ActionResult<ResultApiModel>> SaveMessage(SaveMessageModel messageModel)
+        {
+            var model = await _messageService.SaveMessage(messageModel);
+            var result = _mapper.Map<ResultApiModel>(model);
+            return Ok(result);
+        }
+
 
         [HttpPost(nameof(AddReactionToMessage))]
         public async Task AddReactionToMessage(ReactionApiModel reactionApi){

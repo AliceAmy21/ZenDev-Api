@@ -11,7 +11,6 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
         public Task<ChatroomEntity> GetChatroom(long groupId);
         public Task<List<ChatroomModel>> GetAllChatsByUserId(long userId);
         public Task<List<ChatMessageBridgeEntity>> GetLastGroupMessage(long groupId);
-
-
+        public Task<ResultModel> SaveMessage(SaveMessageModel messageModel);
     }
 }
