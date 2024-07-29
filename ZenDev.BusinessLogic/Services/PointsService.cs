@@ -178,7 +178,6 @@ namespace ZenDev.BusinessLogic.Services
                 var exerciseName = exercises2.FirstOrDefault(e => e.name == activity.Exercise);
                 var bridges = group.Where(groups => groups.UserId == userId && 
                 exerciseName.name == activity.Exercise);
-                _logger.LogInformation("Bridge: " + bridges + "TTTTTTTTTT");
                 foreach(var bridge in bridges){
                     bridge.Points += CalculatePointsGroups(activity);
                 }
@@ -328,8 +327,8 @@ namespace ZenDev.BusinessLogic.Services
                             UserId = userId,
                             ExerciseId = exercises2.FirstOrDefault(e => e.name == activity.Exercise).id,
                             Points = totalPoints,
-                            Distance = activity.Distance,
-                            Duration = activity.Duration,
+                            Distance = activity.Distance/1000,
+                            Duration = activity.Duration/60,
                             DateTime = activity.StartDateLocal,
                             SummaryPolyline = activity.SummaryPolyline,
                             Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
@@ -347,8 +346,8 @@ namespace ZenDev.BusinessLogic.Services
                             UserId = userId,
                             ExerciseId = exercises2.FirstOrDefault(e => e.name == activity.Exercise).id,
                             Points = totalPoints,
-                            Distance = activity.Distance,
-                            Duration = activity.Duration,
+                            Distance = activity.Distance/1000,
+                            Duration = activity.Duration/60,
                             DateTime = activity.StartDateLocal,
                             SummaryPolyline = activity.SummaryPolyline,
                             Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
