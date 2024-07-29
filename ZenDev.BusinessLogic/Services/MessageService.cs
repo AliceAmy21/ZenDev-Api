@@ -25,21 +25,27 @@ namespace ZenDev.BusinessLogic.Services
             _logger = logger;
         }
 
-        public async Task AddReactionToMessage(ReactionModel reaction)
+        public async Task<ReactionModel> AddReactionToMessage(ReactionModel reaction)
         {
             ReactionEntity reactionEntity = new ReactionEntity
             {
                 Reaction = reaction.Reaction,
+               
                 UserId = reaction.UserId,
             };
             await _dbContext.Reactions.AddAsync(reactionEntity);
 
+            _dbContext.SaveChanges();
             MessageReactionBridgeEntity messageReactionBridgeEntity = new MessageReactionBridgeEntity
             {
-                MessageId = reaction.messageId,
+                MessageId = reaction.MessageId,
                 ReactionId = reactionEntity.ReactionId
+
             };
             await _dbContext.MessageReactionBridge.AddAsync(messageReactionBridgeEntity);
+            _dbContext.SaveChanges();
+            reaction.ReactionId = reactionEntity.ReactionId;
+            return reaction;
         }
 
         public Task<List<MessageModel>> GetAllMessagesForChat(long groupId)
@@ -72,11 +78,20 @@ namespace ZenDev.BusinessLogic.Services
             return Task.FromResult(messageModels.OrderByDescending(time => time.DateSent).ToList());
         }
 
-        public async Task RemoveReactionFromMessage(long reactionId)
+        public async Task<long> RemoveReactionFromMessage(long reactionId)
         {
             ReactionEntity reactionEntity = await _dbContext.Reactions.FindAsync(reactionId);
+
+            var reactionMessageBridge = _dbContext.MessageReactionBridge
+               .Include(message => message.MessageEntity)
+               .Include(reaction => reaction.ReactionEntity)
+               .AsQueryable();
+            var deletedReaction = reactionMessageBridge
+                .FirstOrDefault(r => r.ReactionId == reactionId)
+                .MessageId;
             if (reactionEntity != null)
                 _dbContext.Reactions.Remove(reactionEntity);
+            return deletedReaction;
         }
 
         public async Task<ChatroomEntity> GetChatroom(long groupId)
@@ -109,7 +124,7 @@ namespace ZenDev.BusinessLogic.Services
             return allChats;
         }
 
-        public async Task<ResultModel> SaveMessage(SaveMessageModel messageModel)
+        public async Task<MessageModel> SaveMessage(SaveMessageModel messageModel)
         {
             var result = new ResultModel()
             {
@@ -138,15 +153,26 @@ namespace ZenDev.BusinessLogic.Services
                 await _dbContext.AddAsync(chatMessageBridge);
                 await _dbContext.SaveChangesAsync();
                 result.Success = true;
+
+                var newMessage = new MessageModel()
+                {
+                    UserId = message.UserId,
+                    UserEntity = _dbContext.Users.Find(message.UserId),
+                    MessageId = message.MessageId,
+                    MessageContent = message.MessageContent,
+                    DateSent = message.DateSent,
+                    Shareable = message.Shareable,
                 
+                };
+                return newMessage;
             }
             catch (Exception ex)
             {
                 result.Success = false;
                 result.ErrorMessages = new List<string> { ex.Message };
             }
-
-            return result;
+            
+            return new MessageModel();
         }
 
         public LastMessageModel GetLastMessage(long groupId)

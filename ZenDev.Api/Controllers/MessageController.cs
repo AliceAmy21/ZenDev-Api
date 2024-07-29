@@ -54,22 +54,27 @@ namespace ZenDev.Api.Controllers
         }
 
         [HttpPost(nameof(SaveMessage))]
-        public async Task<ActionResult<ResultApiModel>> SaveMessage(SaveMessageModel messageModel)
+        public async Task<ActionResult<MessageApiModel>> SaveMessage(SaveMessageModel messageModel)
         {
             var model = await _messageService.SaveMessage(messageModel);
-            var result = _mapper.Map<ResultApiModel>(model);
+            var result = _mapper.Map<MessageApiModel>(model);
             return Ok(result);
         }
 
 
         [HttpPost(nameof(AddReactionToMessage))]
-        public async Task AddReactionToMessage(ReactionApiModel reactionApi){
-            await _messageService.AddReactionToMessage(_mapper.Map<ReactionModel>(reactionApi));
+        public async Task<ActionResult<ReactionApiModel>> AddReactionToMessage(ReactionApiModel reactionApi){
+            var result = _messageService.AddReactionToMessage(_mapper.Map<ReactionModel>(reactionApi));
+            return (_mapper.Map<ReactionApiModel>(result));
         }
 
         [HttpDelete(nameof(RemoveReactionFromMessage))]
-        public async Task RemoveReactionFromMessage(long reactionId){
-            await _messageService.RemoveReactionFromMessage(reactionId);
+        public async Task<ActionResult<List<long>>> RemoveReactionFromMessage(long reactionId){
+            long messageId = _messageService.RemoveReactionFromMessage(reactionId).Result;
+            List<long> deletedReaction = new List<long>();
+            deletedReaction.Add(messageId);
+            deletedReaction.Add(reactionId);
+            return deletedReaction;
         }
     }
 }

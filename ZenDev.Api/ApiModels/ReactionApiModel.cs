@@ -7,5 +7,8 @@ namespace ZenDev.Api.ApiModels
         public long UserId {get;set;}
         public UserInviteApiModel UserInviteApiModel {get;set;}
         public string Reaction {get;set;}
+
+        public long MessageId { get;set;}
+
     }
 }
