@@ -1,4 +1,6 @@
-﻿namespace ZenDev.SignalRHost.Hubs
+﻿using ZenDev.Api.ApiModels;
+
+namespace ZenDev.SignalRHost.Hubs
 {
     public interface IExampleClient
     {
@@ -7,6 +9,6 @@
         public Task JoinChatUnsuccessful(string message);
         public Task SendMessageSuccessful(string message);
         public Task SendMessageUnsuccessful(string message);
-        public Task NewMessage(string message);
+        public Task NewMessage(MessageApiModel message);
     }
 }

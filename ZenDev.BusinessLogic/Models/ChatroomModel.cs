@@ -14,7 +14,7 @@ namespace ZenDev.BusinessLogic.Models
         public long GroupId { get; set; } 
         public string GroupName {  get; set; }
         public string GroupIconUrl { get; set; }
-        public string LastMessage { get; set; }
+        public LastMessageModel LastMessage { get; set; }
 
     }
 }

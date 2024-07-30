@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
+using ZenDev.Api.ApiModels;
 using ZenDev.SignalRHost.Models;
 
 
@@ -23,21 +24,19 @@ namespace ZenDev.SignalRHost.Hubs
             }
 
             var connectionExists = _chatConnections.ContainsValue(userId);
-            var test = Context.UserIdentifier;
+            
            
             _chatConnections.Add(Context.ConnectionId, userId);
             _chatUsers.Add(userId, userName);
             
             await Clients.Caller.JoinChatSuccessful(Context.ConnectionId);
+      
            
         }
 
-        public async Task JoinGroup(long groupId, long chatId)
-        {
-            var chatRoom = 
-        }
+        
 
-        public async Task SendMessage(string message)
+        public async Task SendMessage(MessageApiModel message)
         {
             var userId = _chatConnections.GetValueOrDefault(Context.ConnectionId);
             var userName = _chatUsers.GetValueOrDefault(userId);
@@ -54,9 +53,7 @@ namespace ZenDev.SignalRHost.Hubs
             await Clients.Caller.SendMessageSuccessful(Context.ConnectionId);
 
             
-
-            var broadcastResponse = BuildResponse(userName ?? string.Empty, message);
-            await Clients.All.NewMessage(broadcastResponse);
+            await Clients.All.NewMessage(message);
 
         }
         private string BuildResponse(params string[] parameters)

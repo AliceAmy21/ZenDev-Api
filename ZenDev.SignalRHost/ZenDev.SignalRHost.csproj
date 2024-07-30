@@ -17,6 +17,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ZenDev.BusinessLogic\ZenDev.BusinessLogic.csproj" />
+		<ProjectReference Include="..\ZenDev.Api\ZenDev.Api.csproj" />
 	</ItemGroup>
 
 </Project>

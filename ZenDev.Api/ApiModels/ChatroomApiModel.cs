@@ -4,7 +4,7 @@
     {
         public long ChatId { get; set; }
         public long GroupId { get; set; }
-        public string LastMessage { get; set; }
+        public LastMessageApiModel LastMessage { get; set; }
         public GroupApiModel GroupApiModel { get; set; }
     }
 }

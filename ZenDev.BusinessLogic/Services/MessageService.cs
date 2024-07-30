@@ -117,7 +117,7 @@ namespace ZenDev.BusinessLogic.Services
                     ChatId = chatroom?.ChatId ?? 0,
                     GroupId = chat.GroupId,
                     GroupEntity = chat,
-                    LastMessage = lastMessage.MessageContent,
+                    LastMessage = lastMessage,
                 });
             }
 
