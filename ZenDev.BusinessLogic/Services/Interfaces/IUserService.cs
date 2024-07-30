@@ -9,5 +9,6 @@ namespace ZenDev.BusinessLogic.Services.Interfaces
         public Task<List<UserEntity>> GetAllUsersAsync();
         public Task<UserResultModel> CreateUserAsync(UserEntity user);
         public Task<ResultModel> AddRefreshTokenAsync(string email, string refreshToken);
+        public Task<UserHomePageModel> GetLatestActivityRecord(long userId);
     }
 }

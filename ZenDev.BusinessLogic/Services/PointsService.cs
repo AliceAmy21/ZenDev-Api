@@ -5,6 +5,7 @@ using ZenDev.Common.Models;
 using ZenDev.Persistence;
 using ZenDev.Persistence.Entities;
 using Microsoft.Extensions.Logging;
+using System.Data.Common;
 
 namespace ZenDev.BusinessLogic.Services
 {
@@ -22,16 +23,26 @@ namespace ZenDev.BusinessLogic.Services
         }
         public async Task UpdateTotalPoints(long userId, List<ActivityPointsApiModel> activities)
         {
-            int totalPoints = 0;
+            var user = _dbContext.Users.FirstOrDefault(user => user.UserId == userId);
             foreach (var activity in activities)
             {
+                var startOfWeek = GetStartOfWeek(activity.StartDateLocal, DayOfWeek.Monday);
                 int movingTimeInMinutes = GetMinutes(activity.MovingTime);
-                totalPoints += GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
+                int points = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
+
+                if (startOfWeek == user.ActiveWeek)
+                {
+                    user.WeekPoints += points;
+                }
+                else
+                {
+                    UpdateStreak(user, startOfWeek);
+                }
+
+                user.TotalPoints += points;
             }
 
-            var user = _dbContext.Users.FirstOrDefault(user => user.UserId == userId);
-            user.TotalPoints += totalPoints;
-
+            UnlockStreakAchievement(user);
             UnlockPointsAchievement(user);
 
             await _dbContext.SaveChangesAsync();
@@ -92,6 +103,35 @@ namespace ZenDev.BusinessLogic.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task UpdateGoalCompletion(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var personalGoals = _dbContext.PersonalGoals
+            .Include(exercise => exercise.ExerciseEntity)
+            .AsQueryable();
+
+            foreach(var activity in activities){
+                var goals = personalGoals.Where(g => g.UserId == userId && 
+                g.ExerciseEntity.ExerciseName == activity.Exercise &&
+                g.GoalStartDate <= activity.StartDateLocal &&
+                g.GoalEndDate >= activity.StartDateLocal);
+
+                foreach(var goal in goals){
+                    if (goal.AmountCompleted >= goal.AmountToComplete)
+                    {
+                        goal.AmountCompleted = goal.AmountToComplete;
+                    }
+                    else
+                    {
+                        if(goal.MeasurementUnit == "Distance")
+                            goal.AmountCompleted += Convert.ToInt64(activity.Distance)/1000;
+                        else
+                            goal.AmountCompleted += Convert.ToInt64(activity.Duration)/60;
+                    }
+                }
+            }
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task UpdateAmountCompleteChallenges(long userId, List<ActivityPointsApiModel> activities)
         {
             var challenge = _dbContext.UserChallengeBridge
@@ -104,10 +144,18 @@ namespace ZenDev.BusinessLogic.Services
                 challenges.ChallengeEntity.ChallengeStartDate <= activity.StartDateLocal &&
                 challenges.ChallengeEntity.ChallengeEndDate >= activity.StartDateLocal);
                 foreach(var bridge in bridges){
-                    if(bridge.ChallengeEntity.Measurement == Persistence.Constants.Measurement.Distance)
-                        bridge.AmountCompleted += Convert.ToInt64(activity.Distance);
-                    else
-                        bridge.AmountCompleted += Convert.ToInt64(activity.Duration);
+                    if (bridge.AmountCompleted >= bridge.ChallengeEntity.AmountToComplete)
+                    {
+                        bridge.AmountCompleted = bridge.ChallengeEntity.AmountToComplete;
+                    }
+                    else 
+                    {
+                        if(bridge.ChallengeEntity.Measurement == Persistence.Constants.Measurement.Distance)
+                            bridge.AmountCompleted += Convert.ToInt64(activity.Distance)/1000;
+                        else
+                            bridge.AmountCompleted += Convert.ToInt64(activity.Duration)/60;
+                    }
+                    
                 }
             }
             await _dbContext.SaveChangesAsync();
@@ -119,9 +167,17 @@ namespace ZenDev.BusinessLogic.Services
             .Include(challenge=>challenge.GroupEntity)
             .Include(exercise => exercise.GroupEntity.ExerciseTypeEntity)
             .AsQueryable();
+
+            var exercies = _dbContext.Exercises.ToList();
+            List<(long id, string name)> exercises2 = [];
+            foreach(var exs in exercies){
+                exercises2.Add((exs.ExerciseId,String.Join("",exs.ExerciseName.Split(' '))));
+            }
+
             foreach(var activity in activities){
+                var exerciseName = exercises2.FirstOrDefault(e => e.name == activity.Exercise);
                 var bridges = group.Where(groups => groups.UserId == userId && 
-                groups.GroupEntity.ExerciseTypeEntity.ExerciseType == activity.Exercise);
+                exerciseName.name == activity.Exercise);
                 foreach(var bridge in bridges){
                     bridge.Points += CalculatePointsGroups(activity);
                 }
@@ -166,7 +222,72 @@ namespace ZenDev.BusinessLogic.Services
                     break;
                 }
             }
+        }
 
+        public DateTime GetStartOfWeek(DateTime date, DayOfWeek startOfWeek)
+        {
+            var currentDate = date;
+            int diff = (7 + (currentDate.DayOfWeek - startOfWeek)) % 7; //Gets the number of days to subtract to get to the start of the week
+            return currentDate.AddDays(-diff).Date; // .Date is used to set the time to midnight
+        }
+
+        public long UpdateStreak(UserEntity user, DateTimeOffset activeWeek){
+           if (user.WeekPoints >= 500)
+           {
+                user.Streak += 1;
+           }
+           else
+           {
+                user.Streak = 0;
+           }
+           user.WeekPoints = 0;
+           user.ActiveWeek = activeWeek;
+
+            _dbContext.Update(user);
+            _dbContext.SaveChanges();
+
+            _logger.LogInformation(user.Streak.ToString() + " week streak");
+            return user.Streak;
+        }
+
+        public void UnlockStreakAchievement(UserEntity user){
+            var streakAchievements = _dbContext.Achievements
+                .Where(achievement => achievement.AchievementName.Contains("Streak"))
+                .ToArray();
+            
+            var myAchievements = _dbContext.UserAchievementBridge
+                .Where(userAchievementBridge => userAchievementBridge.UserId == user.UserId)
+                .Select(userAchievementBridge => userAchievementBridge.AchievementId)                               
+                .ToArray();
+
+            for (int i = 0; i < streakAchievements.Length; i++)
+            {
+                String[] achievementName = streakAchievements[i].AchievementName.Split(' ');
+                long streak = int.Parse(achievementName[0]);
+
+                if (user.Streak >= streak)
+                {
+                    if (myAchievements.Contains(streakAchievements[i].AchievementId))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        UserAchievementBridgeEntity newStreakAchievement = new()
+                        {
+                            AchievementId = streakAchievements[i].AchievementId,
+                            UserId = user.UserId
+                        };
+                        _dbContext.Add(newStreakAchievement);
+                        _dbContext.SaveChanges();
+                        _logger.LogInformation("New Achievement Unlocked with name " + streakAchievements[i].AchievementName);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         public async Task UpdateTournamentPoints(long userId, List<ActivityPointsApiModel> activities)
@@ -187,6 +308,59 @@ namespace ZenDev.BusinessLogic.Services
                     }
                 }
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateActivitiesForUser(long userId, List<ActivityPointsApiModel> activities)
+        {
+            var exercies = _dbContext.Exercises.ToList();
+            List<(long id, string name)> exercises2 = [];
+            foreach(var exs in exercies){
+                exercises2.Add((exs.ExerciseId,String.Join("",exs.ExerciseName.Split(' '))));
+            }
+
+            foreach(var activity in activities){
+                int movingTimeInMinutes = GetMinutes(activity.MovingTime);
+                int totalPoints = GetPointsForCategory(movingTimeInMinutes, activity.AverageHeartrate, activity.MaxHeartrate);
+                var ex = _dbContext.Exercises.FirstOrDefault(e=> e.ExerciseName == activity.Exercise);
+                    if(activity.EndLatlng.Count() > 0 && activity.StartLatlng.Count() > 0){
+                        ActivityRecordEntity activityRecord = new ActivityRecordEntity{
+                            UserId = userId,
+                            ExerciseId = exercises2.FirstOrDefault(e => e.name == activity.Exercise).id,
+                            Points = totalPoints,
+                            Distance = activity.Distance/1000,
+                            Duration = activity.Duration/60,
+                            DateTime = activity.StartDateLocal,
+                            SummaryPolyline = activity.SummaryPolyline,
+                            Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
+                            AverageSpeed = activity.AverageSpeed,
+                            StartLatitiude = activity.StartLatlng[0],
+                            StartLongitude = activity.StartLatlng[1],
+                            EndLatitude = activity.EndLatlng[0],
+                            EndLongitude = activity.EndLatlng[1]
+                        };
+                        await _dbContext.ActivityRecords.AddAsync(activityRecord);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    else{
+                        ActivityRecordEntity activityRecord = new ActivityRecordEntity{
+                            UserId = userId,
+                            ExerciseId = exercises2.FirstOrDefault(e => e.name == activity.Exercise).id,
+                            Points = totalPoints,
+                            Distance = activity.Distance/1000,
+                            Duration = activity.Duration/60,
+                            DateTime = activity.StartDateLocal,
+                            SummaryPolyline = activity.SummaryPolyline,
+                            Calories = Convert.ToDouble(Math.Floor(activity.Kilojoules/4.184)),
+                            AverageSpeed = activity.AverageSpeed,
+                            StartLatitiude = 0,
+                            StartLongitude = 0,
+                            EndLatitude = 0,
+                            EndLongitude = 0
+                        };
+                        await _dbContext.ActivityRecords.AddAsync(activityRecord);
+                        await _dbContext.SaveChangesAsync();
+                    }
+            }
         }
     }
 }

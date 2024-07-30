@@ -88,15 +88,33 @@ namespace ZenDev.BusinessLogic.Services
             return challenge1;
         }
 
-        public async Task<ChallengeEntity> GetChallengeByIdAsync(long ChallengeId){
+        public async Task<ChallengeViewModel> GetChallengeByIdAsync(long challengeId, long userId){
             var challenge = _dbContext.Challenges
             .Include(groups=>groups.GroupEntity)
             .Include(exercise=>exercise.ExerciseEntity)
             .Include(exerciseT=>exerciseT.GroupEntity.ExerciseTypeEntity)
             .AsQueryable();
 
-            ChallengeEntity challengeEntity = await challenge.FirstAsync(challenge=>challenge.ChallengeId == ChallengeId);
-            return challengeEntity;
+            var amountCompleted = _dbContext.UserChallengeBridge.FirstOrDefaultAsync(u => u.UserId == userId && u.ChallengeId == challengeId).Result.AmountCompleted;
+            ChallengeEntity challengeEntity = await challenge.FirstAsync(challenge=>challenge.ChallengeId == challengeId);
+            ChallengeViewModel challengeView = new ChallengeViewModel{
+                ChallengeId = challengeEntity.ChallengeId,
+                ChallengeName = challengeEntity.ChallengeName,
+                ChallengeDescription = challengeEntity.ChallengeDescription,
+                ChallengeStartDate = challengeEntity.ChallengeStartDate, 
+                ChallengeEndDate = challengeEntity.ChallengeEndDate,
+                AmountCompleted = amountCompleted,
+                Measurement = challengeEntity.Measurement,
+                AmountToComplete = challengeEntity.AmountToComplete,
+                ExerciseId = challengeEntity.ExerciseId,
+                ExerciseEntity = challengeEntity.ExerciseEntity,
+                GroupId = challengeEntity.GroupId,
+                GroupEntity = challengeEntity.GroupEntity,
+                UserId = userId,
+                Admin = challengeEntity.Admin
+            };
+
+            return challengeView;
         }
 
         public List<List<ChallengeListModel>> GetChallengesForGroupAsync(long groupId, long userId)

@@ -14,7 +14,7 @@ namespace ZenDev.Persistence.Entities
         [MaxLength(500)]
         public string GroupDescription { get; set; } = string.Empty;
 
-        public string GroupIconUrl { get; set; } = string.Empty;
+        public string GroupIconUrl { get; set; } = "..assets\\svg\\groups.svg";
 
         public long ExerciseTypeId { get; set; }
 

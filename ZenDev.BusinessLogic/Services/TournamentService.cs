@@ -53,6 +53,7 @@ namespace ZenDev.BusinessLogic.Services
                 }
             }
             await _dbContext.SaveChangesAsync();
+            tournamentEntity.ExerciseEntity = _dbContext.Exercises.Find(tournamentEntity.ExerciseId);
             return tournamentEntity;
         }
 

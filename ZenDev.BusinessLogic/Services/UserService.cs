@@ -56,13 +56,11 @@ namespace ZenDev.BusinessLogic.Services
                     var lastActive = matchingUserEntries.LastActive;
                     UpdateLastActive(matchingUserEntries);
 
-                    long streak = UpdateStreak(lastActive, matchingUserEntries);
-
-                    UnlockStreakAchievement(streak, matchingUserEntries);
-        
                     return result;
                 }
-        
+
+                user.ActiveWeek = GetStartOfWeek(DayOfWeek.Monday);
+                _logger.LogInformation(user.ActiveWeek + " Start of the week");
                 var newUser = await _dbContext.AddAsync(user);
                 await _dbContext.SaveChangesAsync();
                 result.UserId = newUser.Entity.UserId;
@@ -116,63 +114,54 @@ namespace ZenDev.BusinessLogic.Services
             _dbContext.SaveChanges();
         }
 
-        public long UpdateStreak(DateTimeOffset lastActive, UserEntity user){
-            var updatedLastActive = user.LastActive;
-            int daysSinceLastActive = (updatedLastActive.Date - lastActive.Date).Days;
-
-            if (daysSinceLastActive == 1)
-            {
-                user.Streak++;
-            }
-            else if (daysSinceLastActive > 1)
-            {
-                user.Streak = 0;
-            }
-
-            _dbContext.Update(user);
-            _dbContext.SaveChanges();
-
-            _logger.LogInformation(user.Streak.ToString() + " day streak");
-            return user.Streak;
+        public static DateTime GetStartOfWeek(DayOfWeek startOfWeek)
+        {
+            var currentDate = DateTime.Now;
+            int diff = (7 + (currentDate.DayOfWeek - startOfWeek)) % 7; //Gets the number of days to subtract to get to the start of the week
+            return currentDate.AddDays(-diff).Date; // .Date is used to set the time to midnight
         }
 
-        public void UnlockStreakAchievement(long userStreak, UserEntity user){
-            var streakAchievements = _dbContext.Achievements
-                .Where(achievement => achievement.AchievementName.Contains("Streak"))
-                .ToArray();
-            
-            var myAchievements = _dbContext.UserAchievementBridge
-                .Where(userAchievementBridge => userAchievementBridge.UserId == user.UserId)
-                .Select(userAchievementBridge => userAchievementBridge.AchievementId)                               
-                .ToArray();
+        public async Task<UserHomePageModel> GetLatestActivityRecord(long userId)
+        {
+            var userActivities = _dbContext.ActivityRecords
+                .Include(e => e.ExerciseEntity)
+                .Where(u=>u.UserId == userId)
+                .OrderByDescending(d=>d.DateTime);
 
-            for (int i = 0; i < streakAchievements.Length; i++)
+            var records = userActivities.ToList()[0];
+            List<int> activeDays = [];
+            var day = Convert.ToInt32(DateTime.Now.DayOfWeek)-1;
+            if (day < 0)
             {
-                String[] achievementName = streakAchievements[i].AchievementName.Split(' ');
-                long streak = int.Parse(achievementName[0]);
+                day = 6;
+            }
 
-                if (userStreak >= streak)
-                {
-                    if (myAchievements.Contains(streakAchievements[i].AchievementId))
-                    {
-                        continue;
-                    }
-                    else{
-                        UserAchievementBridgeEntity newStreakAchievement = new()
-                        {
-                            AchievementId = streakAchievements[i].AchievementId,
-                            UserId = user.UserId
-                        };
-                        _dbContext.Add(newStreakAchievement);
-                        _dbContext.SaveChanges();
-                         _logger.LogInformation("New Achievement Unlocked with name " + streakAchievements[i].AchievementName);
-                    }
-                }
-                else
-                {
-                    break;
+            for(int i = day; i>=0; i--){
+                int j = day - i;
+                var date = DateTime.Now.AddDays(-j).Date;
+                if(await userActivities.AnyAsync(d=>d.DateTime.Date == date)){
+                   activeDays.Add(i);
                 }
             }
+            UserHomePageModel userHomePageModel = new UserHomePageModel{
+                ActivityRecordId = records.ActivityRecordId,
+                UserId = records.UserId,
+                ExerciseName = records.ExerciseEntity.ExerciseName,
+                Points = records.Points,
+                Distance = records.Distance,
+                Duration = records.Duration,
+                DateTime = records.DateTime,
+                SummaryPolyline = records.SummaryPolyline,
+                Calories = records.Calories,
+                AverageSpeed = records.AverageSpeed,
+                ActiveDays = activeDays,
+                StartLatitiude = records.StartLatitiude,
+                StartLongitude = records.StartLongitude,
+                EndLatitude = records.EndLatitude,
+                EndLongitude = records.EndLongitude
+            };
+            
+            return userHomePageModel;
         }
     }
 }

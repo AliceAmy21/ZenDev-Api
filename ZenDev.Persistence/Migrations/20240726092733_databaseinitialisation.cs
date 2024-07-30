@@ -97,7 +97,9 @@ namespace ZenDev.Persistence.Migrations
                     AvatarIconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastActive = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastSynced = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    TotalPoints = table.Column<long>(type: "bigint", nullable: false)
+                    TotalPoints = table.Column<long>(type: "bigint", nullable: false),
+                    ActiveWeek = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    WeekPoints = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -157,14 +159,28 @@ namespace ZenDev.Persistence.Migrations
                     ActivityRecordId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ExerciseId = table.Column<long>(type: "bigint", nullable: false),
                     Points = table.Column<long>(type: "bigint", nullable: false),
-                    Distance = table.Column<long>(type: "bigint", nullable: false),
-                    Duration = table.Column<long>(type: "bigint", nullable: false),
-                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    Distance = table.Column<double>(type: "float", nullable: true),
+                    Duration = table.Column<long>(type: "bigint", nullable: true),
+                    DateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    SummaryPolyline = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Calories = table.Column<double>(type: "float", nullable: false),
+                    AverageSpeed = table.Column<double>(type: "float", nullable: false),
+                    StartLatitiude = table.Column<double>(type: "float", nullable: false),
+                    StartLongitude = table.Column<double>(type: "float", nullable: false),
+                    EndLatitude = table.Column<double>(type: "float", nullable: false),
+                    EndLongitude = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ActivityRecords", x => x.ActivityRecordId);
+                    table.ForeignKey(
+                        name: "FK_ActivityRecords_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ActivityRecords_Users_UserId",
                         column: x => x.UserId,
@@ -536,6 +552,11 @@ namespace ZenDev.Persistence.Migrations
                         principalColumn: "MessageId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityRecords_ExerciseId",
+                table: "ActivityRecords",
+                column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ActivityRecords_UserId",
