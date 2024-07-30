@@ -136,7 +136,7 @@ namespace ZenDev.BusinessLogic.Services
                 day = 6;
             }
 
-            for(int i = day; i>0; i--){
+            for(int i = day; i>=0; i--){
                 int j = day - i;
                 var date = DateTime.Now.AddDays(-j).Date;
                 if(await userActivities.AnyAsync(d=>d.DateTime.Date == date)){
