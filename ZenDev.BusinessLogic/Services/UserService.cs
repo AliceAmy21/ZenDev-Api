@@ -128,6 +128,11 @@ namespace ZenDev.BusinessLogic.Services
                 .Where(u=>u.UserId == userId)
                 .OrderByDescending(d=>d.DateTime);
 
+            if (userActivities.Count() <= 0)
+            {
+                return new UserHomePageModel();
+            }
+
             var records = userActivities.ToList()[0];
             List<int> activeDays = [];
             var day = Convert.ToInt32(DateTime.Now.DayOfWeek)-1;
@@ -160,7 +165,6 @@ namespace ZenDev.BusinessLogic.Services
                 EndLatitude = records.EndLatitude,
                 EndLongitude = records.EndLongitude
             };
-            
             return userHomePageModel;
         }
     }
