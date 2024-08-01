@@ -1,14 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using ZenDev.Api.ApiModels;
 
-namespace ZenDev.SignalRHost.HubConfig
+namespace ZenDev.SignalRHost.Hubs
 {
-    public interface IChatroomHub
+    public interface IChatroomClient
     {
-        Task AddToGroup(long groupId);
-        Task RemoveFromGroup(long groupId);
-        Task SendMessage(long userId, string messageContent, long groupId, DateTime timeSent);
-        Task AddReaction(long userId, long messageId, long reactionId, long groupId);
-        Task RemoveReaction(long userId, long messageId, long reactionId, long groupId);
-        Task AskServer(string someTextFromClient);
+        public Task ConnectionSuccessful(string message);
+        public Task JoinChatSuccessful(string message);
+        public Task JoinChatUnsuccessful(string message);
+        public Task SendMessageSuccessful(string message);
+        public Task SendMessageUnsuccessful(string message);
+        public Task NewMessage(MessageApiModel message);
     }
 }

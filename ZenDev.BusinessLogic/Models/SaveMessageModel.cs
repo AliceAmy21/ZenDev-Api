@@ -15,7 +15,7 @@ namespace ZenDev.BusinessLogic.Models
         public long UserId { get; set; }
         public string MessageContent { get; set; } = string.Empty;
         public DateTimeOffset DateSent { get; set; }
-        public bool Shareable { get; set; } = false;
+        public bool Shareable { get; set; }
         public long ChatId { get; set; }
     }
 }

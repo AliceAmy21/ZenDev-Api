@@ -6,7 +6,7 @@ using ZenDev.SignalRHost.Models;
 
 namespace ZenDev.SignalRHost.Hubs
 {
-    public class ChatroomHub : Hub<IExampleClient>
+    public class ChatroomHub : Hub<IChatroomClient>
     {
         public const string HUB_IDENTIFIER = "chatroom-hub";
        
