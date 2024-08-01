@@ -54,6 +54,7 @@ namespace ZenDev.BusinessLogic.Services
                 .Include(message => message.MessageEntity)
                 .Include(chat => chat.ChatroomEntity)
                 .Include(reaction => reaction.MessageEntity.messageReactionBridges)
+                .Include(user => user.MessageEntity.UserEntity)
                 .AsQueryable();
 
             List<MessageModel> messageModels = [];
@@ -75,7 +76,7 @@ namespace ZenDev.BusinessLogic.Services
                 };
                 messageModels.Add(messageComplete);
             }
-            return Task.FromResult(messageModels.OrderByDescending(time => time.DateSent).ToList());
+            return Task.FromResult(messageModels.OrderBy(time => time.DateSent).ToList());
         }
 
         public async Task<long> RemoveReactionFromMessage(long reactionId)
@@ -86,9 +87,11 @@ namespace ZenDev.BusinessLogic.Services
                .Include(message => message.MessageEntity)
                .Include(reaction => reaction.ReactionEntity)
                .AsQueryable();
+
             var deletedReaction = reactionMessageBridge
                 .FirstOrDefault(r => r.ReactionId == reactionId)
                 .MessageId;
+
             if (reactionEntity != null)
                 _dbContext.Reactions.Remove(reactionEntity);
             return deletedReaction;
@@ -152,6 +155,7 @@ namespace ZenDev.BusinessLogic.Services
 
                 await _dbContext.AddAsync(chatMessageBridge);
                 await _dbContext.SaveChangesAsync();
+                
                 result.Success = true;
 
                 var newMessage = new MessageModel()
@@ -223,6 +227,5 @@ namespace ZenDev.BusinessLogic.Services
             }
             return temp;
         }
-
     }
 }

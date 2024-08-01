@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using ZenDev.Api.ApiModels;
 using ZenDev.BusinessLogic.Models;
 using ZenDev.BusinessLogic.Services.Interfaces;
-using ZenDev.Persistence.Entities;
 
 namespace ZenDev.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
     public class MessageController(
         IMessageService messageService,
         IMapper mapper
@@ -21,7 +19,9 @@ namespace ZenDev.Api.Controllers
 
         [HttpGet(nameof(GetAllMessagesForChat))]
         public async Task<ActionResult<List<MessageApiModel>>> GetAllMessagesForChat(long groupId){
+            
             var messages = await _messageService.GetAllMessagesForChat(groupId);
+            
             return Ok(_mapper.Map<List<MessageApiModel>>(messages));
         }
 
@@ -39,8 +39,10 @@ namespace ZenDev.Api.Controllers
         public async Task<ActionResult<List<ChatroomApiModel>>> GetAllChatsByUserId(long userId)
         {
             var models = await _messageService.GetAllChatsByUserId(userId);
+            
             if (models == null) return Empty;
-            var result = _mapper.Map<List<ChatroomApiModel>>(models);
+            
+            var result = _mapper.Map<List<ChatroomApiModel>>(models);            
             return Ok(result);
         }
 
@@ -58,22 +60,29 @@ namespace ZenDev.Api.Controllers
         {
             var model = await _messageService.SaveMessage(messageModel);
             var result = _mapper.Map<MessageApiModel>(model);
+            
             return Ok(result);
         }
 
 
         [HttpPost(nameof(AddReactionToMessage))]
         public async Task<ActionResult<ReactionApiModel>> AddReactionToMessage(ReactionApiModel reactionApi){
+            
             var result = _messageService.AddReactionToMessage(_mapper.Map<ReactionModel>(reactionApi));
+            
             return (_mapper.Map<ReactionApiModel>(result));
         }
 
         [HttpDelete(nameof(RemoveReactionFromMessage))]
         public async Task<ActionResult<List<long>>> RemoveReactionFromMessage(long reactionId){
+            
             long messageId = _messageService.RemoveReactionFromMessage(reactionId).Result;
+            
             List<long> deletedReaction = new List<long>();
+            
             deletedReaction.Add(messageId);
             deletedReaction.Add(reactionId);
+            
             return deletedReaction;
         }
     }
