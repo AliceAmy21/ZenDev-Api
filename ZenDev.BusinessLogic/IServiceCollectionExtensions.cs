@@ -18,6 +18,7 @@ namespace ZenDev.BusinessLogic
             services.AddScoped<ILeaderBoardService, LeaderBoardService>();
             services.AddScoped<IMindfulnessService, MindfulnessService>();
             services.AddScoped<IAchievementService, AchievementService>();
+            services.AddScoped<ITournamentService,TournamentService>();
             services.AddScoped<IMessageService,MessageService>();
         }
     }

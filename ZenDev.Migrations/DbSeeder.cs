@@ -18,6 +18,8 @@ namespace ZenDev.Migrations
         public ChallengeEntity[] _challenges;
         public UserChallengeBridgeEntity[] _ucBridge;
 
+
+
         public DbSeeder(ZenDevDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -29,6 +31,7 @@ namespace ZenDev.Migrations
             _ucBridge = [];
             _challenges = [];
             _groups = [];
+
         }
 
         public void SeedData()

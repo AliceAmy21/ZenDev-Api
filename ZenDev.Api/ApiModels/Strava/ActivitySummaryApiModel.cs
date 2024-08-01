@@ -16,8 +16,8 @@
         public DateTime StartDateLocal { get; set; }
         public string Timezone { get; set; }
         public double UtcOffset { get; set; }
-        public List<double> StartLatlng { get; set; }
-        public List<double> EndLatlng { get; set; }
+        public List<double> StartLatlng { get; set; } =[0,0];
+        public List<double> EndLatlng { get; set; } = [0,0];
         public string LocationCity { get; set; }
         public string LocationState { get; set; }
         public string LocationCountry { get; set; }

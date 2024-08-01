@@ -47,6 +47,10 @@ namespace ZenDev.Persistence
         public virtual DbSet<MessageEntity> Messages {get;set;}
         public virtual DbSet<MessageReactionBridgeEntity> MessageReactionBridge {get;set;}
         public virtual DbSet<ReactionEntity> Reactions {get;set;}
+        public virtual DbSet<TournamentEntity> Tournaments {get;set;}
+        public virtual DbSet<TournamentGroupEntity> TournamentGroups {get;set;}
+        public virtual DbSet<TournamentGroupBridgeEntity> TournamentGroupBridge {get;set;}
+        public virtual DbSet<TournamentGroupUserBridgeEntity> TournamentGroupUserBridge {get;set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -108,6 +112,32 @@ namespace ZenDev.Persistence
                 .HasOne(rm => rm.ReactionEntity)
                 .WithOne(m => m.MessageReactionBridgeEntity)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TournamentGroupBridgeEntity>()
+                .HasKey(tg => tg.TournamentGroupId);
+
+            modelBuilder.Entity<TournamentGroupBridgeEntity>()
+                .HasOne(tg => tg.TournamentGroupEntity)
+                .WithMany(tg => tg.TournamentGroupBridgeEntities)
+                .HasForeignKey(tg => tg.TGroupId);
+
+            modelBuilder.Entity<TournamentGroupBridgeEntity>()
+                .HasOne(tg => tg.TournamentEntity)
+                .WithMany(tg => tg.TournamentGroupBridgeEntities)
+                .HasForeignKey(tg => tg.TournamentId);
+
+            modelBuilder.Entity<TournamentGroupUserBridgeEntity>()
+                .HasKey(tg => tg.TournamentGroupUserId);
+
+            modelBuilder.Entity<TournamentGroupUserBridgeEntity>()
+                .HasOne(tg => tg.UserEntity)
+                .WithMany(tg => tg.TournamentGroupUserBridgeEntities)
+                .HasForeignKey(tg => tg.UserId);
+
+            modelBuilder.Entity<TournamentGroupUserBridgeEntity>()
+                .HasOne(tg => tg.TournamentGroupEntity)
+                .WithMany(tg => tg.TournamentGroupUserBridgeEntities)
+                .HasForeignKey(tg => tg.TGroupId);
 
         }
     }

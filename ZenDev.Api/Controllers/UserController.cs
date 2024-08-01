@@ -60,5 +60,13 @@ namespace ZenDev.Api.Controllers
 
             return Ok(_mapper.Map<ResultApiModel>(result));
         }
+
+        [HttpGet(nameof(GetLatestActivityRecord))]
+        public async Task<ActionResult<UserHomePageApiModel>> GetLatestActivityRecord(long userId)
+        {
+            var result = await _userService.GetLatestActivityRecord(userId);
+
+            return Ok(_mapper.Map<UserHomePageApiModel>(result));
+        }
     }
 }

@@ -34,6 +34,10 @@ namespace ZenDev.Api
             .ForMember(dest=>dest.ExerciseApiModel, opt=>opt.MapFrom(src=>src.ExerciseEntity))
             .ForMember(dest=>dest.GroupApiModel, opt=>opt.MapFrom(src=>src.GroupEntity))
             .ReverseMap();
+            CreateMap<ChallengeViewModel, ChallengeApiModel>()
+            .ForMember(dest=>dest.ExerciseApiModel, opt=>opt.MapFrom(src=>src.ExerciseEntity))
+            .ForMember(dest=>dest.GroupApiModel, opt=>opt.MapFrom(src=>src.GroupEntity))
+            .ReverseMap();
             CreateMap<ChallengeCreationModel, ChallengeCreationApiModel>().ReverseMap();
             CreateMap<ChallengeUpdateModel, ChallengeUpdateApiModel>().ReverseMap();
             CreateMap<GroupEntity, GroupListApiModel>()
@@ -72,8 +76,8 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.AverageHeartrate, opt => opt.MapFrom(src => src.average_heartrate))
                 .ForMember(dest => dest.MaxHeartrate, opt => opt.MapFrom(src => src.max_heartrate));
             CreateMap<AthleteResponse, AthleteApiModel>()
-              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
-              .ForMember(dest => dest.ResourceState, opt => opt.MapFrom(src => src.resource_state));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
+                .ForMember(dest => dest.ResourceState, opt => opt.MapFrom(src => src.resource_state));
             CreateMap<MapResponse, MapApiModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
                 .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.summary_polyline));
@@ -81,6 +85,7 @@ namespace ZenDev.Api
                 .ForMember(dest => dest.Exercise, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.ElapsedTime))
                 .ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
+                .ForMember(dest => dest.SummaryPolyline, opt => opt.MapFrom(src => src.Map.SummaryPolyline))
                 .ReverseMap();
             CreateMap<LeaderBoardListModel, LeaderBoardListApiModel>()
                 .ForMember(dest => dest.UserInviteApiModel, opt => opt.MapFrom(src => src.UserInviteModel))
@@ -106,6 +111,27 @@ namespace ZenDev.Api
             CreateMap<ChatroomModel, ChatroomApiModel>()
                 .ForMember(dest => dest.GroupApiModel, opt => opt.MapFrom(src => src.GroupEntity))
                 .ReverseMap();
+            CreateMap<ReactionModel,ReactionApiModel>().ReverseMap();
+            CreateMap<TournamentEntity,TournamentApiModel>()
+                .ForMember(dest => dest.ExerciseName, opt =>opt.MapFrom(src=>src.ExerciseEntity.ExerciseName))
+                .ReverseMap();
+            CreateMap<TournamentEntity,TournamentListApiModel>()
+                .ForMember(dest => dest.ExerciseName, opt =>opt.MapFrom(src=>src.ExerciseEntity.ExerciseName))
+                .ReverseMap();
+            CreateMap<TournamentGroupEntity,GroupResultApiModel>()
+                .ReverseMap();
+            CreateMap<TournamentCreationModel,TournamentCreationApiModel>()
+                .ForMember(dest=>dest.exerciseApiModel,opt=>opt.MapFrom(src=>src.ExerciseEntity))
+                .ForMember(dest=>dest.tournamentGroupApiModels,opt=>opt.MapFrom(src=>src.TournamentGroupModels))
+                .ReverseMap();
+            CreateMap<TournamentGroupModel,TournamentGroupApiModel>()
+                .ForMember(dest=>dest.userInviteApiModels,opt=>opt.MapFrom(src=>src.UserEntities))
+                .ReverseMap();
+            CreateMap<TournamentModel,TournamentApiModel>()
+                .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.tournamentGroupModels))
+                .ReverseMap();
+            CreateMap<TournamentLeaderBoardModel, TournamentLeaderBoardApiModel>().ReverseMap();
+            CreateMap<UserHomePageModel, UserHomePageApiModel>().ReverseMap();
         }
     }
 }
